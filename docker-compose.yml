@@ -13,9 +13,12 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - ecommerce-net
 
   app:
-    image: ecommerce-app
+    build:
+      context: .
     container_name: ecommerce-api
     depends_on:
       - db

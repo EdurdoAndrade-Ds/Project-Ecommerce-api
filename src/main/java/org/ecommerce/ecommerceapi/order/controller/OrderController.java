@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class OrderService {
+public class OrderController {
 
     private final OrderRepository orderRepository;
 
-    public OrderService(OrderRepository orderRepository) {
+    public OrderController(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 
