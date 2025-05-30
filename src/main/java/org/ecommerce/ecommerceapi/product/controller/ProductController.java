@@ -1,6 +1,8 @@
 package org.ecommerce.ecommerceapi.product.controller;
 
 
+import org.ecommerce.ecommerceapi.product.model.Product;
+import org.ecommerce.ecommerceapi.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,34 +16,34 @@ import java.util.List;
 public class ProductController {
 
     @Autowired
-    private ProdutoService produtoService;
+    private ProductService productService;
 
     @PostMapping
-    public ResponseEntity<Produto> create(@Valid @RequestBody Produto produto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvar(produto));
+    public ResponseEntity<Product> create(@Valid @RequestBody Product produto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.salvar(produto));
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> list() {
-        return ResponseEntity.ok(produtoService.buscarTodos());
+    public ResponseEntity<List<Product>> list() {
+        return ResponseEntity.ok(productService.buscarTodos());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> searchForIdProduto(@PathVariable Long id) {
-        return produtoService.buscarPorId(id)
+    public ResponseEntity<Product> searchForIdProduto(@PathVariable Long id) {
+        return productService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> updateProduto(@PathVariable Long id, @Valid @RequestBody Produto produto) {
-        produto.setId(id);
-        return ResponseEntity.ok(produtoService.atualizar(produto));
+    public ResponseEntity<Product> updateProduto(@PathVariable Long id, @Valid @RequestBody Product product) {
+        product.setId(id);
+        return ResponseEntity.ok(productService.atualizar(product));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduto(@PathVariable Long id) {
-        produtoService.deletar(id);
+        productService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 }

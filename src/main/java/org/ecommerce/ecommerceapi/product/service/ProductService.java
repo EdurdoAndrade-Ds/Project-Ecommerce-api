@@ -1,7 +1,6 @@
 package org.ecommerce.ecommerceapi.product.service;
 
-import com.ecommerce.ecommerce.modules.Produto;
-import com.ecommerce.ecommerce.repository.ProdutoRepository;
+import org.ecommerce.ecommerceapi.product.model.Product;
 import org.ecommerce.ecommerceapi.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,50 +15,50 @@ public class ProductService {
     private ProductRepository productRepository;
 
     // Criar ou atualizar produto
-    public Produto salvar(Produto produto) {
-        return produtoRepository.save(produto);
+    public Product salvar(Product product) {
+        return productRepository.save(product);
     }
 
     // Buscar todos os produtos
-    public List<Produto> buscarTodos() {
-        return produtoRepository.findAll();
+    public List<Product> buscarTodos() {
+        return productRepository.findAll();
     }
 
     // Buscar produto por ID
-    public Optional<Produto> buscarPorId(Long id) {
-        return produtoRepository.findById(id);
+    public Optional<Product> buscarPorId(Long id) {
+        return productRepository.findById(id);
     }
 
     // Atualizar produto
-    public Produto atualizar(Produto produto) {
-        if (produto.getId() == null) {
+    public Product atualizar(Product product) {
+        if (product.getId() == null) {
             throw new IllegalArgumentException("Não é possível atualizar um produto sem ID");
         }
-        return produtoRepository.save(produto);
+        return productRepository.save(product);
     }
 
     // Deletar produto
     public void deletar(Long id) {
-        produtoRepository.deleteById(id);
+        productRepository.deleteById(id);
     }
 
     // Verificar disponibilidade de estoque
     public boolean verificarEstoque(Long id, int quantidade) {
-        Optional<Produto> produto = buscarPorId(id);
-        return produto.map(p -> p.getQuantidadeEstoque() >= quantidade).orElse(false);
+        Optional<Product> product = buscarPorId(id);
+        return product.map(p -> p.getQuantidadeEstoque() >= quantidade).orElse(false);
     }
 
     // Atualizar estoque
     public void atualizarEstoque(Long id, int quantidade) {
-        Produto produto = buscarPorId(id)
+        Product product = buscarPorId(id)
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
-        int novoEstoque = produto.getQuantidadeEstoque() - quantidade;
+        int novoEstoque = product.getQuantidadeEstoque() - quantidade;
         if (novoEstoque < 0) {
             throw new RuntimeException("Estoque insuficiente");
         }
 
-        produto.setQuantidadeEstoque(novoEstoque);
-        produtoRepository.save(produto);
+        product.setQuantidadeEstoque(novoEstoque);
+        productRepository.save(product);
     }
 }
