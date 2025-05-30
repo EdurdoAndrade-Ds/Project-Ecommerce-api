@@ -45,17 +45,25 @@ public class ProductService {
     // Verificar disponibilidade de estoque
     public boolean verificarEstoque(Long id, int quantidade) {
         Optional<Product> product = buscarPorId(id);
-        return product.map(p -> p.getQuantidadeEstoque() >= quantidade).orElse(false);
+        return product.map(p -> {
+            Integer estoque = p.getQuantidadeEstoque();
+            return estoque != null && estoque >= quantidade;
+        }).orElse(false);
     }
 
     // Atualizar estoque
     public void atualizarEstoque(Long id, int quantidade) {
         Product product = buscarPorId(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado com ID: " + id));
 
-        int novoEstoque = product.getQuantidadeEstoque() - quantidade;
+        Integer estoqueAtual = product.getQuantidadeEstoque();
+        if (estoqueAtual == null) {
+            throw new RuntimeException("Estoque do produto não está definido para o produto com ID: " + id);
+        }
+
+        int novoEstoque = estoqueAtual - quantidade;
         if (novoEstoque < 0) {
-            throw new RuntimeException("Estoque insuficiente");
+            throw new RuntimeException("Estoque insuficiente para o produto com ID: " + id + ". Estoque atual: " + estoqueAtual + ", solicitado: " + quantidade);
         }
 
         product.setQuantidadeEstoque(novoEstoque);

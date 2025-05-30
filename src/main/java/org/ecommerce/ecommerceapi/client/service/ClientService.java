@@ -1,11 +1,12 @@
 package org.ecommerce.ecommerceapi.client.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.List;
+
 import org.ecommerce.ecommerceapi.client.model.Client;
 import org.ecommerce.ecommerceapi.client.repository.ClientRepository;
 import org.ecommerce.ecommerceapi.exceptions.ResourceNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ClientService {
@@ -48,6 +49,5 @@ public class ClientService {
         return clientRepository.findByEmailContaining(email);
     }
 
-    public Client updateClient(Long id, Client client) {
-    }
+    
 }

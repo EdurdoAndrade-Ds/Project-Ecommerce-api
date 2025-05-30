@@ -21,6 +21,8 @@ public class Product {
 
     private String description;
 
+    private int QuantidadeEstoque;
+
     @NotNull
     @DecimalMin("0.0")
     private BigDecimal price;
@@ -55,5 +57,13 @@ public class Product {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public int getQuantidadeEstoque() {
+        return QuantidadeEstoque;
+    }
+
+    public void setQuantidadeEstoque(int quantidadeEstoque) {
+        QuantidadeEstoque = quantidadeEstoque;
     }
 }

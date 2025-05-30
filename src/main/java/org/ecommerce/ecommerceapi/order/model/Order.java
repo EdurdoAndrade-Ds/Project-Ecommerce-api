@@ -21,7 +21,7 @@ public class Order {
     private LocalDateTime dateCreate;
 
     @Enumerated(EnumType.STRING)
-    private StatusPedido status;
+    private OrderStatus status;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
@@ -35,10 +35,10 @@ public class Order {
     )
     private List<Product> products = new ArrayList<>();
 
-    public Pedido() {
+    public Order() {
     }
 
-    public Pedido(LocalDateTime dateCreate, StatusPedido status, Client client, List<Product> products) {
+    public Order(LocalDateTime dateCreate, OrderStatus status, Client client, List<Product> products) {
         this.dateCreate = dateCreate;
         this.status = status;
         this.client = client;
@@ -59,11 +59,11 @@ public class Order {
         this.dateCreate = dateCreate;
     }
 
-    public StatusPedido getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(StatusPedido status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
