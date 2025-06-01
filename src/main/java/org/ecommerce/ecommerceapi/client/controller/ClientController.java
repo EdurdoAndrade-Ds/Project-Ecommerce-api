@@ -2,24 +2,17 @@ package org.ecommerce.ecommerceapi.client.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import org.ecommerce.ecommerceapi.client.dto.ClientRequestDTO;
-import org.ecommerce.ecommerceapi.client.dto.ClientResponseDTO;
+import java.util.List;
+import org.ecommerce.ecommerceapi.client.model.Client;
 import org.ecommerce.ecommerceapi.client.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/clientes")
-<<<<<<< HEAD
-@Tag(name = "Clientes", description = "Endpoints para gerenciamento de clientes")
-=======
-@Tag(name = "Clientes", description = "Endpoints de gerenciamento de clientes")
->>>>>>> 8eed7800ad60ed4ab9f4ca0dc008a8a431db2e53
 public class ClientController {
 
     @Autowired
@@ -27,30 +20,26 @@ public class ClientController {
 
     @Operation(summary = "Cria um novo cliente")
     @PostMapping
-    public ResponseEntity<ClientResponseDTO> create(@Valid @RequestBody ClientRequestDTO dto) {
-        ClientResponseDTO createdClient = clientService.saveClient(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdClient);
+    public ResponseEntity<Client> create(@Valid @RequestBody Client cliente) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(clientService.saveClient(cliente));
     }
 
     @Operation(summary = "Lista todos os clientes")
     @GetMapping
-    public ResponseEntity<List<ClientResponseDTO>> list() {
-        List<ClientResponseDTO> clients = clientService.listAllClient();
-        return ResponseEntity.ok(clients);
+    public ResponseEntity<List<Client>> list() {
+        return ResponseEntity.ok(clientService.listAllClient());
     }
 
     @Operation(summary = "Busca um cliente pelo ID")
     @GetMapping("/{id}")
-    public ResponseEntity<ClientResponseDTO> searchForIdClient(@PathVariable Long id) {
-        ClientResponseDTO client = clientService.searchForIdClient(id);
-        return ResponseEntity.ok(client);
+    public ResponseEntity<Client> searchForIdClient(@PathVariable Long id) {
+        return ResponseEntity.ok(clientService.searchForIdClient(id));
     }
 
     @Operation(summary = "Atualiza um cliente existente")
     @PutMapping("/{id}")
-    public ResponseEntity<ClientResponseDTO> updateClient(@PathVariable Long id, @Valid @RequestBody ClientRequestDTO dto) {
-        ClientResponseDTO updatedClient = clientService.updateClient(id, dto);
-        return ResponseEntity.ok(updatedClient);
+    public ResponseEntity<Client> updateClient(@PathVariable Long id, @Valid @RequestBody Client client) {
+        return ResponseEntity.ok(clientService.updateClient(id, client));
     }
 
     @Operation(summary = "Remove um cliente pelo ID")
@@ -62,13 +51,11 @@ public class ClientController {
 
     @Operation(summary = "Busca clientes por email")
     @GetMapping("/filtro")
-    public ResponseEntity<List<ClientResponseDTO>> searchForEmail(@RequestParam String email) {
-        List<ClientResponseDTO> clients = clientService.searchForEmail(email);
-        return ResponseEntity.ok(clients);
+    public ResponseEntity<List<Client>> searchForEmail(@RequestParam String email) {
+        return ResponseEntity.ok(clientService.searchForEmail(email));
     }
-<<<<<<< HEAD
-=======
 
-    
->>>>>>> 8eed7800ad60ed4ab9f4ca0dc008a8a431db2e53
+    public void teste() {
+
+    }
 }
