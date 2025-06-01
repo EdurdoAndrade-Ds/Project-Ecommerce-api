@@ -19,19 +19,20 @@ public class ClientService {
     private ClientRepository clientRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; // Injeção do encoder
+    private PasswordEncoder passwordEncoder;
 
+    // Cria um novo cliente
     public ClientResponseDTO saveClient(ClientRequestDTO dto) {
         Client client = new Client();
         client.setName(dto.getName());
         client.setEmail(dto.getEmail());
         client.setTelefone(dto.getTelefone());
-        // Criptografando a senha antes de salvar
         client.setSenha(passwordEncoder.encode(dto.getSenha()));
-        client = clientRepository.save(client);
-        return toResponseDTO(client);
+        Client saved = clientRepository.save(client);
+        return toResponseDTO(saved);
     }
 
+    // Lista todos os clientes
     public List<ClientResponseDTO> listAllClient() {
         return clientRepository.findAll()
                 .stream()
@@ -39,45 +40,50 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
+    // Busca por id
     public ClientResponseDTO searchForIdClient(Long id) {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id " + id));
         return toResponseDTO(client);
     }
 
+    // Atualiza cliente
     public ClientResponseDTO updateClient(Long id, ClientRequestDTO dto) {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id " + id));
         client.setName(dto.getName());
         client.setEmail(dto.getEmail());
         client.setTelefone(dto.getTelefone());
-        // Atualiza a senha criptografando-a (se quiser permitir atualização da senha)
-        client.setSenha(passwordEncoder.encode(dto.getSenha()));
-        client = clientRepository.save(client);
-        return toResponseDTO(client);
-    }
-
-    public void deleteClient(Long id) {
-        if (!clientRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Cliente não encontrado com id " + id);
+        if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
+            client.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
-        clientRepository.deleteById(id);
+        Client updated = clientRepository.save(client);
+        return toResponseDTO(updated);
     }
 
+    // Remove cliente
+    public void deleteClient(Long id) {
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id " + id));
+        clientRepository.delete(client);
+    }
+
+    // Busca clientes por email
     public List<ClientResponseDTO> searchForEmail(String email) {
-        return clientRepository.findByEmailContaining(email)
-                .stream()
+        return clientRepository.findAll().stream()
+                .filter(c -> c.getEmail().equalsIgnoreCase(email))
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
+    // Conversão de entidade para DTO de resposta
     private ClientResponseDTO toResponseDTO(Client client) {
-        return new ClientResponseDTO(
-                client.getId(),
-                client.getName(),
-                client.getEmail(),
-                client.getTelefone()
-                // NÃO inclui a senha no response DTO por segurança
-        );
+        ClientResponseDTO dto = new ClientResponseDTO();
+        dto.setId(client.getId());
+        dto.setName(client.getName());
+        dto.setEmail(client.getEmail());
+        dto.setTelefone(client.getTelefone());
+        // Não inclua a senha no DTO de resposta!
+        return dto;
     }
 }
