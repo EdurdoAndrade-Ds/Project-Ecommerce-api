@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/clientes")
+@Tag(name = "Clientes", description = "Endpoints de gerenciamento de clientes")
 public class ClientController {
 
     @Autowired
@@ -55,7 +56,5 @@ public class ClientController {
         return ResponseEntity.ok(clientService.searchForEmail(email));
     }
 
-    public void teste() {
-
-    }
+    
 }

@@ -83,4 +83,10 @@ public class Pedido {
     public void setProdutos(List<Product> products) {
         this.products = products;
     }
+
+    public void setCustomerId(Long customerId) {
+    }
+
+    public void setCreatedAt(LocalDateTime now) {
+    }
 }
