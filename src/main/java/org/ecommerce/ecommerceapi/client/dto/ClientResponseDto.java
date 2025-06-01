@@ -1,12 +1,22 @@
 package org.ecommerce.ecommerceapi.client.dto;
 
-public class ClientResponseDto {
+public class ClientResponseDTO {
 
     private Long id;
     private String name;
     private String email;
+    private String telefone; // Adicionado campo telefone
 
-    // outros campos que queira retornar na resposta
+    // Construtor padrão
+    public ClientResponseDTO() {}
+
+    // Construtor com campos
+    public ClientResponseDTO(Long id, String name, String email, String telefone) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.telefone = telefone;
+    }
 
     // Getters e setters
     public Long getId() {
@@ -26,5 +36,11 @@ public class ClientResponseDto {
     }
     public void setEmail(String email) {
         this.email = email;
+    }
+    public String getTelefone() {
+        return telefone;
+    }
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }

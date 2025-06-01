@@ -73,7 +73,7 @@ public class PedidoController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletar(@PathVariable Long id) {
         if(!pedidoRepository.existsById(id)) {
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.notFound().build();
         }
         pedidoRepository.deleteById(id);
         return ResponseEntity.noContent().build();

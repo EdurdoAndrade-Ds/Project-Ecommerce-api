@@ -3,7 +3,7 @@ package org.ecommerce.ecommerceapi.client.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
-public class ClientUpdateDto {
+public class ClientUpdateDTO {
 
     @Size(max = 100, message = "Nome deve ter no máximo 100 caracteres")
     private String name;

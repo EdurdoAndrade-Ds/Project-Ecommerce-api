@@ -15,11 +15,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/clientes")
-<<<<<<< HEAD
+
 @Tag(name = "Clientes", description = "Endpoints para gerenciamento de clientes")
-=======
-@Tag(name = "Clientes", description = "Endpoints de gerenciamento de clientes")
->>>>>>> 8eed7800ad60ed4ab9f4ca0dc008a8a431db2e53
+
 public class ClientController {
 
     @Autowired
@@ -66,9 +64,5 @@ public class ClientController {
         List<ClientResponseDTO> clients = clientService.searchForEmail(email);
         return ResponseEntity.ok(clients);
     }
-<<<<<<< HEAD
-=======
 
-    
->>>>>>> 8eed7800ad60ed4ab9f4ca0dc008a8a431db2e53
 }

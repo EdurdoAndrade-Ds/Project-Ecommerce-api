@@ -1,3 +1,13 @@
+package org.ecommerce.ecommerceapi.client.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
+
 @Entity
 public class Client {
     @Id
@@ -17,7 +27,7 @@ public class Client {
 
     @NotBlank
     @Size(min = 6, message = "A senha deve ter no mínimo 6 caracteres")
-    private String senha; // 🔒 Nova propriedade
+    private String senha;
 
     // Getters e setters
     public Long getId() {
