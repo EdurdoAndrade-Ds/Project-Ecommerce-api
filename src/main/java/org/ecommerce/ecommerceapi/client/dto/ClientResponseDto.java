@@ -1,6 +1,6 @@
 package org.ecommerce.ecommerceapi.client.dto;
 
-public class ClientResponseDTO {
+public class ClientResponseDTO{
 
     private Long id;
     private String name;
