@@ -21,7 +21,7 @@ public class Product {
 
     private String description;
 
-    private int QuantidadeEstoque;
+    private int QuantidadeEstoque; //ainda definindo como vai ficar o estoque
 
     @NotNull
     @DecimalMin("0.0")
