@@ -1,16 +1,17 @@
 package org.ecommerce.ecommerceapi.product.controller;
 
-import org.ecommerce.ecommerceapi.product.model.Product;
+import org.ecommerce.ecommerceapi.product.dto.ProductRequestDTO;
+import org.ecommerce.ecommerceapi.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.product.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
-import jakarta.validation.Valid;
 import java.util.List;
-
+@Tag(name = "Produtos", description = "Endpoints de gerenciamento de produtos")
 @RestController
 @RequestMapping("/produtos")
 public class ProductController {
@@ -18,48 +19,52 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    // cadastrar produto
+    // Cadastrar produto
     @Operation(summary = "Cria um novo produto")
     @PostMapping
-    public ResponseEntity<Product> create(@Valid @RequestBody Product produto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.salvar(produto));
+    public ResponseEntity<ProductResponseDTO> create(@Valid @RequestBody ProductRequestDTO produtoDTO) {
+        ProductResponseDTO createdProduct = productService.criar(produtoDTO);
+        return ResponseEntity.status(201).body(createdProduct);
     }
 
-    // listar todos os produtos
+    // Listar todos os produtos
     @Operation(summary = "Lista todos os produtos")
     @GetMapping
-    public ResponseEntity<List<Product>> list() {
+    public ResponseEntity<List<ProductResponseDTO>> list() {
         return ResponseEntity.ok(productService.buscarTodos());
     }
 
-    // buscar produto por ID
+    // Buscar produto por ID
     @Operation(summary = "Busca um produto pelo ID")
     @GetMapping("/{id}")
-    public ResponseEntity<Product> searchForIdProduto(@PathVariable Long id) {
-        return productService.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<ProductResponseDTO> getById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(productService.buscarPorId(id));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // atualizar produto
+    // Atualizar produto
     @Operation(summary = "Atualiza um produto")
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduto(@PathVariable Long id, @Valid @RequestBody Product product) {
-        if (!productService.buscarPorId(id).isPresent()) {
+    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id, @Valid @RequestBody ProductRequestDTO produtoDTO) {
+        try {
+            return ResponseEntity.ok(productService.atualizar(id, produtoDTO));
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
-        product.setId(id);
-        return ResponseEntity.ok(productService.atualizar(product));
     }
 
-    // remover um produto por id
+    // Deletar produto
     @Operation(summary = "Remove um produto")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduto(@PathVariable Long id) {
-        if (!productService.buscarPorId(id).isPresent()) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        try {
+            productService.deletar(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
-        productService.deletar(id);
-        return ResponseEntity.noContent().build();
     }
 }
