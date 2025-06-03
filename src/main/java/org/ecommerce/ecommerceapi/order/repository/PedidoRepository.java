@@ -1,7 +1,7 @@
-package org.ecommerce.ecommerceapi.order.repository;
+package org.ecommerce.ecommerceapi.Pedido.repository;
 
-import org.ecommerce.ecommerceapi.order.model.Pedido;
+import org.ecommerce.ecommerceapi.Pedido.model.Pedido;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PedidoRepository extends JpaRepository<Pedido, Long> {
+public interface PedidoService extends JpaRepository<org.ecommerce.ecommerceapi.pedido.model.pedido, Long> {
 }
