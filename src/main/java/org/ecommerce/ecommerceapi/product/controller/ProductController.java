@@ -52,7 +52,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.atualizar(product));
     }
 
-    // remover um produto
+    // remover um produto por id
     @Operation(summary = "Remove um produto")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProduto(@PathVariable Long id) {
