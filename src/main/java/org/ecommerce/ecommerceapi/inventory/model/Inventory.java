@@ -2,6 +2,7 @@ package org.ecommerce.ecommerceapi.inventory.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.ecommerce.ecommerceapi.product.model.Product;
 
 @Entity
 @Table(name = "inventory")
@@ -12,33 +13,10 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private Long productId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false, unique = true)
+    private Product product;
 
     @Column(nullable = false)
     private Integer quantity = 0;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
 }

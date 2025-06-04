@@ -16,14 +16,15 @@ public class ProductResponseDTO {
     private BigDecimal price;
     private Integer quantidadeEstoque;
 
-    
     public static ProductResponseDTO fromEntity(Product product) {
+        Integer estoque = (product.getInventory() != null) ? product.getInventory().getQuantity() : 0;
+
         return ProductResponseDTO.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
                 .price(product.getPrice())
-                .quantidadeEstoque(product.getQuantidadeEstoque())
+                .quantidadeEstoque(estoque)
                 .build();
     }
 }

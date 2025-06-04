@@ -5,6 +5,7 @@ import org.ecommerce.ecommerceapi.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.product.dto.ProductMapperDTO;
 import org.ecommerce.ecommerceapi.product.model.Product;
 import org.ecommerce.ecommerceapi.product.repository.ProductRepository;
+import org.ecommerce.ecommerceapi.inventory.model.Inventory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,14 @@ public class ProductService {
     // Criar produto
     public ProductResponseDTO criar(ProductRequestDTO dto) {
         Product product = ProductMapperDTO.toEntity(dto);
+
+        // Cria inventário vazio ao cadastrar produto
+        Inventory inventory = new Inventory();
+        inventory.setProduct(product);
+        inventory.setQuantity(dto.getQuantidadeEstoque() != null ? dto.getQuantidadeEstoque() : 0);
+
+        product.setInventory(inventory);
+
         Product salvo = productRepository.save(product);
         return ProductMapperDTO.toDTO(salvo);
     }
@@ -33,7 +42,16 @@ public class ProductService {
         existente.setName(dto.getName());
         existente.setDescription(dto.getDescription());
         existente.setPrice(dto.getPrice());
-        existente.setQuantidadeEstoque(dto.getQuantidadeEstoque());
+
+        // Atualiza estoque se vier no DTO
+        if (dto.getQuantidadeEstoque() != null) {
+            if (existente.getInventory() == null) {
+                Inventory inv = new Inventory();
+                inv.setProduct(existente);
+                existente.setInventory(inv);
+            }
+            existente.getInventory().setQuantity(dto.getQuantidadeEstoque());
+        }
 
         Product atualizado = productRepository.save(existente);
         return ProductMapperDTO.toDTO(atualizado);
@@ -61,10 +79,10 @@ public class ProductService {
 
     // Verificar disponibilidade de estoque
     public boolean verificarEstoque(Long id, int quantidade) {
-        Optional<Product> product = productRepository.findById(id);
-        return product.map(p -> {
-            Integer estoque = p.getQuantidadeEstoque();
-            return estoque != null && estoque >= quantidade;
+        Optional<Product> productOpt = productRepository.findById(id);
+        return productOpt.map(p -> {
+            Inventory inv = p.getInventory();
+            return inv != null && inv.getQuantity() != null && inv.getQuantity() >= quantidade;
         }).orElse(false);
     }
 
@@ -73,12 +91,17 @@ public class ProductService {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado com ID: " + id));
 
-        Integer estoqueAtual = product.getQuantidadeEstoque();
-        if (estoqueAtual == null || estoqueAtual < quantidade) {
+        Inventory inventory = product.getInventory();
+        if (inventory == null || inventory.getQuantity() == null) {
+            throw new RuntimeException("Estoque não cadastrado para o produto com ID: " + id);
+        }
+
+        int estoqueAtual = inventory.getQuantity();
+        if (estoqueAtual < quantidade) {
             throw new RuntimeException("Estoque insuficiente para o produto com ID: " + id);
         }
 
-        product.setQuantidadeEstoque(estoqueAtual - quantidade);
+        inventory.setQuantity(estoqueAtual - quantidade);
         productRepository.save(product);
     }
 }

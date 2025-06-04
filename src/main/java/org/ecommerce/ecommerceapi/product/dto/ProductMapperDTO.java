@@ -1,6 +1,7 @@
 package org.ecommerce.ecommerceapi.product.dto;
 
 import org.ecommerce.ecommerceapi.product.model.Product;
+import org.ecommerce.ecommerceapi.inventory.model.Inventory;
 
 public class ProductMapperDTO {
 
@@ -10,7 +11,14 @@ public class ProductMapperDTO {
         product.setName(dto.getName());
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
-        product.setQuantidadeEstoque(dto.getQuantidadeEstoque());
+
+        // Criar e associar o estoque (Inventory)
+        Inventory inventory = new Inventory();
+        inventory.setQuantity(dto.getQuantidadeEstoque() != null ? dto.getQuantidadeEstoque() : 0);
+        inventory.setProduct(product);
+
+        product.setInventory(inventory);
+
         return product;
     }
 

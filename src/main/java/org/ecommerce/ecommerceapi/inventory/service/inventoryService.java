@@ -4,6 +4,8 @@ import org.ecommerce.ecommerceapi.inventory.dto.InventoryResponseDTO;
 import org.ecommerce.ecommerceapi.inventory.dto.UpdateStockDTO;
 import org.ecommerce.ecommerceapi.inventory.model.Inventory;
 import org.ecommerce.ecommerceapi.inventory.repository.InventoryRepository;
+import org.ecommerce.ecommerceapi.product.model.Product;
+import org.ecommerce.ecommerceapi.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,12 +15,15 @@ public class InventoryService {
     @Autowired
     private InventoryRepository repository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     public InventoryResponseDTO getStockByProductId(Long productId) {
         Inventory inventory = repository.findByProductId(productId)
                 .orElseThrow(() -> new RuntimeException("Produto não encontrado no estoque"));
 
         InventoryResponseDTO dto = new InventoryResponseDTO();
-        dto.setProductId(inventory.getProductId());
+        dto.setProductId(inventory.getProduct().getId());
         dto.setQuantity(inventory.getQuantity());
 
         return dto;
@@ -28,7 +33,9 @@ public class InventoryService {
         Inventory inventory = repository.findByProductId(dto.getProductId())
                 .orElseGet(() -> {
                     Inventory newInventory = new Inventory();
-                    newInventory.setProductId(dto.getProductId());
+                    Product product = productRepository.findById(dto.getProductId())
+                            .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                    newInventory.setProduct(product);
                     newInventory.setQuantity(0);
                     return newInventory;
                 });
@@ -52,3 +59,4 @@ public class InventoryService {
         updateStock(dto);
     }
 }
+
