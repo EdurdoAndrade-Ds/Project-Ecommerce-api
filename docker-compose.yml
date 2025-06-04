@@ -45,7 +45,9 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "8081:80"
+      - "8085:80"
+    depends_on:
+      - db
     networks:
       - ecommerce-net
 
