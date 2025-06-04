@@ -1,44 +1,36 @@
 package org.ecommerce.ecommerceapi.inventory.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.ecommerce.ecommerceapi.product.model.Product;
 
 @Entity
 @Table(name = "inventory")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Inventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private Long productId;
+    @OneToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false, unique = true)
+    private Product product;
 
     @Column(nullable = false)
-    private Integer quantity = 0;
+    private Integer quantity;
 
-    public Long getId() {
-        return id;
+    public void increase(int amount) {
+        this.quantity += amount;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void decrease(int amount) {
+        if (this.quantity < amount) {
+            throw new IllegalArgumentException("Estoque insuficiente");
+        }
+        this.quantity -= amount;
     }
 }
