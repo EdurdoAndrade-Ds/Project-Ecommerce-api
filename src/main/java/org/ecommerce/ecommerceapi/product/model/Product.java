@@ -1,69 +1,40 @@
 package org.ecommerce.ecommerceapi.product.model;
 
+import jakarta.persistence.*;
+import lombok.*;
+import org.ecommerce.ecommerceapi.inventory.model.Inventory;
+
 import java.math.BigDecimal;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 @Entity
+@Table(name = "product")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @Column(nullable = false)
     private String name;
 
+    @Column(length = 1000)
     private String description;
 
-    private int QuantidadeEstoque; //ainda definindo como vai ficar o estoque
-
-    @NotNull
-    @DecimalMin("0.0")
+    @Column(nullable = false)
     private BigDecimal price;
 
-    public Long getId() {
-        return id;
-    }
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Inventory inventory;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public int getQuantidadeEstoque() {
-        return QuantidadeEstoque;
-    }
-
-    public void setQuantidadeEstoque(int quantidadeEstoque) {
-        QuantidadeEstoque = quantidadeEstoque;
+    // Método utilitário para manter associação bidirecional
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+        if (inventory != null) {
+            inventory.setProduct(this);
+        }
     }
 }

@@ -3,68 +3,77 @@ package org.ecommerce.ecommerceapi.product.controller;
 import org.ecommerce.ecommerceapi.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.product.service.ProductService;
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.util.List;
-@Tag(name = "Produtos", description = "Endpoints de gerenciamento de produtos")
+
+@Tag(name = "Produto", description = "Endpoints de gerenciamento de produtos")
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("/api/produtos")
 public class ProductController {
 
     @Autowired
     private ProductService productService;
 
-    // Cadastrar produto
+    // Criar produto
     @Operation(summary = "Cria um novo produto")
     @PostMapping
-    public ResponseEntity<ProductResponseDTO> create(@Valid @RequestBody ProductRequestDTO produtoDTO) {
-        ProductResponseDTO createdProduct = productService.criar(produtoDTO);
-        return ResponseEntity.status(201).body(createdProduct);
-    }
-
-    // Listar todos os produtos
-    @Operation(summary = "Lista todos os produtos")
-    @GetMapping
-    public ResponseEntity<List<ProductResponseDTO>> list() {
-        return ResponseEntity.ok(productService.buscarTodos());
-    }
-
-    // Buscar produto por ID
-    @Operation(summary = "Busca um produto pelo ID")
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> getById(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(productService.buscarPorId(id));
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ProductResponseDTO criar(@RequestBody ProductRequestDTO dto) {
+        return productService.criar(dto);
     }
 
     // Atualizar produto
-    @Operation(summary = "Atualiza um produto")
+    @Operation(summary = "Atualizar produto")
     @PutMapping("/{id}")
-    public ResponseEntity<ProductResponseDTO> update(@PathVariable Long id, @Valid @RequestBody ProductRequestDTO produtoDTO) {
-        try {
-            return ResponseEntity.ok(productService.atualizar(id, produtoDTO));
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ProductResponseDTO atualizar(@PathVariable Long id, @RequestBody ProductRequestDTO dto) {
+        return productService.atualizar(id, dto);
+    }
+
+    // Buscar todos os produtos
+    @Operation(summary = "Buscar todos os produtos")
+    @GetMapping
+    public List<ProductResponseDTO> buscarTodos() {
+        return productService.buscarTodos();
+    }
+
+    // Buscar produto por ID
+    @Operation(summary = "Buscar produto por ID")
+    @GetMapping("/{id}")
+    public ProductResponseDTO buscarPorId(@PathVariable Long id) {
+        return productService.buscarPorId(id);
     }
 
     // Deletar produto
-    @Operation(summary = "Remove um produto")
+    @Operation(summary = "Deletar produto")
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        try {
-            productService.deletar(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public void deletar(@PathVariable Long id) {
+        productService.deletar(id);
+    }
+
+    // Verificar disponibilidade de estoque
+    @Operation(summary = "Verificar disponibilidade de estoque")
+    @GetMapping("/{id}/disponivel")
+    public boolean verificarEstoque(@PathVariable Long id, @RequestParam int quantidade) {
+        return productService.verificarEstoque(id, quantidade);
+    }
+
+    // Adicionar ao estoque
+    @Operation(summary = "Adicionar ao estoque")
+    @PutMapping("/{id}/estoque/adicionar")
+    public ResponseEntity<Void> adicionarEstoque(@PathVariable Long id, @RequestParam int quantidade) {
+        productService.adicionarAoEstoque(id, quantidade);
+        return ResponseEntity.noContent().build();
+    }
+
+    // Reduzir estoque
+    @Operation(summary = "Reduzir estoque")
+    @PutMapping("/{id}/reduzir-estoque")
+    public void atualizarEstoque(@PathVariable Long id, @RequestParam int quantidade) {
+        productService.atualizarEstoque(id, quantidade);
     }
 }
