@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.ecommerce.ecommerceapi.client.dto.ClientRequestDTO;
-import org.ecommerce.ecommerceapi.client.dto.ClientResponseDTO;
 import org.ecommerce.ecommerceapi.client.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

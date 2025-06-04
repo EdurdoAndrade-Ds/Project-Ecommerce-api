@@ -1,7 +1,6 @@
 package org.ecommerce.ecommerceapi.client.service;
 
 import org.ecommerce.ecommerceapi.client.dto.ClientRequestDTO;
-import org.ecommerce.ecommerceapi.client.dto.ClientResponseDTO;
 import org.ecommerce.ecommerceapi.client.model.Client;
 import org.ecommerce.ecommerceapi.client.repository.ClientRepository;
 import org.ecommerce.ecommerceapi.exceptions.ResourceNotFoundException;
