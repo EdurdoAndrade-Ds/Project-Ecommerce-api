@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.client.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.ecommerce.ecommerceapi.client.model.Client;
 import org.ecommerce.ecommerceapi.client.repository.ClientRepository;
 import org.ecommerce.ecommerceapi.client.dto.LoginDTO;
@@ -11,8 +12,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Clientes", description = "Endpoints para autenticação de clientes")
 @RestController
-@RequestMapping("/api/clientes")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     @Autowired
