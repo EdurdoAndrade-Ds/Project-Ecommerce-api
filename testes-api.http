@@ -1,0 +1,10 @@
+### Criar produto
+POST http://localhost:8080/swagger-ui/index.html#/api/Produtos
+Content-Type: application/json
+
+{
+  "name": "Headset Logitech G435",
+  "description": "Headset sem fio leve com microfone",
+  "price": 379.90,
+  "stockQuantity": 15
+}
