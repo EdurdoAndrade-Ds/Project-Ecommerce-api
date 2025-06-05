@@ -4,7 +4,6 @@ import org.ecommerce.ecommerceapi.inventory.model.Inventory;
 import org.ecommerce.ecommerceapi.product.model.Product;
 
 public class ProductMapperDTO {
-
     public static Product toEntity(ProductRequestDTO dto) {
         Product product = new Product();
         product.setName(dto.getName());

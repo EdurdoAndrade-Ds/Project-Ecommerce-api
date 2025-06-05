@@ -11,7 +11,6 @@ import org.ecommerce.ecommerceapi.product.model.Product;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Inventory {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
