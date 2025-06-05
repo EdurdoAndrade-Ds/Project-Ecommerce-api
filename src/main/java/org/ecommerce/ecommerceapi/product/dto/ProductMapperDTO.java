@@ -11,10 +11,11 @@ public class ProductMapperDTO {
         product.setDescription(dto.getDescription());
         product.setPrice(dto.getPrice());
 
-        // Criar inventário e associar ao produto
+        // Cria e associa o inventário ao produto
         Inventory inventory = new Inventory();
         inventory.setQuantity(dto.getStockQuantity());
-        product.setInventory(inventory);
+        inventory.setProduct(product); // Importante manter a associação bidirecional
+        product.setInventory(inventory); // Isso já cuida do setProduct internamente, mas mantém por segurança
 
         return product;
     }

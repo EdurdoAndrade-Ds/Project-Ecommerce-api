@@ -16,21 +16,9 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false, unique = true)
-    private Product product;
-
-    @Column(nullable = false)
     private Integer quantity;
 
-    public void increase(int amount) {
-        this.quantity += amount;
-    }
-
-    public void decrease(int amount) {
-        if (this.quantity < amount) {
-            throw new IllegalArgumentException("Estoque insuficiente");
-        }
-        this.quantity -= amount;
-    }
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false, unique = true)
+    private Product product;
 }
