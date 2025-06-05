@@ -1,4 +1,4 @@
-package org.ecommerce.ecommerceapi.securitty;
+package org.ecommerce.ecommerceapi.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
