@@ -1,9 +1,9 @@
-package org.ecommerce.ecommerceapi.controller;
+package org.ecommerce.ecommerceapi.client.controller;
 
 import org.ecommerce.ecommerceapi.client.model.Client;
 import org.ecommerce.ecommerceapi.client.repository.ClientRepository;
-import org.ecommerce.ecommerceapi.dto.LoginDTO;
-import org.ecommerce.ecommerceapi.dto.LoginResponseDTO;
+import org.ecommerce.ecommerceapi.client.dto.LoginDTO;
+import org.ecommerce.ecommerceapi.client.dto.LoginResponseDTO;
 import org.ecommerce.ecommerceapi.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
