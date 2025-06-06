@@ -37,4 +37,8 @@ public class Product {
             inventory.setProduct(this);
         }
     }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
 }

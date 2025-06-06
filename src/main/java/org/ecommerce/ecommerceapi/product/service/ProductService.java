@@ -20,17 +20,11 @@ public class ProductService {
 
     // Criar produto com estoque
     public ProductResponseDTO criar(ProductRequestDTO dto) {
-        Product product = new Product();
-        product.setName(dto.getName());
-        product.setDescription(dto.getDescription());
-        product.setPrice(dto.getPrice());
-
+        Product product = ProductMapperDTO.toEntity(dto);
         Inventory inventory = new Inventory();
         inventory.setQuantity(dto.getStockQuantity());
         inventory.setProduct(product);
-
         product.setInventory(inventory);
-
         Product salvo = productRepository.save(product);
         return ProductMapperDTO.toDTO(salvo);
     }
@@ -44,14 +38,13 @@ public class ProductService {
         existente.setDescription(dto.getDescription());
         existente.setPrice(dto.getPrice());
 
-        if (existente.getInventory() != null) {
-            existente.getInventory().setQuantity(dto.getStockQuantity());
-        } else {
-            Inventory inventory = new Inventory();
-            inventory.setQuantity(dto.getStockQuantity());
+        Inventory inventory = existente.getInventory();
+        if (inventory == null) {
+            inventory = new Inventory();
             inventory.setProduct(existente);
             existente.setInventory(inventory);
         }
+        inventory.setQuantity(dto.getStockQuantity());
 
         Product atualizado = productRepository.save(existente);
         return ProductMapperDTO.toDTO(atualizado);
@@ -85,8 +78,8 @@ public class ProductService {
         Inventory inventory = product.getInventory();
         if (inventory == null) {
             inventory = new Inventory();
-            inventory.setQuantity(quantidade);
             inventory.setProduct(product);
+            inventory.setQuantity(quantidade);
             product.setInventory(inventory);
         } else {
             inventory.setQuantity(inventory.getQuantity() + quantidade);

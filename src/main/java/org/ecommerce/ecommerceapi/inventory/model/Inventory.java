@@ -21,4 +21,16 @@ public class Inventory {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false, unique = true)
     private Product product;
+
+    // Não precisa dos métodos abaixo, pois o Lombok já gera automaticamente
+    // Se quiser sobrescrever, pode manter assim:
+    @Override
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    @Override
+    public Product getProduct() {
+        return product;
+    }
 }

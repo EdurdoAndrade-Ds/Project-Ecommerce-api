@@ -23,6 +23,11 @@ public class ClientService {
 
     // Cria um novo cliente
     public ClientResponseDTO saveClient(ClientRequestDTO dto) {
+        if (clientRepository.findAll().stream()
+                .anyMatch(c -> c.getEmail().equalsIgnoreCase(dto.getEmail()))) {
+            throw new IllegalArgumentException("E-mail já cadastrado");
+        }
+
         Client client = new Client();
         client.setName(dto.getName());
         client.setEmail(dto.getEmail());
@@ -74,6 +79,30 @@ public class ClientService {
                 .filter(c -> c.getEmail().equalsIgnoreCase(email))
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    // Atualiza cliente pelo email
+    public ClientResponseDTO updateClientByEmail(String email, ClientRequestDTO dto) {
+        Client client = clientRepository.findAll().stream()
+                .filter(c -> c.getEmail().equalsIgnoreCase(email))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com email " + email));
+        client.setName(dto.getName());
+        client.setTelefone(dto.getTelefone());
+        if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
+            client.setSenha(passwordEncoder.encode(dto.getSenha()));
+        }
+        Client updated = clientRepository.save(client);
+        return toResponseDTO(updated);
+    }
+
+    // Remove cliente pelo email
+    public void deleteByEmail(String email) {
+        Client client = clientRepository.findAll().stream()
+                .filter(c -> c.getEmail().equalsIgnoreCase(email))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com email " + email));
+        clientRepository.delete(client);
     }
 
     // Conversão de entidade para DTO de resposta
