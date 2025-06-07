@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import org.ecommerce.ecommerceapi.product.model.Product;
+import org.ecommerce.ecommerceapi.product.model.Inventory;
 
 import java.math.BigDecimal;
 
@@ -35,5 +36,35 @@ public class ProductResponseDTO {
                 .price(product.getPrice())
                 .estoque(product.getInventory() != null ? product.getInventory().getQuantity() : null)
                 .build();
+    }
+
+    public ProductResponseDTO criar(ProductRequestDTO dto) {
+        Product product = ProductMapperDTO.toEntity(dto);
+        Inventory inventory = new Inventory();
+        inventory.setQuantity(dto.getStockQuantity()); // ou dto.getEstoque()
+        inventory.setProduct(product);
+        product.setInventory(inventory);
+        Product salvo = productRepository.save(product);
+        return ProductMapperDTO.toDTO(salvo);
+    }
+
+    public ProductResponseDTO atualizar(Long id, ProductRequestDTO dto) {
+        Product existente = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+
+        existente.setName(dto.getName());
+        existente.setDescription(dto.getDescription());
+        existente.setPrice(dto.getPrice());
+
+        Inventory inventory = existente.getInventory();
+        if (inventory == null) {
+            inventory = new Inventory();
+            inventory.setProduct(existente);
+            existente.setInventory(inventory);
+        }
+        inventory.setQuantity(dto.getStockQuantity()); // ou dto.getEstoque()
+
+        Product atualizado = productRepository.save(existente);
+        return ProductMapperDTO.toDTO(atualizado);
     }
 }

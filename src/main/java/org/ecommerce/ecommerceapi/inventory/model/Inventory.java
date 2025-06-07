@@ -22,15 +22,20 @@ public class Inventory {
     @JoinColumn(name = "product_id", nullable = false, unique = true)
     private Product product;
 
-    // Não precisa dos métodos abaixo, pois o Lombok já gera automaticamente
-    // Se quiser sobrescrever, pode manter assim:
-    @Override
     public void setProduct(Product product) {
         this.product = product;
+        product.setInventory(this);
     }
 
-    @Override
-    public Product getProduct() {
-        return product;
+    public void setQuantity(Integer stockQuantity) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Integer getInventory() {
+        return quantity;
     }
 }

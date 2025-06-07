@@ -30,15 +30,7 @@ public class Product {
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Inventory inventory;
 
-    // Método utilitário para manter associação bidirecional
     public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-        if (inventory != null) {
-            inventory.setProduct(this);
-        }
-    }
-
-    public Inventory getInventory() {
-        return inventory;
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
