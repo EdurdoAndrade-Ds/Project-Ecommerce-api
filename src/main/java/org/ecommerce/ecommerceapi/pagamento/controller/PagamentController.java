@@ -91,13 +91,12 @@ public class PagamentController {
         )
     )
     @PostMapping
-    public ResponseEntity<PagamentoResponseDTO> realizarPagamento(
+    public ResponseEntity<?> realizarPagamento(
         @RequestBody PagamentoRequestDTO dto,
         @AuthenticationPrincipal ClientUserDetails userDetails
     ) {
         String email = userDetails.getUsername();
-        // Chama o serviço para processar o pagamento
-        PagamentoResponseDTO response = pagamentoService.processarPagamento(dto, email);
-        return ResponseEntity.ok(response);
+        // Busque o cliente pelo email e processe o pagamento
+        // ...
     }
 }

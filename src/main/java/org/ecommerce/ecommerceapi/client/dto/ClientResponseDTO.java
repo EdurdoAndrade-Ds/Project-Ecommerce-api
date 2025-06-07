@@ -1,11 +1,21 @@
 package org.ecommerce.ecommerceapi.client.dto;
 
-public class ClientResponseDTO{
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
 
+@Data
+public class ClientResponseDTO {
+    @Schema(description = "ID único do cliente", example = "1")
     private Long id;
+
+    @Schema(description = "Nome completo do cliente", example = "Eduardo")
     private String name;
+
+    @Schema(description = "Endereço de e-mail", example = "eduardo@email.com")
     private String email;
-    private String telefone; // Adicionado campo telefone
+
+    @Schema(description = "Telefone com DDD", example = "11999999999")
+    private String telefone;
 
     // Construtor padrão
     public ClientResponseDTO() {}

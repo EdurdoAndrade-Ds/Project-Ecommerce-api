@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.client.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.ecommerce.ecommerceapi.client.dto.ClientRequestDTO;
 import org.ecommerce.ecommerceapi.client.dto.ClientResponseDTO;
 import org.ecommerce.ecommerceapi.client.model.Client;
@@ -8,10 +9,12 @@ import org.ecommerce.ecommerceapi.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class ClientService {
 
@@ -21,23 +24,24 @@ public class ClientService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    // Cria um novo cliente
+    @Transactional
     public ClientResponseDTO saveClient(ClientRequestDTO dto) {
-        if (clientRepository.findAll().stream()
-                .anyMatch(c -> c.getEmail().equalsIgnoreCase(dto.getEmail()))) {
-            throw new IllegalArgumentException("E-mail já cadastrado");
-        }
+        log.info("Salvando novo cliente: {}", dto.getEmail());
+        
+        validateEmailExists(dto.getEmail());
 
         Client client = new Client();
         client.setName(dto.getName());
         client.setEmail(dto.getEmail());
         client.setTelefone(dto.getTelefone());
         client.setSenha(passwordEncoder.encode(dto.getSenha()));
+        
         Client saved = clientRepository.save(client);
+        log.info("Cliente salvo com sucesso: {}", saved.getId());
+        
         return toResponseDTO(saved);
     }
 
-    // Lista todos os clientes
     public List<ClientResponseDTO> listAllClient() {
         return clientRepository.findAll()
                 .stream()
@@ -45,74 +49,75 @@ public class ClientService {
                 .collect(Collectors.toList());
     }
 
-    // Busca por id
     public ClientResponseDTO searchForIdClient(Long id) {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id " + id));
         return toResponseDTO(client);
     }
 
-    // Atualiza cliente
-    public ClientResponseDTO updateClient(Long id, ClientRequestDTO dto) {
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id " + id));
-        client.setName(dto.getName());
-        client.setEmail(dto.getEmail());
-        client.setTelefone(dto.getTelefone());
-        if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
-            client.setSenha(passwordEncoder.encode(dto.getSenha()));
-        }
+    @Transactional
+    public ClientResponseDTO updateClient(String identifier, ClientRequestDTO dto, boolean isEmail) {
+        Client client = findClient(identifier, isEmail);
+        validateUpdate(client, dto);
+        updateClientFields(client, dto);
+        
         Client updated = clientRepository.save(client);
+        log.info("Cliente atualizado: {}", updated.getId());
+        
         return toResponseDTO(updated);
     }
 
-    // Remove cliente
-    public void deleteClient(Long id) {
-        Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id " + id));
+    @Transactional
+    public void deleteClient(String identifier, boolean isEmail) {
+        Client client = findClient(identifier, isEmail);
         clientRepository.delete(client);
+        log.info("Cliente removido: {}", client.getId());
     }
 
-    // Busca clientes por email
-    public List<ClientResponseDTO> searchForEmail(String email) {
-        return clientRepository.findAll().stream()
-                .filter(c -> c.getEmail().equalsIgnoreCase(email))
-                .map(this::toResponseDTO)
-                .collect(Collectors.toList());
-    }
-
-    // Atualiza cliente pelo email
-    public ClientResponseDTO updateClientByEmail(String email, ClientRequestDTO dto) {
-        Client client = clientRepository.findAll().stream()
-                .filter(c -> c.getEmail().equalsIgnoreCase(email))
-                .findFirst()
+    public ClientResponseDTO searchForEmail(String email) {
+        Client client = clientRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com email " + email));
-        client.setName(dto.getName());
-        client.setTelefone(dto.getTelefone());
+        return toResponseDTO(client);
+    }
+
+    private Client findClient(String identifier, boolean isEmail) {
+        return isEmail
+            ? clientRepository.findByEmail(identifier)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com email " + identifier))
+            : clientRepository.findById(Long.parseLong(identifier))
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id " + identifier));
+    }
+
+    private void validateEmailExists(String email) {
+        if (clientRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("E-mail já cadastrado");
+        }
+    }
+
+    private void validateUpdate(Client client, ClientRequestDTO dto) {
+        if (dto.getEmail() != null && !dto.getEmail().equals(client.getEmail())) {
+            throw new IllegalArgumentException("Não é permitido alterar o email");
+        }
+    }
+
+    private void updateClientFields(Client client, ClientRequestDTO dto) {
+        if (dto.getName() != null) {
+            client.setName(dto.getName());
+        }
+        if (dto.getTelefone() != null) {
+            client.setTelefone(dto.getTelefone());
+        }
         if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
             client.setSenha(passwordEncoder.encode(dto.getSenha()));
         }
-        Client updated = clientRepository.save(client);
-        return toResponseDTO(updated);
     }
 
-    // Remove cliente pelo email
-    public void deleteByEmail(String email) {
-        Client client = clientRepository.findAll().stream()
-                .filter(c -> c.getEmail().equalsIgnoreCase(email))
-                .findFirst()
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com email " + email));
-        clientRepository.delete(client);
-    }
-
-    // Conversão de entidade para DTO de resposta
     private ClientResponseDTO toResponseDTO(Client client) {
         ClientResponseDTO dto = new ClientResponseDTO();
         dto.setId(client.getId());
         dto.setName(client.getName());
         dto.setEmail(client.getEmail());
         dto.setTelefone(client.getTelefone());
-        // Não inclua a senha no DTO de resposta!
         return dto;
     }
 }

@@ -3,7 +3,6 @@ package org.ecommerce.ecommerceapi.product.controller;
 import org.ecommerce.ecommerceapi.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.product.service.ProductService;
-import org.ecommerce.ecommerceapi.pagamento.dto.PagamentoResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

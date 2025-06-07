@@ -1,15 +1,13 @@
 package org.ecommerce.ecommerceapi.product.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
 import lombok.Data;
 import org.ecommerce.ecommerceapi.product.model.Product;
-import org.ecommerce.ecommerceapi.product.model.Inventory;
+import org.ecommerce.ecommerceapi.inventory.model.Inventory;
 
 import java.math.BigDecimal;
 
 @Data
-@Builder
 @Schema(description = "DTO para retorno de informações de um produto")
 public class ProductResponseDTO {
 
@@ -22,49 +20,24 @@ public class ProductResponseDTO {
     @Schema(description = "Descrição do produto", example = "Notebook com 16GB RAM e SSD 512GB")
     private String description;
 
-    @Schema(description = "Preço do produto", example = "3799.99")
+    @Schema(description = "Preço", example = "3799.99")
     private BigDecimal price;
 
-    @Schema(description = "Quantidade atual em estoque", example = "8")
-    private Integer estoque;
+    @Schema(description = "Quantidade em estoque", example = "5")
+    private Integer stockQuantity;
 
     public static ProductResponseDTO fromEntity(Product product) {
-        return ProductResponseDTO.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .estoque(product.getInventory() != null ? product.getInventory().getQuantity() : null)
-                .build();
-    }
-
-    public ProductResponseDTO criar(ProductRequestDTO dto) {
-        Product product = ProductMapperDTO.toEntity(dto);
-        Inventory inventory = new Inventory();
-        inventory.setQuantity(dto.getStockQuantity()); // ou dto.getEstoque()
-        inventory.setProduct(product);
-        product.setInventory(inventory);
-        Product salvo = productRepository.save(product);
-        return ProductMapperDTO.toDTO(salvo);
-    }
-
-    public ProductResponseDTO atualizar(Long id, ProductRequestDTO dto) {
-        Product existente = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
-
-        existente.setName(dto.getName());
-        existente.setDescription(dto.getDescription());
-        existente.setPrice(dto.getPrice());
-
-        Inventory inventory = existente.getInventory();
-        if (inventory == null) {
-            inventory = new Inventory();
-            inventory.setProduct(existente);
-            existente.setInventory(inventory);
+        ProductResponseDTO dto = new ProductResponseDTO();
+        dto.setId(product.getId());
+        dto.setName(product.getName());
+        dto.setDescription(product.getDescription());
+        dto.setPrice(product.getPrice());
+        // Ajuste aqui conforme seu model Product:
+        if (product.getInventory() != null) {
+            dto.setStockQuantity(product.getInventory().getQuantity());
+        } else {
+            dto.setStockQuantity(0);
         }
-        inventory.setQuantity(dto.getStockQuantity()); // ou dto.getEstoque()
-
-        Product atualizado = productRepository.save(existente);
-        return ProductMapperDTO.toDTO(atualizado);
+        return dto;
     }
 }

@@ -21,8 +21,25 @@ public class PagamentoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    public PagamentoResponseDTO processarPagamento(PagamentoRequestDTO dto, String email) {
-    // TODO: implementar lógica
-    return new PagamentoResponseDTO();
-}
+    public PagamentoResponseDTO processarPagamento(PagamentoRequestDTO dto) {
+        Pedido pedido = pedidoRepository.findById(dto.getPedidoId())
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        Pagamento pagamento = new Pagamento();
+        pagamento.setPedido(pedido);
+        pagamento.setMetodo(dto.getMetodo());
+        pagamento.setStatus(StatusPagamento.APROVADO);
+        pagamento.setDataPagamento(LocalDateTime.now());
+
+        pagamento = pagamentoRepository.save(pagamento);
+
+        PagamentoResponseDTO response = new PagamentoResponseDTO();
+        response.setId(pagamento.getId());
+        response.setPedidoId(pedido.getId());
+        response.setMetodo(pagamento.getMetodo());
+        response.setStatus(pagamento.getStatus().name());
+        response.setDataPagamento(pagamento.getDataPagamento());
+
+        return response;
+    }
 }

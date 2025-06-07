@@ -1,64 +1,31 @@
 package org.ecommerce.ecommerceapi.client.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class ClientRequestDTO {
-    @NotBlank(message = "O nome é obrigatório")
-    @Size(min = 2, max = 100)
+
+    @NotBlank(message = "Nome é obrigatório")
+    @Size(min = 3, max = 100, message = "Nome deve ter entre 3 e 100 caracteres")
+    @Schema(description = "Nome completo do cliente", example = "Eduardo")
     private String name;
 
-    @NotBlank(message = "O e-mail é obrigatório")
-    @Email(message = "Deve ser um endereço de e-mail válido")
+    @NotBlank(message = "Email é obrigatório")
+    @Email(message = "Email inválido")
+    @Schema(description = "Endereço de e-mail", example = "eduardo@email.com")
     private String email;
 
-    @NotBlank(message = "O telefone é obrigatório")
-    @Pattern(regexp = "\\d{10,15}", message = "O telefone deve conter apenas números (10 a 15 dígitos)")
+    @NotBlank(message = "Telefone é obrigatório")
+    @Pattern(regexp = "^\\+?[1-9][0-9]{10,14}$", message = "Telefone inválido")
+    @Schema(description = "Telefone com DDD, apenas números", example = "11999999999")
     private String telefone;
 
-    @NotBlank(message = "A senha é obrigatória")
-    @Size(min = 6, max = 100, message = "A senha deve ter entre 6 e 100 caracteres")
+    @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
+    @Schema(description = "Senha de acesso", example = "password")
     private String senha;
-
-    public ClientRequestDTO() {}
-
-    public ClientRequestDTO(String name, String email, String telefone, String senha) {
-        this.name = name;
-        this.email = email;
-        this.telefone = telefone;
-        this.senha = senha;
-    }
-
-    // getters e setters
-    public String getName() {
-        return name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getTelefone() {
-        return telefone;
-    }
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
-    public String getSenha() {
-        return senha;
-    }
-    public void setSenha(String senha) {
-        this.senha = senha;
-    }
 }
-

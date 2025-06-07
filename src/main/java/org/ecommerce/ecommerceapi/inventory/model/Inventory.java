@@ -16,26 +16,34 @@ public class Inventory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id", nullable = false, unique = true)
+    private Product product;
+
+    @Column(nullable = false)
     private Integer quantity;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id", nullable = false, unique = true)
-    private Product product;
+    public void increase(int amount) {
+        if (this.quantity == null) this.quantity = 0;
+        this.quantity += amount;
+    }
+
+    public void decrease(int amount) {
+        if (this.quantity == null || this.quantity < amount) {
+            throw new IllegalArgumentException("Estoque insuficiente");
+        }
+        this.quantity -= amount;
+    }
 
     public void setProduct(Product product) {
         this.product = product;
-        product.setInventory(this);
     }
 
-    public void setQuantity(Integer stockQuantity) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public Integer getInventory() {
-        return quantity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -2,6 +2,7 @@ package org.ecommerce.ecommerceapi.security;
 
 import org.ecommerce.ecommerceapi.client.model.Client;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -17,7 +18,7 @@ public class ClientUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // ou retorne as roles do seu Client, se houver
+        return Collections.singletonList(new SimpleGrantedAuthority(Role.CLIENTE.getRole()));
     }
 
     @Override
@@ -48,5 +49,9 @@ public class ClientUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public Client getClient() {
+        return client;
     }
 }
