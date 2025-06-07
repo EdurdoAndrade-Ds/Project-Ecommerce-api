@@ -6,6 +6,7 @@ docker-compose up --build
 
 Site para Swagger: http://localhost:8080/swagger-ui/index.html
 
+https://project-ecommerce-api.onrender.com/swagger-ui/index.html
 
 docker run -p 8081:80 -e "PGADMIN_DEFAULT_EMAIL=admin@admin.com" -e "PGADMIN_DEFAULT_PASSWORD=admin" dpage/pgadmin4
 
