@@ -96,7 +96,8 @@ public class PagamentController {
         @AuthenticationPrincipal ClientUserDetails userDetails
     ) {
         String email = userDetails.getUsername();
-        // Busque o cliente pelo email e processe o pagamento
-        // ...
+        // Exemplo de chamada ao serviço:
+        PagamentoResponseDTO response = pagamentoService.processarPagamento(dto);
+        return ResponseEntity.ok(response);
     }
 }
