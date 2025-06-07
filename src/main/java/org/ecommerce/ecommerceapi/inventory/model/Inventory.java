@@ -1,44 +1,41 @@
 package org.ecommerce.ecommerceapi.inventory.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
+import org.ecommerce.ecommerceapi.product.model.Product;
 
 @Entity
 @Table(name = "inventory")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Inventory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private Long productId;
+    private Integer quantity;
 
-    @Column(nullable = false)
-    private Integer quantity = 0;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false, unique = true)
+    private Product product;
 
-    public Long getId() {
-        return id;
+    public void setProduct(Product product) {
+        this.product = product;
+        product.setInventory(this);
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setQuantity(Integer stockQuantity) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public Integer getInventory() {
+        return quantity;
     }
 }

@@ -3,8 +3,8 @@ package org.ecommerce.ecommerceapi.order.service;
 import org.ecommerce.ecommerceapi.order.model.Pedido;
 import org.ecommerce.ecommerceapi.order.repository.PedidoRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PedidoService {
@@ -15,19 +15,34 @@ public class PedidoService {
         this.pedidoRepository = pedidoRepository;
     }
 
-    public List<Pedido> listarTodos() {
+    public Pedido removerPedido(Long id) {
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado com o ID: " + id));
+        pedidoRepository.delete(pedido);
+        return pedido;
+    }
+
+    public List<Pedido> listarPedidos() {
         return pedidoRepository.findAll();
     }
 
-    public Optional<Pedido> buscarPorId(Long id) {
-        return pedidoRepository.findById(id);
-    }
-
-    public Pedido salvar(Pedido pedido) {
+    public Pedido criaPedido(Pedido pedido) {
         return pedidoRepository.save(pedido);
     }
 
-    public void deletar(Long id) {
-        pedidoRepository.deleteById(id);
+    public Pedido buscaPedidoPorId(Long id) {
+        return pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado com o ID: " + id));
+    }
+
+    public Pedido atualizaPedido(Long id, Pedido pedidoAtualizado) {
+        Pedido pedidoExistente = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado com o ID: " + id));
+
+        pedidoExistente.setCliente(pedidoAtualizado.getCliente());
+        //pedidoExistente.setItens(pedidoAtualizado.getItens());
+        //pedidoExistente.setTotal(pedidoAtualizado.getTotal());
+
+        return pedidoRepository.save(pedidoExistente);
     }
 }
