@@ -60,7 +60,6 @@ public class SwaggerConfig {
                                 .description("Servidor Configurado")
                 ))
                 .tags(List.of(
-                        new Tag().name("Auth").description("Operações de autenticação"),
                         new Tag().name("Clientes").description("Gerenciamento de clientes"),
                         new Tag().name("Produtos").description("Gerenciamento de produtos"),
                         new Tag().name("Pedidos").description("Gerenciamento de pedidos"),
