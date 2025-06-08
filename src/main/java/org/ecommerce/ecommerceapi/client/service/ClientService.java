@@ -24,28 +24,23 @@ public class ClientService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    
     @Transactional
     public ClientResponseDTO saveClient(ClientRequestDTO dto) {
-            log.info("Salvando novo cliente: {}", dto.getEmail());
+        log.info("Salvando novo cliente: {}", dto.getEmail());
         
-            validateEmailExists(dto.getEmail());
-        
-            Client client = new Client();
-            client.setName(dto.getName());
-            client.setEmail(dto.getEmail());
-            client.setTelefone(dto.getTelefone());
-            client.setSenha(passwordEncoder.encode(dto.getSenha()));
-        
-            Client saved = clientRepository.save(client);
-            log.info("Cliente salvo com sucesso: {}", saved.getId());
-        
-            return toResponseDTO(saved);
-        }
-        
-        
-        
+        validateEmailExists(dto.getEmail());
 
+        Client client = new Client();
+        client.setName(dto.getName());
+        client.setEmail(dto.getEmail());
+        client.setTelefone(dto.getTelefone());
+        client.setSenha(passwordEncoder.encode(dto.getSenha()));
+        
+        Client saved = clientRepository.save(client);
+        log.info("Cliente salvo com sucesso: {}", saved.getId());
+        
+        return toResponseDTO(saved);
+    }
 
     public List<ClientResponseDTO> listAllClient() {
         return clientRepository.findAll()

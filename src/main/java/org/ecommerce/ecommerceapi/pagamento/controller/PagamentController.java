@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-@Tag(name = "Pagamento", description = "Endpoints para processamento de pagamentos")
+@Tag(name = "Pagamentos", description = "Endpoints para processamento de pagamentos")
 @RestController
 @RequestMapping("/api/pagamentos")
 public class PagamentController {
@@ -96,8 +96,6 @@ public class PagamentController {
         @AuthenticationPrincipal ClientUserDetails userDetails
     ) {
         String email = userDetails.getUsername();
-        // Exemplo de chamada ao serviço:
-        PagamentoResponseDTO response = pagamentoService.processarPagamento(dto);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().build();
     }
 }
