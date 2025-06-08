@@ -15,7 +15,7 @@ public class JwtUtil {
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("role", Role.CLIENTE.getRole());
-        
+
         return Jwts.builder()
                 .setSubject(email)
                 .setClaims(claims)
@@ -26,15 +26,21 @@ public class JwtUtil {
     }
 
     public String extractUsername(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public boolean isTokenValid(String token) {
         try {
-            Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SECRET_KEY)
+                    .parseClaimsJws(token)
+                    .getBody();
+            return !claims.getExpiration().before(new Date());
+        } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
     }

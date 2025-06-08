@@ -38,24 +38,13 @@ public class SecurityConfig {
             .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/clientes").permitAll()
-                .requestMatchers("/api/clientes/{id}").permitAll()
-                .requestMatchers("/api/clientes/filtro").permitAll()
-                .requestMatchers("/api/clientes/me/**").authenticated()
-                .requestMatchers("/api/pedidos/me/**").authenticated()
-                .requestMatchers("/api/pedidos/**").authenticated()
-                .requestMatchers("/api/produtos/**").authenticated()
-                .requestMatchers("/api/pagamentos/**").authenticated()
-                .requestMatchers(
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-ui.html",
-                    "/swagger-resources/**",
-                    "/api-docs/**",
-                    "/webjars/**",
-                    "/v3/api-docs.yaml",
-                    "/swagger-ui/index.html"
-                ).permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/api-docs/**", "/webjars/**", "/v3/api-docs.yaml").permitAll()
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/api/clientes/me/**", "/api/pedidos/me/**").authenticated()
+                .requestMatchers("/api/clientes/**").permitAll()
+                .requestMatchers("/api/pedidos/**", "/api/produtos/**", "/api/pagamentos/**").authenticated()
+                .anyRequest().authenticated()
+            ).permitAll()
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
