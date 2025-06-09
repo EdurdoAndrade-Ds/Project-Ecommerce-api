@@ -46,6 +46,16 @@ public class SecurityConfig {
                         .requestMatchers("/api/clientes").permitAll()
                         .requestMatchers("/api/clientes/{id}").permitAll()
                         .requestMatchers("/api/clientes/filtro").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/api-docs/**",
+                                "/webjars/**",
+                                "/v3/api-docs.yaml",
+                                "/swagger-ui/index.html"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
