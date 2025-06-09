@@ -1,7 +1,10 @@
 package org.ecommerce.ecommerceapi.client.service;
 
+import org.ecommerce.ecommerceapi.client.dto.ClientCreateDTO;
 import org.ecommerce.ecommerceapi.client.dto.ClientRequestDTO;
+import org.ecommerce.ecommerceapi.client.dto.ClientResponseDTO;
 import org.ecommerce.ecommerceapi.client.model.Client;
+import org.ecommerce.ecommerceapi.client.model.Role;
 import org.ecommerce.ecommerceapi.client.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,4 +26,21 @@ public class ClientService {
         client.setSenha(passwordEncoder.encode(dto.getSenha()));
         return clientRepository.save(client);
     }
+
+    public ClientResponseDTO create(ClientCreateDTO dto) {
+        if (clientRepository.existsByEmail(dto.getEmail())) {
+            throw new RuntimeException("Email já cadastrado.");
+        }
+
+        Client client = new Client();
+        client.setName(dto.getName());
+        client.setEmail(dto.getEmail());
+        client.setPassword(passwordEncoder.encode(dto.getPassword()));
+        client.setRole(Role.CLIENTE); // ou outro enum conforme sua lógica
+
+        clientRepository.save(client);
+
+        return new ClientResponseDTO(client); // construtor que mapeia entity → DTO
+    }
+
 }
