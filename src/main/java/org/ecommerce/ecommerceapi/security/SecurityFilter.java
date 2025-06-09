@@ -1,4 +1,4 @@
-package org.ecommerce.ecommerceapi.security;
+/*package org.ecommerce.ecommerceapi.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
@@ -62,3 +62,4 @@ public class SecurityFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+ */

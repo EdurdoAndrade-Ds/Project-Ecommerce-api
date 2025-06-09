@@ -17,7 +17,7 @@ public class ClientUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // ou retorne as roles do seu Client, se houver
+        return Collections.emptyList();
     }
 
     @Override
