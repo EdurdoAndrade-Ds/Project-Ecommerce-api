@@ -32,9 +32,9 @@ public class ClientService {
         }
 
         Client client = new Client();
-        client.setNome(dto.getName());
+        client.setNome(dto.getNome());
         client.setEmail(dto.getEmail());
-        client.setSenha(passwordEncoder.encode(dto.getPassword()));
+        client.setSenha(passwordEncoder.encode(dto.getSenha()));
         client.setRole(Role.CLIENTE); // ou outro enum conforme sua lógica
 
         clientRepository.save(client);

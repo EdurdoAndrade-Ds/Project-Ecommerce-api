@@ -27,7 +27,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody ClientRequestDTO dto) {
-        clientService.criarCliente(dto); // <- Corrigir aqui
+        clientService.criarCliente(dto);// <- Corrigir aqui
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuário criado com sucesso.");
     }
 }

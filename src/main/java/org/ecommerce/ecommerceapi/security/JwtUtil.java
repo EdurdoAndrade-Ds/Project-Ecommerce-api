@@ -2,7 +2,7 @@ package org.ecommerce.ecommerceapi.security;
 
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
-
+import org.ecommerce.ecommerceapi.client.model.Role;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;

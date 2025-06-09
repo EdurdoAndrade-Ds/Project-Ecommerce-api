@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.security;
 
+import org.ecommerce.ecommerceapi.client.model.Role;
 import org.ecommerce.ecommerceapi.client.model.Client;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

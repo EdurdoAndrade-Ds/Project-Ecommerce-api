@@ -25,9 +25,9 @@ public class ClientController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ClientResponseDTO> createClient(@RequestBody @Valid ClientCreateDTO dto) {
-        ClientResponseDTO response = clientService.create(dto);
+    public ResponseEntity<ClientResponseDTO> createClient(@RequestBody @Valid ClientRequestDTO dto) {
+        ClientResponseDTO response = clientService.criarCliente(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
 }
+
