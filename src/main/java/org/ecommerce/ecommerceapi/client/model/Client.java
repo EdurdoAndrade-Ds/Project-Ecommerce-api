@@ -10,8 +10,8 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "clients", indexes = {
-    @Index(name = "idx_client_email", columnList = "email", unique = true),
-    @Index(name = "idx_client_telefone", columnList = "telefone")
+        @Index(name = "idx_client_email", columnList = "email", unique = true),
+        @Index(name = "idx_client_telefone", columnList = "telefone")
 })
 public class Client {
     @Id

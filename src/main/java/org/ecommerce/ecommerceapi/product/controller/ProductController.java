@@ -25,18 +25,18 @@ public class ProductController {
     private ProductService productService;
 
     @Operation(
-        summary = "Cria um novo produto",
-        description = "Rota responsável por cadastrar um novo produto no sistema"
+            summary = "Cria um novo produto",
+            description = "Rota responsável por cadastrar um novo produto no sistema"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Produto cadastrado com sucesso",
-            content = @Content(
-                examples = {
-                    @ExampleObject(
-                        name = "Produto criado",
-                        value = """
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Produto cadastrado com sucesso",
+                    content = @Content(
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Produto criado",
+                                            value = """
                         {
                             "id": 1,
                             "nome": "Notebook",
@@ -45,35 +45,35 @@ public class ProductController {
                             "estoque": 10
                         }
                         """
+                                    )
+                            }
                     )
-                }
-            )
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados inválidos fornecidos",
-            content = @Content(
-                examples = {
-                    @ExampleObject(
-                        name = "Erro de Validação",
-                        value = """
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Dados inválidos fornecidos",
+                    content = @Content(
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Erro de Validação",
+                                            value = """
                         {
                             "message": "Nome do produto já cadastrado"
                         }
                         """
+                                    )
+                            }
                     )
-                }
             )
-        )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
-        description = "Dados do produto a ser cadastrado",
-        required = true,
-        content = @Content(
-            examples = {
-                @ExampleObject(
-                    name = "Cadastro de Produto",
-                    value = """
+            description = "Dados do produto a ser cadastrado",
+            required = true,
+            content = @Content(
+                    examples = {
+                            @ExampleObject(
+                                    name = "Cadastro de Produto",
+                                    value = """
                     {
                         "nome": "Notebook",
                         "descricao": "Notebook Dell Inspiron",
@@ -81,9 +81,9 @@ public class ProductController {
                         "estoque": 10
                     }
                     """
-                )
-            }
-        )
+                            )
+                    }
+            )
     )
     @PostMapping
     public ProductResponseDTO criar(@RequestBody ProductRequestDTO dto) {
@@ -91,18 +91,18 @@ public class ProductController {
     }
 
     @Operation(
-        summary = "Atualizar produto",
-        description = "Atualiza os dados de um produto existente"
+            summary = "Atualizar produto",
+            description = "Atualiza os dados de um produto existente"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Produto atualizado com sucesso",
-            content = @Content(
-                examples = {
-                    @ExampleObject(
-                        name = "Produto atualizado",
-                        value = """
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Produto atualizado com sucesso",
+                    content = @Content(
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Produto atualizado",
+                                            value = """
                         {
                             "id": 1,
                             "nome": "Notebook Atualizado",
@@ -111,14 +111,14 @@ public class ProductController {
                             "estoque": 15
                         }
                         """
+                                    )
+                            }
                     )
-                }
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Produto não encontrado"
             )
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Produto não encontrado"
-        )
     })
     @PutMapping("/{id}")
     public ProductResponseDTO atualizar(@PathVariable Long id, @RequestBody ProductRequestDTO dto) {
@@ -126,12 +126,12 @@ public class ProductController {
     }
 
     @Operation(
-        summary = "Buscar todos os produtos",
-        description = "Retorna a lista de todos os produtos cadastrados"
+            summary = "Buscar todos os produtos",
+            description = "Retorna a lista de todos os produtos cadastrados"
     )
     @ApiResponse(
-        responseCode = "200",
-        description = "Lista de produtos retornada com sucesso"
+            responseCode = "200",
+            description = "Lista de produtos retornada com sucesso"
     )
     @GetMapping
     public List<ProductResponseDTO> buscarTodos() {
@@ -139,18 +139,18 @@ public class ProductController {
     }
 
     @Operation(
-        summary = "Buscar produto por ID",
-        description = "Retorna os dados de um produto pelo seu ID"
+            summary = "Buscar produto por ID",
+            description = "Retorna os dados de um produto pelo seu ID"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Produto encontrado"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Produto não encontrado"
-        )
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Produto encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Produto não encontrado"
+            )
     })
     @GetMapping("/{id}")
     public ProductResponseDTO buscarPorId(@PathVariable Long id) {
@@ -158,18 +158,18 @@ public class ProductController {
     }
 
     @Operation(
-        summary = "Deletar produto",
-        description = "Remove um produto do sistema pelo ID"
+            summary = "Deletar produto",
+            description = "Remove um produto do sistema pelo ID"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "Produto deletado com sucesso"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Produto não encontrado"
-        )
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Produto deletado com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Produto não encontrado"
+            )
     })
     @DeleteMapping("/{id}")
     public void deletar(@PathVariable Long id) {
@@ -177,18 +177,18 @@ public class ProductController {
     }
 
     @Operation(
-        summary = "Verificar disponibilidade de estoque",
-        description = "Verifica se há quantidade suficiente de um produto em estoque"
+            summary = "Verificar disponibilidade de estoque",
+            description = "Verifica se há quantidade suficiente de um produto em estoque"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Disponibilidade retornada"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Produto não encontrado"
-        )
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Disponibilidade retornada"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Produto não encontrado"
+            )
     })
     @GetMapping("/{id}/disponivel")
     public boolean verificarEstoque(@PathVariable Long id, @RequestParam int quantidade) {
@@ -196,18 +196,18 @@ public class ProductController {
     }
 
     @Operation(
-        summary = "Adicionar ao estoque",
-        description = "Adiciona uma quantidade ao estoque do produto"
+            summary = "Adicionar ao estoque",
+            description = "Adiciona uma quantidade ao estoque do produto"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "Estoque atualizado com sucesso"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Produto não encontrado"
-        )
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Estoque atualizado com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Produto não encontrado"
+            )
     })
     @PutMapping("/{id}/estoque/adicionar")
     public ResponseEntity<Void> adicionarEstoque(@PathVariable Long id, @RequestParam int quantidade) {
@@ -216,18 +216,18 @@ public class ProductController {
     }
 
     @Operation(
-        summary = "Reduzir estoque",
-        description = "Reduz a quantidade de um produto em estoque"
+            summary = "Reduzir estoque",
+            description = "Reduz a quantidade de um produto em estoque"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Estoque reduzido com sucesso"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Produto não encontrado"
-        )
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Estoque reduzido com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Produto não encontrado"
+            )
     })
     @PutMapping("/{id}/reduzir-estoque")
     public void atualizarEstoque(@PathVariable Long id, @RequestParam int quantidade) {

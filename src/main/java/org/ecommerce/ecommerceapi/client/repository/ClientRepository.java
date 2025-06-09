@@ -10,16 +10,16 @@ import java.util.Optional;
 
 public interface ClientRepository extends JpaRepository<Client, Long> {
     Optional<Client> findByEmail(String email);
-    
+
     Optional<Client> findByEmailAndSenha(String email, String senha);
-    
+
     List<Client> findByNameContainingIgnoreCase(String name);
-    
+
     boolean existsByEmail(String email);
-    
+
     @Query("SELECT c FROM Client c WHERE c.telefone LIKE %:telefone%")
     List<Client> findByTelefoneContaining(@Param("telefone") String telefone);
-    
+
     @Query("SELECT c FROM Client c WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :termo, '%')) OR LOWER(c.email) LIKE LOWER(CONCAT('%', :termo, '%'))")
     List<Client> searchByTerm(@Param("termo") String termo);
 }

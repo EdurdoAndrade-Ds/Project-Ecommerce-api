@@ -32,8 +32,8 @@ public class ClientController {
 
     @Operation(summary = "Lista todos os clientes")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso"),
-        @ApiResponse(responseCode = "403", description = "Acesso negado")
+            @ApiResponse(responseCode = "200", description = "Lista de clientes retornada com sucesso"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado")
     })
     @GetMapping
     public ResponseEntity<List<ClientResponseDTO>> list() {
@@ -43,8 +43,8 @@ public class ClientController {
 
     @Operation(summary = "Busca um cliente pelo ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Cliente encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
     })
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponseDTO> searchForIdClient(@PathVariable Long id) {
@@ -54,8 +54,8 @@ public class ClientController {
 
     @Operation(summary = "Busca cliente por email")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Cliente encontrado com sucesso"),
-        @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
     })
     @GetMapping("/filtro")
     public ResponseEntity<ClientResponseDTO> searchForEmail(@RequestParam String email) {
@@ -65,10 +65,10 @@ public class ClientController {
 
     @Operation(summary = "Atualiza os dados do cliente autenticado")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos"),
-        @ApiResponse(responseCode = "403", description = "Acesso negado"),
-        @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+            @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "403", description = "Acesso negado"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
     })
     @PutMapping("/me")
     public ResponseEntity<ClientResponseDTO> updateMyData(
@@ -78,17 +78,17 @@ public class ClientController {
         if (dto.getEmail() != null && !dto.getEmail().equals(userDetails.getUsername())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-        
+
         ClientResponseDTO updatedClient = clientService.updateClient(userDetails.getUsername(), dto, true);
         return ResponseEntity.ok(updatedClient);
     }
 
     @Operation(summary = "Remove o próprio cliente autenticado mediante confirmação da senha")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "204", description = "Cliente removido com sucesso"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos"),
-        @ApiResponse(responseCode = "401", description = "Senha incorreta"),
-        @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+            @ApiResponse(responseCode = "204", description = "Cliente removido com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "401", description = "Senha incorreta"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
     })
     @DeleteMapping("/me")
     public ResponseEntity<Void> deleteMyAccount(
@@ -98,7 +98,7 @@ public class ClientController {
         if (!passwordEncoder.matches(dto.getSenha(), userDetails.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        
+
         clientService.deleteClient(userDetails.getUsername(), true);
         return ResponseEntity.noContent().build();
     }

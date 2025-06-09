@@ -27,7 +27,7 @@ public class ClientService {
     @Transactional
     public ClientResponseDTO saveClient(ClientRequestDTO dto) {
         log.info("Salvando novo cliente: {}", dto.getEmail());
-        
+
         validateEmailExists(dto.getEmail());
 
         Client client = new Client();
@@ -35,10 +35,10 @@ public class ClientService {
         client.setEmail(dto.getEmail());
         client.setTelefone(dto.getTelefone());
         client.setSenha(passwordEncoder.encode(dto.getSenha()));
-        
+
         Client saved = clientRepository.save(client);
         log.info("Cliente salvo com sucesso: {}", saved.getId());
-        
+
         return toResponseDTO(saved);
     }
 
@@ -60,10 +60,10 @@ public class ClientService {
         Client client = findClient(identifier, isEmail);
         validateUpdate(client, dto);
         updateClientFields(client, dto);
-        
+
         Client updated = clientRepository.save(client);
         log.info("Cliente atualizado: {}", updated.getId());
-        
+
         return toResponseDTO(updated);
     }
 
@@ -82,9 +82,9 @@ public class ClientService {
 
     private Client findClient(String identifier, boolean isEmail) {
         return isEmail
-            ? clientRepository.findByEmail(identifier)
+                ? clientRepository.findByEmail(identifier)
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com email " + identifier))
-            : clientRepository.findById(Long.parseLong(identifier))
+                : clientRepository.findById(Long.parseLong(identifier))
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id " + identifier));
     }
 

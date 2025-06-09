@@ -32,14 +32,14 @@ public class DatabaseConfig {
         config.setUsername(username);
         config.setPassword(password);
         config.setDriverClassName("org.postgresql.Driver");
-        
+
         // Configurações de pool
         config.setMaximumPoolSize(10);
         config.setMinimumIdle(5);
         config.setIdleTimeout(300000); // 5 minutos
         config.setConnectionTimeout(20000); // 20 segundos
         config.setMaxLifetime(1200000); // 20 minutos
-        
+
         return new HikariDataSource(config);
     }
 

@@ -38,12 +38,12 @@ public class PedidoController {
     }
 
     @Operation(
-        summary = "Lista todos os pedidos",
-        description = "Retorna todos os pedidos cadastrados"
+            summary = "Lista todos os pedidos",
+            description = "Retorna todos os pedidos cadastrados"
     )
     @ApiResponse(
-        responseCode = "200",
-        description = "Lista de pedidos retornada com sucesso"
+            responseCode = "200",
+            description = "Lista de pedidos retornada com sucesso"
     )
     @GetMapping
     public List<Pedido> listarTodos() {
@@ -51,18 +51,18 @@ public class PedidoController {
     }
 
     @Operation(
-        summary = "Busca um pedido pelo ID",
-        description = "Retorna os dados de um pedido pelo seu ID"
+            summary = "Busca um pedido pelo ID",
+            description = "Retorna os dados de um pedido pelo seu ID"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Pedido encontrado"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Pedido não encontrado"
-        )
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Pedido encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Pedido não encontrado"
+            )
     })
     @GetMapping("/{id}")
     public ResponseEntity<Pedido> buscarPorId(@PathVariable Long id) {
@@ -72,18 +72,18 @@ public class PedidoController {
     }
 
     @Operation(
-        summary = "Cria um novo pedido",
-        description = "Rota responsável por cadastrar um novo pedido no sistema"
+            summary = "Cria um novo pedido",
+            description = "Rota responsável por cadastrar um novo pedido no sistema"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Pedido criado com sucesso",
-            content = @Content(
-                examples = {
-                    @ExampleObject(
-                        name = "Pedido criado",
-                        value = """
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Pedido criado com sucesso",
+                    content = @Content(
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Pedido criado",
+                                            value = """
                         {
                             "id": 1,
                             "cliente": {
@@ -100,43 +100,43 @@ public class PedidoController {
                             "createdAt": "2024-06-05T10:00:00"
                         }
                         """
+                                    )
+                            }
                     )
-                }
-            )
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados inválidos fornecidos",
-            content = @Content(
-                examples = {
-                    @ExampleObject(
-                        name = "Erro de Validação",
-                        value = """
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Dados inválidos fornecidos",
+                    content = @Content(
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Erro de Validação",
+                                            value = """
                         {
                             "message": "Cliente não encontrado"
                         }
                         """
+                                    )
+                            }
                     )
-                }
             )
-        )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
-        description = "Dados do pedido a ser cadastrado",
-        required = true,
-        content = @Content(
-            examples = {
-                @ExampleObject(
-                    name = "Cadastro de Pedido",
-                    value = """
+            description = "Dados do pedido a ser cadastrado",
+            required = true,
+            content = @Content(
+                    examples = {
+                            @ExampleObject(
+                                    name = "Cadastro de Pedido",
+                                    value = """
                     {
                         "customerId": 1,
                         "produtoIds": [1]
                     }
                     """
-                )
-            }
-        )
+                            )
+                    }
+            )
     )
     @PostMapping
     public ResponseEntity<Pedido> salvar(@Valid @RequestBody PedidoRequestDTO dto) {
@@ -144,7 +144,7 @@ public class PedidoController {
 
         // Buscar e setar o cliente
         Client cliente = clientRepository.findById(dto.getCustomerId())
-            .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         pedido.setCliente(cliente);
 
         // Buscar produtos pelos IDs
@@ -159,18 +159,18 @@ public class PedidoController {
     }
 
     @Operation(
-        summary = "Remove um pedido pelo ID",
-        description = "Remove um pedido do sistema pelo ID"
+            summary = "Remove um pedido pelo ID",
+            description = "Remove um pedido do sistema pelo ID"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "204",
-            description = "Pedido removido com sucesso"
-        ),
-        @ApiResponse(
-            responseCode = "404",
-            description = "Pedido não encontrado"
-        )
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Pedido removido com sucesso"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Pedido não encontrado"
+            )
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deletar(@PathVariable Long id) {

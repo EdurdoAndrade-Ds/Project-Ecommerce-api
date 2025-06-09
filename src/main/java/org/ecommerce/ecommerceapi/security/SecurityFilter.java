@@ -1,13 +1,9 @@
 package org.ecommerce.ecommerceapi.security;
 
-import com.auth0.jwt.interfaces.DecodedJWT;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collections;
+
 import org.ecommerce.ecommerceapi.providers.JWTProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,8 +11,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import java.io.IOException;
-import java.util.Collections;
+
+import com.auth0.jwt.interfaces.DecodedJWT;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -24,38 +27,37 @@ public class SecurityFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(SecurityFilter.class);
 
     @Autowired
-    private JWTProvider jwtProvider;
+    JWTProvider jwtProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        String path = request.getRequestURI();
-        if (path.startsWith("/api/auth")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         String header = request.getHeader("Authorization");
+        logger.info("Authorization Header: {}", header);
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
+            logger.info("Extracted Token: {}", token);
 
             try {
                 String subject = jwtProvider.validateToken(token);
                 DecodedJWT decodedJWT = jwtProvider.getDecodedJWT(token);
 
-                var roles = decodedJWT.getClaim("roles").asList(String.class);
-                var authorities = roles != null ?
-                        roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_" + role)).toList() :
-                        Collections.<SimpleGrantedAuthority>emptyList();
+                var rolesClaim = decodedJWT.getClaim("roles");
+                logger.info("Roles Claim from JWT: {}", rolesClaim);
 
-                UsernamePasswordAuthenticationToken auth =
-                        new UsernamePasswordAuthenticationToken(subject, null, authorities);
+                var roles = rolesClaim != null ? rolesClaim.asList(String.class) : Collections.<String>emptyList();
+                var authorities = roles.stream()
+                        .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
+                        .toList();
+                logger.info("Authorities added to Security Context: {}", authorities);
+
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(subject, null,
+                        authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
-                // Se quiser, pode remover as linhas abaixo se não usar esses atributos
                 request.setAttribute("candidate_id", subject);
                 request.setAttribute("company_id", subject);
             } catch (Exception e) {

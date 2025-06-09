@@ -25,18 +25,18 @@ public class PagamentController {
     private PagamentoService pagamentoService;
 
     @Operation(
-        summary = "Realiza um pagamento",
-        description = "Rota responsável por processar um pagamento no sistema"
+            summary = "Realiza um pagamento",
+            description = "Rota responsável por processar um pagamento no sistema"
     )
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Pagamento realizado com sucesso",
-            content = @Content(
-                examples = {
-                    @ExampleObject(
-                        name = "Pagamento realizado",
-                        value = """
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Pagamento realizado com sucesso",
+                    content = @Content(
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Pagamento realizado",
+                                            value = """
                         {
                             "id": 1,
                             "valor": 3500.00,
@@ -45,35 +45,35 @@ public class PagamentController {
                             "pedidoId": 10
                         }
                         """
+                                    )
+                            }
                     )
-                }
-            )
-        ),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Dados inválidos fornecidos",
-            content = @Content(
-                examples = {
-                    @ExampleObject(
-                        name = "Erro de Validação",
-                        value = """
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Dados inválidos fornecidos",
+                    content = @Content(
+                            examples = {
+                                    @ExampleObject(
+                                            name = "Erro de Validação",
+                                            value = """
                         {
                             "message": "Cartão inválido ou saldo insuficiente"
                         }
                         """
+                                    )
+                            }
                     )
-                }
             )
-        )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
-        description = "Dados do pagamento a ser realizado",
-        required = true,
-        content = @Content(
-            examples = {
-                @ExampleObject(
-                    name = "Pagamento",
-                    value = """
+            description = "Dados do pagamento a ser realizado",
+            required = true,
+            content = @Content(
+                    examples = {
+                            @ExampleObject(
+                                    name = "Pagamento",
+                                    value = """
                     {
                         "valor": 3500.00,
                         "metodo": "CARTAO_CREDITO",
@@ -86,14 +86,14 @@ public class PagamentController {
                         }
                     }
                     """
-                )
-            }
-        )
+                            )
+                    }
+            )
     )
     @PostMapping
     public ResponseEntity<?> realizarPagamento(
-        @RequestBody PagamentoRequestDTO dto,
-        @AuthenticationPrincipal ClientUserDetails userDetails
+            @RequestBody PagamentoRequestDTO dto,
+            @AuthenticationPrincipal ClientUserDetails userDetails
     ) {
         String email = userDetails.getUsername();
         return ResponseEntity.ok().build();
