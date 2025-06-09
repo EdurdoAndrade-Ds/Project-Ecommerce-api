@@ -1,7 +1,8 @@
-package org.ecommerce.ecommerceapi.security;
+package org.ecommerce.ecommerceapi.client.model;
 
 public enum Role {
-    CLIENTE("ROLE_CLIENTE");
+    CLIENTE("CLIENTE"),
+    ADMIN("ADMIN");
 
     private final String role;
 
@@ -12,4 +13,4 @@ public enum Role {
     public String getRole() {
         return role;
     }
-} 
+}
