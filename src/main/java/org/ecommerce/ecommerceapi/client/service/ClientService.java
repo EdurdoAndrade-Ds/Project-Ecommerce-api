@@ -1,6 +1,5 @@
 package org.ecommerce.ecommerceapi.client.service;
 
-import org.ecommerce.ecommerceapi.client.dto.ClientCreateDTO;
 import org.ecommerce.ecommerceapi.client.dto.ClientRequestDTO;
 import org.ecommerce.ecommerceapi.client.dto.ClientResponseDTO;
 import org.ecommerce.ecommerceapi.client.model.Client;
@@ -27,15 +26,15 @@ public class ClientService {
         return clientRepository.save(client);
     }
 
-    public ClientResponseDTO create(ClientCreateDTO dto) {
+    public ClientResponseDTO criarCliente(ClientRequestDTO dto) {
         if (clientRepository.existsByEmail(dto.getEmail())) {
             throw new RuntimeException("Email já cadastrado.");
         }
 
         Client client = new Client();
-        client.setName(dto.getName());
+        client.setNome(dto.getName());
         client.setEmail(dto.getEmail());
-        client.setPassword(passwordEncoder.encode(dto.getPassword()));
+        client.setSenha(passwordEncoder.encode(dto.getPassword()));
         client.setRole(Role.CLIENTE); // ou outro enum conforme sua lógica
 
         clientRepository.save(client);
