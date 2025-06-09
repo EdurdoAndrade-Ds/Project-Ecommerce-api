@@ -1,76 +1,48 @@
-package org.ecommerce.ecommerceapi.security;
+package org.ecommerce.ecommerceapi.client.controller;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.ecommerce.ecommerceapi.client.dto.ClientRequestDTO;
+import org.ecommerce.ecommerceapi.client.dto.LoginDTO;
+import org.ecommerce.ecommerceapi.client.dto.LoginResponseDTO;
+import org.ecommerce.ecommerceapi.security.JwtUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.*;
+import org.ecommerce.ecommerceapi.client.service.ClientService;
 
-import java.util.Arrays;
-import java.util.List;
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
 
-@Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
-public class SecurityConfig {
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    private final JwtAuthFilter jwtAuthFilter;
+    @Autowired
+    private JwtUtil jwtUtil;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
-        this.jwtAuthFilter = jwtAuthFilter;
+    @Autowired
+    private ClientService clientService; // Certifique-se de ter esse service
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO dto) {
+        try {
+            var authToken = new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getSenha());
+            authenticationManager.authenticate(authToken);
+            String token = jwtUtil.generateToken(dto.getEmail());
+            return ResponseEntity.ok(new LoginResponseDTO(token));
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("Credenciais inválidas");
+        }
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(AbstractHttpConfigurer::disable)
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-resources/**", "/api-docs/**", "/webjars/**", "/v3/api-docs.yaml").permitAll()
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers("/api/clientes/me/**", "/api/pedidos/me/**").authenticated()
-                .requestMatchers("/api/clientes/**").permitAll()
-                .requestMatchers("/api/pedidos/**", "/api/produtos/**", "/api/pagamentos/**").authenticated()
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
-        configuration.setExposedHeaders(List.of("Authorization"));
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody ClientRequestDTO dto) {
+        try {
+            clientService.saveClient(dto);
+            return ResponseEntity.ok("Cliente registrado com sucesso!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao registrar cliente: " + e.getMessage());
+        }
     }
 }
