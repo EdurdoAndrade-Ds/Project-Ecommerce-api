@@ -41,12 +41,9 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/clientes").permitAll()
-                        .requestMatchers("/api/clientes/{id}").permitAll()
-                        .requestMatchers("/api/clientes/filtro").permitAll()
                         .requestMatchers(
+                                "/auth/**",                      // ← Necessário para liberar /auth/register
+                                "/api/auth/**",                  // ← Caso use api/auth em outra parte
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
@@ -56,6 +53,9 @@ public class SecurityConfig {
                                 "/v3/api-docs.yaml",
                                 "/swagger-ui/index.html"
                         ).permitAll()
+                        .requestMatchers("/api/clientes").permitAll()
+                        .requestMatchers("/api/clientes/{id}").permitAll()
+                        .requestMatchers("/api/clientes/filtro").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
