@@ -7,11 +7,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DeleteClienteUseCase {
-    @Autowired
-    private ClienteRepository clienteRepository;
+    @Autowired ClienteRepository clienteRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Autowired PasswordEncoder passwordEncoder;
 
     public void execute(Long clienteId, String senha) {
         var cliente = this.clienteRepository.findById(clienteId)
