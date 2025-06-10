@@ -1,9 +1,13 @@
 ﻿# Project Ecommerce API
 
-Microserviço de E-commerce desenvolvido com Java 17 e Spring Boot, seguindo boas práticas de arquitetura e segurança. O projeto é responsável por realizar a gestão de produtos, pedidos, pagamentos e autenticação com usuários e clientes.
+![Java](https://img.shields.io/badge/Java-17-blue)
+![SpringBoot](https://img.shields.io/badge/Spring%20Boot-3.0-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
+
+Microserviço de E-commerce desenvolvido com Java 17 e Spring Boot, seguindo boas práticas de arquitetura e segurança. O projeto é responsável por realizar a gestão de produtos, pedidos e autenticação com usuários e clientes.
 
 🔗 Acesso público à API Swagger:  
-https://project-ecommerce-api.onrender.com/swagger-ui/index.html
+👉 [Swagger UI](https://project-ecommerce-api.onrender.com/swagger-ui/index.html)
 
 ---
 
@@ -40,9 +44,8 @@ Este projeto simula uma plataforma robusta e escalável para o gerenciamento de 
 ## ⚙️ Funcionalidades atuais
 
 ✅ Cadastro, autenticação e gerenciamento de clientes  
-✅ Cadastro e listagem de produtos  
+✅ Cadastro, listagem, detalhamento, atualização e exclusão de produtos  
 ✅ Criação e cancelamento de pedidos  
-✅ Pagamento de pedidos  
 ✅ Listagem de pedidos por cliente  
 ✅ Proteção de rotas com JWT  
 ✅ Documentação automática com Swagger
@@ -67,15 +70,25 @@ Este projeto simula uma plataforma robusta e escalável para o gerenciamento de 
 ecommerce-api/
 ├── modules/
 │   ├── cliente/
+│   │   ├── dtos/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── repositories/
+│   │   └── entities/
 │   ├── produto/
-│   ├── pedido/
-│   └── pagamento/
+│   │   ├── dtos/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── repositories/
+│   │   └── entities/
+│   └── pedido/
+│       ├── dtos/
+│       ├── controllers/
+│       ├── services/
+│       ├── repositories/
+│       └── entities/
 ├── security/
 ├── providers/
-├── dtos/
-├── controllers/
-├── services/
-├── repositories/
 ├── exceptions/
 └── ...
 ```
@@ -93,18 +106,20 @@ ecommerce-api/
 }
 ```
 
+### 🛍️ Criação de Produto
+```json
+{
+  "nome": "Teclado Mecânico",
+  "descricao": "Teclado com switches azuis e iluminação RGB",
+  "preco": 350.00,
+  "quantidade": 10
+}
+```
+
 ### 🛒 Criação de Pedido
 ```json
 {
   "produtosIds": [1, 2, 3]
-}
-```
-
-### 💳 Pagamento
-```json
-{
-  "pedidoId": 5,
-  "tipoPagamento": "CARTAO_CREDITO"
 }
 ```
 
@@ -114,8 +129,8 @@ ecommerce-api/
 
 📥 Passo 1 – Clone o repositório
 ```bash
-git clone https://github.com/seuusuario/project-ecommerce-api.git
-cd project-ecommerce-api
+git clone https://github.com/EdurdoAndrade-Ds/Project-Ecommerce-api.git
+cd Project-Ecommerce-api
 ```
 
 🧾 Passo 2 – Configure o banco de dados PostgreSQL  
@@ -134,20 +149,51 @@ spring.jpa.show-sql=true
 ./mvnw spring-boot:run
 ```
 
+🐳 Alternativa com Docker
+```bash
+./mvnw clean package -DskipTests
+docker-compose up --build
+```
+
 ---
 
 ## 👨‍💻 Autores
 
-Eduardo Andrade  
-🔹 Cadastro e autenticação de cliente  
-🔹 Cadastro e gerenciamento de produtos  
-🔹 Criação e listagem de pedidos  
-🔹 Pagamentos e histórico do cliente  
-🔹 Autorização com JWT  
-🔹 Documentação com Swagger  
-🔹 Deploy com Docker e Render  
-🔹 Testes unitários com JUnit e Mockito  
+Eduardo Andrade
+🔹 Cadastro e autenticação de cliente
+🔹 Criação e gerenciamento de produtos
+🔹 Criação e listagem de pedidos
+🔹 Autorização com JWT
+🔹 Documentação com Swagger
+🔹 Deploy com Docker e Render
+🔹 Testes unitários com JUnit e Mockito
 🔹 Tratamento global de exceções
+
+Jose Guilherme
+🔹  exemplo
+🔹  exemplo
+
+Maria Eduarda
+🔹  exemplo
+🔹  exemplo
+
+Mateus
+🔹  exemplo
+🔹  exemplo
+
+Pedro Costa
+🔹  exemplo
+🔹  exemplo
+
+Izabela
+🔹  exemplo
+🔹  exemplo
+
+---
+
+## 📄 Licença
+
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 

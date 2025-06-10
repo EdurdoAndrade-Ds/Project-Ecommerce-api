@@ -19,5 +19,4 @@ public class PedidoResponseDTO {
         private BigDecimal precoUnitario;
 
     }
-
 }
