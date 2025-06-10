@@ -1,4 +1,4 @@
-﻿# Project Ecommerce API
+# Project Ecommerce API
 
 ![Java](https://img.shields.io/badge/Java-17-blue)
 ![SpringBoot](https://img.shields.io/badge/Spring%20Boot-3.0-brightgreen)
@@ -49,18 +49,6 @@ Este projeto simula uma plataforma robusta e escalável para o gerenciamento de 
 ✅ Listagem de pedidos por cliente  
 ✅ Proteção de rotas com JWT  
 ✅ Documentação automática com Swagger
-
----
-
-## 📦 Tecnologias utilizadas
-
-- Java 17
-- Spring Boot 3
-- Spring Data JPA
-- PostgreSQL
-- Maven
-- Lombok
-- Hibernate Validator
 
 ---
 
@@ -159,35 +147,35 @@ docker-compose up --build
 
 ## 👨‍💻 Autores
 
-Eduardo Andrade
-🔹 Cadastro e autenticação de cliente
-🔹 Criação e gerenciamento de produtos
-🔹 Criação e listagem de pedidos
-🔹 Autorização com JWT
-🔹 Documentação com Swagger
-🔹 Deploy com Docker e Render
-🔹 Testes unitários com JUnit e Mockito
-🔹 Tratamento global de exceções
+#### Eduardo Andrade
+- Cadastro e autenticação de cliente
+- Criação e gerenciamento de produtos
+- Criação e listagem de pedidos
+- Autorização com JWT
+- Documentação com Swagger
+- Deploy com Docker e Render
+- Testes unitários com JUnit e Mockito
+- Tratamento global de exceções
 
-Jose Guilherme
-🔹  exemplo
-🔹  exemplo
+#### Jose Guilherme
+- Exemplo de contribuição 1
+- Exemplo de contribuição 2
 
-Maria Eduarda
-🔹  exemplo
-🔹  exemplo
+#### Maria Eduarda
+- Exemplo de contribuição 1
+- Exemplo de contribuição 2
 
-Mateus
-🔹  exemplo
-🔹  exemplo
+#### Mateus
+- Exemplo de contribuição 1
+- Exemplo de contribuição 2
 
-Pedro Costa
-🔹  exemplo
-🔹  exemplo
+#### Pedro Costa
+- Exemplo de contribuição 1
+- Exemplo de contribuição 2
 
-Izabela
-🔹  exemplo
-🔹  exemplo
+#### Izabela
+- Exemplo de contribuição 1
+- Exemplo de contribuição 2
 
 ---
 
