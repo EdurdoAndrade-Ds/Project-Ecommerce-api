@@ -8,7 +8,6 @@ import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoResponseDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.ItemPedido;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
-import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoStatus;
 import org.ecommerce.ecommerceapi.modules.product.entities.Product;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class PedidoService {
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         pedido.setCliente(cliente);
-        pedido.setDateCreate(LocalDateTime.now());
+        pedido.setDateCreate(LocalDateTime.now()); // ✅ ESSA LINHA RESOLVE O ERRO
 
         List<ItemPedido> itens = dto.getItens().stream().map(itemDTO -> {
             Product product = productService.buscarPorId(itemDTO.getProdutoId());
@@ -50,7 +49,6 @@ public class PedidoService {
             return item;
         }).collect(Collectors.toList());
 
-        pedido.setStatus(PedidoStatus.CRIADO);
         pedido.setItens(itens);
         pedido.setTotal(itens.stream()
                 .map(item -> item.getPrecoUnitario().multiply(BigDecimal.valueOf(item.getQuantidade())))
@@ -91,7 +89,6 @@ public class PedidoService {
         response.setId(pedido.getId());
         response.setClienteId(pedido.getCliente().getId());
         response.setTotal(pedido.getTotal());
-        response.setStatus(pedido.getStatus().name()); // 👈 aqui está o que faltava
         response.setItens(pedido.getItens().stream().map(i -> {
             PedidoResponseDTO.ItemDTO ri = new PedidoResponseDTO.ItemDTO();
             ri.setProdutoId(i.getProduto().getId());
