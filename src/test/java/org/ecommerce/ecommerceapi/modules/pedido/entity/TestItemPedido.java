@@ -1,72 +1,25 @@
 package org.ecommerce.ecommerceapi.modules.pedido.entity;
 
+import org.ecommerce.ecommerceapi.modules.product.entities.Product;
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestItemPedido {
 
     @Test
-    void getId() {
-    }
+    void testSetAndGetProduto() {
+        ItemPedido item = new ItemPedido();
+        Product produto = new Product();
+        produto.setId(1L); // Supondo que Product tenha setId()
+        produto.setNome("Produto Teste");
 
-    @Test
-    void getNomeProduto() {
-    }
+        item.setProduto(produto);
 
-    @Test
-    void getQuantidade() {
-    }
-
-    @Test
-    void getPrecoUnitario() {
-    }
-
-    @Test
-    void getPedido() {
-    }
-
-    @Test
-    void getProduto() {
-    }
-
-    @Test
-    void setId() {
-    }
-
-    @Test
-    void setNomeProduto() {
-    }
-
-    @Test
-    void setQuantidade() {
-    }
-
-    @Test
-    void setPrecoUnitario() {
-    }
-
-    @Test
-    void setPedido() {
-    }
-
-    @Test
-    void setProduto() {
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void canEqual() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
-
-    @Test
-    void testToString() {
+        assertNotNull(item.getProduto());
+        assertEquals(1L, item.getProduto().getId());
+        assertEquals("Produto Teste", item.getProduto().getNome());
     }
 }
