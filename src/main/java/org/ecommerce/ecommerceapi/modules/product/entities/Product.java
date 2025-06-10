@@ -7,15 +7,18 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.ecommerce.ecommerceapi.modules.pedido.entity.ItemPedido;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-@Data
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "products")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,4 +39,7 @@ public class Product {
     @Min(value = 0, message = "Estoque não pode ser negativo")
     @Column(name = "estoque", nullable = false)
     private Integer estoque;
+
+    @OneToMany(mappedBy = "produto")
+    private List<ItemPedido> itens;
 }

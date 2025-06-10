@@ -2,6 +2,8 @@ package org.ecommerce.ecommerceapi.modules.pedido.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -13,7 +15,9 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long clienteId;
+    @ManyToOne
+    @JoinColumn(name = "cliente_id")
+    private ClienteEntity cliente;
     private BigDecimal total;
     private boolean cancelado;
 
