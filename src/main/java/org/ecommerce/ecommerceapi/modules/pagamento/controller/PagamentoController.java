@@ -2,6 +2,7 @@ package org.ecommerce.ecommerceapi.modules.pagamento.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Data;
 import org.springframework.security.core.Authentication;
 import org.ecommerce.ecommerceapi.modules.pagamento.dto.PagamentoRequestDTO;
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 @RestController
 @RequestMapping("/api/pagamentos")
+@Tag(name = "Pagamentos", description = "Endpoints para gerenciamento de pagamentos")
 public class PagamentoController {
 
     @Autowired
