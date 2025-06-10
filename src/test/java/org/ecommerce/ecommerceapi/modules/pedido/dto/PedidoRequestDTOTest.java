@@ -1,14 +1,14 @@
-package org.ecommerce.ecommerceapi.modules.pedido.entity;
+package org.ecommerce.ecommerceapi.modules.pedido.dto;
 
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class PedidoTest {
+public class PedidoRequestDTOTest {
 
     @Test
     void testNoArgsConstructorAndSetters() {
-        Pedido dto = new Pedido();
+        PedidoRequestDTO dto = new PedidoRequestDTO();
         assertNotNull(dto);
         // TODO: Adicionar asserts para atributos se necessário
     }
