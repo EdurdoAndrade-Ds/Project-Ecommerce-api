@@ -1,4 +1,4 @@
-﻿# Project Ecommerce API
+# Project Ecommerce API
 
 ![Java](https://img.shields.io/badge/Java-17-blue)
 ![SpringBoot](https://img.shields.io/badge/Spring%20Boot-3.0-brightgreen)
@@ -49,18 +49,6 @@ Este projeto simula uma plataforma robusta e escalável para o gerenciamento de 
 ✅ Listagem de pedidos por cliente  
 ✅ Proteção de rotas com JWT  
 ✅ Documentação automática com Swagger
-
----
-
-## 📦 Tecnologias utilizadas
-
-- Java 17
-- Spring Boot 3
-- Spring Data JPA
-- PostgreSQL
-- Maven
-- Lombok
-- Hibernate Validator
 
 ---
 
@@ -159,35 +147,36 @@ docker-compose up --build
 
 ## 👨‍💻 Autores
 
-Eduardo Andrade
-🔹 Cadastro e autenticação de cliente
-🔹 Criação e gerenciamento de produtos
-🔹 Criação e listagem de pedidos
-🔹 Autorização com JWT
-🔹 Documentação com Swagger
-🔹 Deploy com Docker e Render
-🔹 Testes unitários com JUnit e Mockito
-🔹 Tratamento global de exceções
+#### Eduardo Andrade
+- Cadastro e autenticação de cliente
+- Criação e gerenciamento de produtos
+- Criação e listagem de pedidos
+- Autorização com JWT
+- Documentação com Swagger
+- Deploy com Docker e Render
+- Tratamento global de exceções
+- Ajuste de Bugs
 
-Jose Guilherme
-🔹  exemplo
-🔹  exemplo
+#### Jose Guilherme
+- Testes unitários com JUnit e Mockito
+- Implementacao de metodos do module clientes
+- Refatoracao do cliente
 
-Maria Eduarda
-🔹  exemplo
-🔹  exemplo
+#### Maria Eduarda
+- dockerfile
 
-Mateus
-🔹  exemplo
-🔹  exemplo
+#### Mateus
+- Testes unitários com JUnit e Mockito
+- Implementacao logica do Produto
+- Refatoracao do Produto
 
-Pedro Costa
-🔹  exemplo
-🔹  exemplo
+#### Pedro Costa
+- Implementacao do criar Pedido
+- Finalizacao da logica DTOs
 
-Izabela
-🔹  exemplo
-🔹  exemplo
+#### Izabela
+- Implementacao do dto Pedido
+- Refatoracao do Pedido
 
 ---
 
