@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 public class TestEcommerceApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.from(EcommerceApiApplication::main).with(TestcontainersConfiguration.class).run(args);
+        SpringApplication.from(EcommerceApiApplication::main).with(org.ecommerce.ecommerceapi.TestcontainersConfiguration.class).run(args);
     }
 
 }
