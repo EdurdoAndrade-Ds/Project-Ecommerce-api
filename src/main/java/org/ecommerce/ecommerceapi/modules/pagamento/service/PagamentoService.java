@@ -5,11 +5,12 @@ import org.ecommerce.ecommerceapi.modules.pagamento.dto.PagamentoRequestDTO;
 import org.ecommerce.ecommerceapi.modules.pagamento.dto.PagamentoResponseDTO;
 import org.ecommerce.ecommerceapi.modules.pagamento.entity.Pagamento;
 import org.ecommerce.ecommerceapi.modules.pagamento.repository.PagamentoRepository;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Service
@@ -22,7 +23,7 @@ public class PagamentoService {
     private PedidoRepository pedidoRepository;
 
     public PagamentoResponseDTO criar(PagamentoRequestDTO dto) {
-        Pedido pedido = pedidoRepository.findById(dto.getPedidoId())
+        var pedido = pedidoRepository.findById(dto.getPedidoId())
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
         Pagamento pagamento = new Pagamento();
@@ -31,15 +32,36 @@ public class PagamentoService {
         pagamento.setStatus("PENDENTE");
         pagamento.setData(LocalDateTime.now());
 
-        pagamento = pagamentoRepository.save(pagamento);
+        return mapToDTO(pagamentoRepository.save(pagamento));
+    }
 
-        PagamentoResponseDTO response = new PagamentoResponseDTO();
-        response.setId(pagamento.getId());
-        response.setPedidoId(pedido.getId());
-        response.setValor(pagamento.getValor());
-        response.setStatus(pagamento.getStatus());
-        response.setData(pagamento.getData());
+    public List<PagamentoResponseDTO> listar(Long clienteId) {
+        return pagamentoRepository.findAllByPedidoClienteId(clienteId).stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
 
-        return response;
+    public PagamentoResponseDTO buscarPorId(Long id) {
+        return pagamentoRepository.findById(id)
+                .map(this::mapToDTO)
+                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado"));
+    }
+
+    public PagamentoResponseDTO atualizarStatus(Long id, String status) {
+        Pagamento pagamento = pagamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado"));
+
+        pagamento.setStatus(status);
+        return mapToDTO(pagamentoRepository.save(pagamento));
+    }
+
+    private PagamentoResponseDTO mapToDTO(Pagamento pagamento) {
+        PagamentoResponseDTO dto = new PagamentoResponseDTO();
+        dto.setId(pagamento.getId());
+        dto.setValor(pagamento.getValor());
+        dto.setStatus(pagamento.getStatus());
+        dto.setPedidoId(pagamento.getPedido().getId());
+        dto.setData(pagamento.getData());
+        return dto;
     }
 }
