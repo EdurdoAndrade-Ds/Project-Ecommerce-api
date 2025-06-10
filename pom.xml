@@ -111,10 +111,7 @@
         </dependency>
     </dependencies>
 
-    <!-- Testcontainers para PostgreSQL -->
-
-
-    <!-- Testcontainers BOM (opcional, mas recomendado para versões consistentes) -->
+    <!-- Testcontainers BOM -->
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -127,9 +124,9 @@
         </dependencies>
     </dependencyManagement>
 
-
     <build>
         <plugins>
+            <!-- Plugin Spring Boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -142,6 +139,27 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <!-- Plugin JaCoCo -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.11</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-</project> 
+</project>
