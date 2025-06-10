@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class AuthClienteDTO {
 
-    public AuthClienteDTO(String joaosilva, String senha123456) {
-    }
+
     private String username;
     private String senha;
 }

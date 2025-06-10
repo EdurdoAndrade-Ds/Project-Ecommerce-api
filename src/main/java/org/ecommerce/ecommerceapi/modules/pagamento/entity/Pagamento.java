@@ -31,4 +31,7 @@ public class Pagamento {
 
     @Column(nullable = false)
     private LocalDateTime data;
+
+
+
 }
