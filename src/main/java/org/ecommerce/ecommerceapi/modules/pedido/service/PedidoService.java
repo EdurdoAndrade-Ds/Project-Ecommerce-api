@@ -91,7 +91,7 @@ public class PedidoService {
         response.setId(pedido.getId());
         response.setClienteId(pedido.getCliente().getId());
         response.setTotal(pedido.getTotal());
-        response.setStatus(pedido.getStatus().name());
+        response.setStatus(pedido.getStatus().name()); // 👈 aqui está o que faltava
         response.setItens(pedido.getItens().stream().map(i -> {
             PedidoResponseDTO.ItemDTO ri = new PedidoResponseDTO.ItemDTO();
             ri.setProdutoId(i.getProduto().getId());
@@ -102,5 +102,4 @@ public class PedidoService {
         }).toList());
         return response;
     }
-
 }
