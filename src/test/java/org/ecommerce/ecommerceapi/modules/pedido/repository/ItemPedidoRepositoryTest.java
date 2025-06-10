@@ -18,7 +18,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-public class TestPedidoRepository{
+public class ItemPedidoRepositoryTest {
 
     @Autowired
     private ItemPedidoRepository itemPedidoRepository;
@@ -37,7 +37,7 @@ public class TestPedidoRepository{
 
     @BeforeEach
     void setup() {
-        // Cria e salva Cliente
+        // Cria e salva cliente
         ClienteEntity cliente = new ClienteEntity();
         cliente.setNome("Cliente Teste");
         cliente.setUsername("cliente1");
@@ -45,7 +45,7 @@ public class TestPedidoRepository{
         cliente.setSenha("senha123");
         cliente = clienteRepository.save(cliente);
 
-        // Cria e salva Pedido com Cliente
+        // Cria e salva pedido com cliente
         pedido = new Pedido();
         pedido.setCliente(cliente);
         pedido.setCancelado(false);
@@ -53,7 +53,7 @@ public class TestPedidoRepository{
         pedido.setTotal(BigDecimal.valueOf(100.00));
         pedido = pedidoRepository.save(pedido);
 
-        // Cria e salva Produto
+        // Cria e salva produto
         produto = new Product();
         produto.setNome("Produto Teste");
         produto.setDescricao("Descrição");
@@ -64,6 +64,7 @@ public class TestPedidoRepository{
 
     @Test
     void testSaveAndFind() {
+        // Cria o itemPedido com referencias salvas
         ItemPedido itemPedido = new ItemPedido();
         itemPedido.setNomeProduto(produto.getNome());
         itemPedido.setQuantidade(2);
@@ -71,10 +72,9 @@ public class TestPedidoRepository{
         itemPedido.setPedido(pedido);
         itemPedido.setProduto(produto);
 
-        // Salva o itemPedido
+        // Salva e verifica
         itemPedido = itemPedidoRepository.save(itemPedido);
 
-        // Busca pelo id
         Optional<ItemPedido> encontrado = itemPedidoRepository.findById(itemPedido.getId());
         assertTrue(encontrado.isPresent());
         assertEquals(itemPedido.getNomeProduto(), encontrado.get().getNomeProduto());

@@ -14,6 +14,12 @@ class TestAuthClienteDTO {
 
         assertEquals("usuario", dto.getUsername());
         assertEquals("senha123", dto.getSenha());
+
+        // Testando setters com null
+        dto.setUsername(null);
+        dto.setSenha(null);
+        assertNull(dto.getUsername());
+        assertNull(dto.getSenha());
     }
 
     @Test
@@ -35,7 +41,19 @@ class TestAuthClienteDTO {
 
         assertEquals(dto1, dto2);
         assertEquals(dto1.hashCode(), dto2.hashCode());
+
         assertNotEquals(dto1, dto3);
+        assertNotEquals(dto1, null);
+        assertNotEquals(dto1, new Object());
+
+        // Reflexividade
+        assertEquals(dto1, dto1);
+
+        // Simetria
+        assertTrue(dto1.equals(dto2) && dto2.equals(dto1));
+
+        // Consistência
+        assertEquals(dto1.equals(dto2), dto1.equals(dto2));
     }
 
     @Test
@@ -51,13 +69,19 @@ class TestAuthClienteDTO {
     }
 
     @Test
-    void testBuilder() {
+    void testBuilderWithPartialFields() {
         AuthClienteDTO dto = AuthClienteDTO.builder()
-                .username("builderUser")
-                .senha("builderPass")
+                .username("onlyUsername")
                 .build();
 
-        assertEquals("builderUser", dto.getUsername());
-        assertEquals("builderPass", dto.getSenha());
+        assertEquals("onlyUsername", dto.getUsername());
+        assertNull(dto.getSenha());
+
+        AuthClienteDTO dto2 = AuthClienteDTO.builder()
+                .senha("onlySenha")
+                .build();
+
+        assertNull(dto2.getUsername());
+        assertEquals("onlySenha", dto2.getSenha());
     }
 }
