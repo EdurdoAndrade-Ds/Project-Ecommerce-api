@@ -3,8 +3,6 @@ package org.ecommerce.ecommerceapi.modules.pedido.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
-
-
 import java.util.List;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.CascadeType;
@@ -27,7 +25,6 @@ public class Pedido {
     @Column(name = "total", nullable = false)
     private BigDecimal total;
 
-
     @Column(name = "date_create", nullable = false)
     private LocalDateTime dateCreate;
 
@@ -38,3 +35,4 @@ public class Pedido {
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens;
 }
+

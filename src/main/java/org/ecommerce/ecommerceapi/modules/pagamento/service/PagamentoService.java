@@ -10,6 +10,7 @@ import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Service
@@ -41,5 +42,34 @@ public class PagamentoService {
         response.setData(pagamento.getData());
 
         return response;
+    }
+
+    public List<PagamentoResponseDTO> listarPorCliente(Long clienteId) {
+        return pagamentoRepository.findByPedidoClienteId(clienteId)
+                .stream()
+                .map(p -> new PagamentoResponseDTO(
+                        p.getId(),
+                        p.getPedido().getId(),
+                        p.getValor(),
+                        p.getStatus(),
+                        p.getData()
+                ))
+                .toList();
+    }
+
+    public PagamentoResponseDTO atualizarStatus(Long pagamentoId, String novoStatus, Long clienteId) {
+        Pagamento pagamento = pagamentoRepository.findByIdAndPedidoClienteId(pagamentoId, clienteId)
+                .orElseThrow(() -> new RuntimeException("Pagamento não encontrado ou acesso negado"));
+
+        pagamento.setStatus(novoStatus);
+        pagamento = pagamentoRepository.save(pagamento);
+
+        return new PagamentoResponseDTO(
+                pagamento.getId(),
+                pagamento.getPedido().getId(),
+                pagamento.getValor(),
+                pagamento.getStatus(),
+                pagamento.getData()
+        );
     }
 }
