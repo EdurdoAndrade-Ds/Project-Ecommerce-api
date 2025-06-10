@@ -155,21 +155,28 @@ docker-compose up --build
 - Documentação com Swagger
 - Deploy com Docker e Render
 - Tratamento global de exceções
+- Ajuste de Bugs
 
 #### Jose Guilherme
 - Testes unitários com JUnit e Mockito
+- Implementacao de metodos do module clientes
+- Refatoracao do cliente
 
 #### Maria Eduarda
 - dockerfile
 
 #### Mateus
 - Testes unitários com JUnit e Mockito
+- Implementacao logica do Produto
+- Refatoracao do Produto
 
 #### Pedro Costa
 - Implementacao do criar Pedido
+- Finalizacao da logica DTOs
 
 #### Izabela
 - Implementacao do dto Pedido
+- Refatoracao do Pedido
 
 ---
 
