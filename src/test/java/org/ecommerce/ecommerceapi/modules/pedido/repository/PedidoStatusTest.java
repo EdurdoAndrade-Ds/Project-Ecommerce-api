@@ -2,9 +2,7 @@ package org.ecommerce.ecommerceapi.modules.pedido.repository;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class TestPedidoStatus {
+class PedidoStatusTest {
 
     @Test
     void values() {
