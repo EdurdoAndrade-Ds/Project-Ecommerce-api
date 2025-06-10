@@ -72,5 +72,6 @@ class TestItemPedido {
         ItemPedido item = new ItemPedido();
         assertTrue(item.canEqual(new ItemPedido()));
         assertFalse(item.canEqual("uma string"));
-    }
+}
+
 }
