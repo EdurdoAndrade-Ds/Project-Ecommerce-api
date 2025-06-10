@@ -87,7 +87,31 @@ public class ClienteController {
                     )
             )
     })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Exemplo de requisição para cadastro de cliente",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    examples = @ExampleObject(
+                            name = "ExemploCliente",
+                            value = """
+            {
+              "nome": "user",
+              "username": "user",
+              "email": "user@email.com",
+              "senha": "123456789",
+              "telefone": "11999999999",
+              "endereco": "Rua Exemplo, 123",
+              "cidade": "São Paulo",
+              "estado": "SP",
+              "cep": "01234-567"
+            }
+            """
+                    )
+            )
+    )
     public ResponseEntity<Object> create(@Valid @RequestBody CreateClienteDTO createClienteDTO) {
+
         try {
             var clienteEntity = ClienteEntity.builder()
                     .nome(createClienteDTO.getNome())

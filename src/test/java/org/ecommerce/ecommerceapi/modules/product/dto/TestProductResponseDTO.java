@@ -1,64 +1,26 @@
 package org.ecommerce.ecommerceapi.modules.product.dto;
 
 import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestProductResponseDTO {
+class ProductResponseDTOTest {
 
     @Test
-    void getId() {
-    }
+    void deveCriarEDefinirCamposCorretamente() {
+        ProductResponseDTO dto = new ProductResponseDTO();
 
-    @Test
-    void getNome() {
-    }
+        dto.setId(1L);
+        dto.setNome("Produto Teste");
+        dto.setDescricao("Descrição de Teste");
+        dto.setPreco(BigDecimal.valueOf(99.99));
+        dto.setEstoque(10);
 
-    @Test
-    void getDescricao() {
-    }
-
-    @Test
-    void getPreco() {
-    }
-
-    @Test
-    void getEstoque() {
-    }
-
-    @Test
-    void setId() {
-    }
-
-    @Test
-    void setNome() {
-    }
-
-    @Test
-    void setDescricao() {
-    }
-
-    @Test
-    void setPreco() {
-    }
-
-    @Test
-    void setEstoque() {
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void canEqual() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
-
-    @Test
-    void testToString() {
+        assertEquals(1L, dto.getId());
+        assertEquals("Produto Teste", dto.getNome());
+        assertEquals("Descrição de Teste", dto.getDescricao());
+        assertEquals(BigDecimal.valueOf(99.99), dto.getPreco());
+        assertEquals(10, dto.getEstoque());
     }
 }
