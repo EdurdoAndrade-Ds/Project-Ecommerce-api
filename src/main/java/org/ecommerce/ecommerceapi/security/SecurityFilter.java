@@ -10,10 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-
 import com.auth0.jwt.interfaces.DecodedJWT;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,12 +29,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
-        String path = request.getRequestURI();
-        if (path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         String header = request.getHeader("Authorization");
         logger.info("Authorization Header: {}", header);
@@ -64,8 +55,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
-                request.setAttribute("candidate_id", subject);
-                request.setAttribute("company_id", subject);
+                request.setAttribute("cliente_id", subject);
             } catch (Exception e) {
                 logger.error("Erro ao processar token JWT: {}", e.getMessage());
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -75,6 +65,5 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
-
 }
+
