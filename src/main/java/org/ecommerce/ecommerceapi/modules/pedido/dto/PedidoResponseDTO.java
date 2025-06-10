@@ -10,6 +10,7 @@ public class PedidoResponseDTO {
     private Long clienteId;
     private BigDecimal total;
     private List<ItemDTO> itens;
+        private String status;
 
     @Data
     public static class ItemDTO {
