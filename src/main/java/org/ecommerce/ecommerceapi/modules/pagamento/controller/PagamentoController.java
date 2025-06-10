@@ -7,8 +7,9 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.Data;
+import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.ecommerce.ecommerceapi.modules.pagamento.dto.PagamentoRequestDTO;
 import org.ecommerce.ecommerceapi.modules.pagamento.dto.PagamentoResponseDTO;
 import org.ecommerce.ecommerceapi.modules.pagamento.service.PagamentoService;
@@ -38,16 +39,17 @@ public class PagamentoController {
             @ApiResponse(responseCode = "201", description = "Pagamento criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos")
     })
-    public ResponseEntity<PagamentoResponseDTO> criar(@RequestBody @Valid PagamentoRequestDTO dto) {
-        return new ResponseEntity<>(pagamentoService.criar(dto), HttpStatus.CREATED);
+    public ResponseEntity<PagamentoResponseDTO> criar(@RequestBody @Valid PagamentoRequestDTO dto,
+                                                      @AuthenticationPrincipal ClienteEntity cliente)
+    {
+        return new ResponseEntity<>(pagamentoService.criar(dto, cliente.getId()), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('CLIENTE')")
     @GetMapping
     @Operation(summary = "Listar pagamentos", description = "Lista todos os pagamentos do cliente autenticado")
-    public ResponseEntity<List<PagamentoResponseDTO>> listar(Authentication authentication) {
-        Long clienteId = Long.parseLong(authentication.getName());
-        return ResponseEntity.ok(pagamentoService.listar(clienteId));
+    public ResponseEntity<List<PagamentoResponseDTO>> listar(@AuthenticationPrincipal ClienteEntity cliente) {
+        return ResponseEntity.ok(pagamentoService.listar(cliente.getId()));
     }
 
     @PreAuthorize("hasRole('CLIENTE')")

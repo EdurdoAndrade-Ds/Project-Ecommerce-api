@@ -22,9 +22,13 @@ public class PagamentoService {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    public PagamentoResponseDTO criar(PagamentoRequestDTO dto) {
+    public PagamentoResponseDTO criar(PagamentoRequestDTO dto, Long clienteId) {
         var pedido = pedidoRepository.findById(dto.getPedidoId())
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+
+        if (!pedido.getCliente().getId().equals(clienteId)) {
+            throw new RuntimeException("Acesso negado ao pedido");
+        }
 
         Pagamento pagamento = new Pagamento();
         pagamento.setPedido(pedido);
