@@ -1,6 +1,8 @@
 package org.ecommerce.ecommerceapi.modules.pedido.service;
 
 import lombok.Data;
+import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
+import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoRequestDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoResponseDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.ItemPedido;
@@ -24,14 +26,20 @@ public class PedidoService {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ClienteRepository clienteRepository;
+
     public PedidoResponseDTO criar(PedidoRequestDTO dto, Long clienteId) {
         Pedido pedido = new Pedido();
-        pedido.setClienteId(clienteId);
+        ClienteEntity cliente = clienteRepository.findById(clienteId)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        pedido.setCliente(cliente);
 
         List<ItemPedido> itens = dto.getItens().stream().map(itemDTO -> {
             Product product = productService.buscarPorId(itemDTO.getProdutoId());
             ItemPedido item = new ItemPedido();
-            item.setProdutoId(itemDTO.getProdutoId());
+            item.setProduto(product);
             item.setNomeProduto(product.getNome());
             item.setQuantidade(itemDTO.getQuantidade());
             item.setPrecoUnitario(product.getPreco());
@@ -45,7 +53,6 @@ public class PedidoService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
 
         Pedido salvo = pedidoRepository.save(pedido);
-
         return mapToResponseDTO(salvo);
     }
 
@@ -77,11 +84,11 @@ public class PedidoService {
     private PedidoResponseDTO mapToResponseDTO(Pedido pedido) {
         PedidoResponseDTO response = new PedidoResponseDTO();
         response.setId(pedido.getId());
-        response.setClienteId(pedido.getClienteId());
+        response.setClienteId(pedido.getCliente().getId());
         response.setTotal(pedido.getTotal());
         response.setItens(pedido.getItens().stream().map(i -> {
             PedidoResponseDTO.ItemDTO ri = new PedidoResponseDTO.ItemDTO();
-            ri.setProdutoId(i.getProdutoId());
+            ri.setProdutoId(i.getProduto().getId());
             ri.setNomeProduto(i.getNomeProduto());
             ri.setQuantidade(i.getQuantidade());
             ri.setPrecoUnitario(i.getPrecoUnitario());

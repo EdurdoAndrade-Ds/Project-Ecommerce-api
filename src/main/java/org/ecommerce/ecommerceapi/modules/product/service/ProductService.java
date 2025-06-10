@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.product.service;
 
+import lombok.Data;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.entities.Product;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Data
 @Service
 public class ProductService {
 
