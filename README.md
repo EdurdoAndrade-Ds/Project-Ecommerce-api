@@ -154,28 +154,22 @@ docker-compose up --build
 - Autorização com JWT
 - Documentação com Swagger
 - Deploy com Docker e Render
-- Testes unitários com JUnit e Mockito
 - Tratamento global de exceções
 
 #### Jose Guilherme
-- Exemplo de contribuição 1
-- Exemplo de contribuição 2
+- Testes unitários com JUnit e Mockito
 
 #### Maria Eduarda
-- Exemplo de contribuição 1
-- Exemplo de contribuição 2
+- dockerfile
 
 #### Mateus
-- Exemplo de contribuição 1
-- Exemplo de contribuição 2
+- Testes unitários com JUnit e Mockito
 
 #### Pedro Costa
-- Exemplo de contribuição 1
-- Exemplo de contribuição 2
+- Implementacao do criar Pedido
 
 #### Izabela
-- Exemplo de contribuição 1
-- Exemplo de contribuição 2
+- Implementacao do dto Pedido
 
 ---
 
