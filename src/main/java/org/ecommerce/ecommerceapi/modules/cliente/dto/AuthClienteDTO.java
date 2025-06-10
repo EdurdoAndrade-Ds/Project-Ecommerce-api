@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthClienteDTO {
+
+
     private String username;
     private String senha;
 }
