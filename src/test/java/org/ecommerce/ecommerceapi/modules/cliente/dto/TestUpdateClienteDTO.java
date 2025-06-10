@@ -1,92 +1,68 @@
 package org.ecommerce.ecommerceapi.modules.cliente.dto;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestUpdateClienteDTO {
+class TestUpdateClienteDTOValidation {
 
-    @Test
-    void getNome() {
+    private static Validator validator;
+
+    @BeforeAll
+    static void setupValidator() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
     }
 
     @Test
-    void getUsername() {
+    void testValidDTO() {
+        UpdateClienteDTO dto = UpdateClienteDTO.builder()
+                .nome("Carlos")
+                .username("carlos123")
+                .email("carlos@email.com")
+                .telefone("987654321")
+                .endereco("Rua B, 456")
+                .cidade("Rio de Janeiro")
+                .estado("RJ")
+                .cep("98765-432")
+                .build();
+
+        Set<ConstraintViolation<UpdateClienteDTO>> violations = validator.validate(dto);
+        assertTrue(violations.isEmpty(), "Não deve haver violações para DTO válido");
     }
 
     @Test
-    void getEmail() {
+    void testInvalidUsernameWithSpaces() {
+        UpdateClienteDTO dto = UpdateClienteDTO.builder()
+                .username("carlos 123")
+                .build();
+
+        Set<ConstraintViolation<UpdateClienteDTO>> violations = validator.validate(dto);
+        assertFalse(violations.isEmpty());
+
+        boolean hasUsernameViolation = violations.stream()
+                .anyMatch(v -> v.getPropertyPath().toString().equals("username"));
+        assertTrue(hasUsernameViolation, "Deve haver violação para username com espaço");
     }
 
     @Test
-    void getTelefone() {
-    }
+    void testInvalidEmail() {
+        UpdateClienteDTO dto = UpdateClienteDTO.builder()
+                .email("email-invalido")
+                .build();
 
-    @Test
-    void getEndereco() {
-    }
+        Set<ConstraintViolation<UpdateClienteDTO>> violations = validator.validate(dto);
+        assertFalse(violations.isEmpty());
 
-    @Test
-    void getCidade() {
-    }
-
-    @Test
-    void getEstado() {
-    }
-
-    @Test
-    void getCep() {
-    }
-
-    @Test
-    void setNome() {
-    }
-
-    @Test
-    void setUsername() {
-    }
-
-    @Test
-    void setEmail() {
-    }
-
-    @Test
-    void setTelefone() {
-    }
-
-    @Test
-    void setEndereco() {
-    }
-
-    @Test
-    void setCidade() {
-    }
-
-    @Test
-    void setEstado() {
-    }
-
-    @Test
-    void setCep() {
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void canEqual() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
-
-    @Test
-    void testToString() {
-    }
-
-    @Test
-    void builder() {
+        boolean hasEmailViolation = violations.stream()
+                .anyMatch(v -> v.getPropertyPath().toString().equals("email"));
+        assertTrue(hasEmailViolation, "Deve haver violação para email inválido");
     }
 }

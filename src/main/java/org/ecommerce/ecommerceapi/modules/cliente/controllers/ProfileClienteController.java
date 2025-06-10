@@ -1,7 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.cliente.controllers;
 
 import org.ecommerce.ecommerceapi.modules.cliente.useCases.ProfileClienteUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,8 +21,12 @@ import jakarta.servlet.http.HttpServletRequest;
 @Tag(name = "Cliente", description = "Perfil do cliente")
 public class ProfileClienteController {
 
-    @Autowired
-    private ProfileClienteUseCase profileClienteUseCase;
+    private final ProfileClienteUseCase profileClienteUseCase;
+
+    // ✅ Construtor correto
+    public ProfileClienteController(ProfileClienteUseCase profileClienteUseCase) {
+        this.profileClienteUseCase = profileClienteUseCase;
+    }
 
     @GetMapping("/profile")
     @PreAuthorize("hasRole('CLIENTE')")
@@ -69,4 +72,3 @@ public class ProfileClienteController {
         }
     }
 }
-

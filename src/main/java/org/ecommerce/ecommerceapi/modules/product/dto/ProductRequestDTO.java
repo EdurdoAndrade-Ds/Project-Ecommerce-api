@@ -9,5 +9,4 @@ public class ProductRequestDTO {
     private String descricao;
     private BigDecimal preco;
     private Integer estoque;
-
 }

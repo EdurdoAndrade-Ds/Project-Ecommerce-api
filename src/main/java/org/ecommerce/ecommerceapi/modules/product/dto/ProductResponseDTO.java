@@ -10,6 +10,4 @@ public class ProductResponseDTO {
     private String descricao;
     private BigDecimal preco;
     private Integer estoque;
-
-
 }

@@ -7,38 +7,57 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestAuthClienteDTO {
 
     @Test
-    void getUsername() {
+    void testGettersAndSetters() {
+        AuthClienteDTO dto = new AuthClienteDTO();
+        dto.setUsername("usuario");
+        dto.setSenha("senha123");
+
+        assertEquals("usuario", dto.getUsername());
+        assertEquals("senha123", dto.getSenha());
     }
 
     @Test
-    void getSenha() {
-    }
+    void testEqualsAndHashCode() {
+        AuthClienteDTO dto1 = AuthClienteDTO.builder()
+                .username("user")
+                .senha("pass")
+                .build();
 
-    @Test
-    void setUsername() {
-    }
+        AuthClienteDTO dto2 = AuthClienteDTO.builder()
+                .username("user")
+                .senha("pass")
+                .build();
 
-    @Test
-    void setSenha() {
-    }
+        AuthClienteDTO dto3 = AuthClienteDTO.builder()
+                .username("other")
+                .senha("otherpass")
+                .build();
 
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void canEqual() {
-    }
-
-    @Test
-    void testHashCode() {
+        assertEquals(dto1, dto2);
+        assertEquals(dto1.hashCode(), dto2.hashCode());
+        assertNotEquals(dto1, dto3);
     }
 
     @Test
     void testToString() {
+        AuthClienteDTO dto = AuthClienteDTO.builder()
+                .username("usuario")
+                .senha("senha")
+                .build();
+
+        String str = dto.toString();
+        assertTrue(str.contains("username=usuario"));
+        assertTrue(str.contains("senha=senha"));
     }
 
     @Test
-    void builder() {
+    void testBuilder() {
+        AuthClienteDTO dto = AuthClienteDTO.builder()
+                .username("builderUser")
+                .senha("builderPass")
+                .build();
+
+        assertEquals("builderUser", dto.getUsername());
+        assertEquals("builderPass", dto.getSenha());
     }
 }

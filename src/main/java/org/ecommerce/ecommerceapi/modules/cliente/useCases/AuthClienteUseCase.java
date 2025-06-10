@@ -13,14 +13,11 @@ import java.util.Arrays;
 @Service
 public class AuthClienteUseCase {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    @Autowired ClienteRepository clienteRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Autowired PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JWTProvider jwtProvider;
+    @Autowired JWTProvider jwtProvider;
 
     public AuthClienteResponseDTO execute(AuthClienteDTO authClienteDTO) {
         var cliente = this.clienteRepository.findByUsernameOrEmail(authClienteDTO.getUsername(), authClienteDTO.getUsername())
