@@ -13,6 +13,7 @@ import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +36,7 @@ public class PedidoService {
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         pedido.setCliente(cliente);
+        pedido.setDateCreate(LocalDateTime.now()); // ✅ ESSA LINHA RESOLVE O ERRO
 
         List<ItemPedido> itens = dto.getItens().stream().map(itemDTO -> {
             Product product = productService.buscarPorId(itemDTO.getProdutoId());
@@ -55,6 +57,7 @@ public class PedidoService {
         Pedido salvo = pedidoRepository.save(pedido);
         return mapToResponseDTO(salvo);
     }
+
 
     public List<PedidoResponseDTO> listarPorCliente(Long clienteId) {
         return pedidoRepository.findByClienteId(clienteId).stream()
