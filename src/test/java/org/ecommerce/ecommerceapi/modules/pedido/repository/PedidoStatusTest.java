@@ -41,3 +41,4 @@ class PedidoStatusTest {
         assertThat(saved.isCancelado()).isFalse();
     }
 }
+

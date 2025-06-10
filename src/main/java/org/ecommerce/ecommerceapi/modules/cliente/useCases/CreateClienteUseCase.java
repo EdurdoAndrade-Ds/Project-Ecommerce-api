@@ -9,11 +9,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreateClienteUseCase {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    @Autowired ClienteRepository clienteRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    @Autowired PasswordEncoder passwordEncoder;
 
     public ClienteEntity execute(ClienteEntity clienteEntity) {
         var cliente = this.clienteRepository.findByUsernameOrEmail(clienteEntity.getUsername(), clienteEntity.getEmail());

@@ -10,8 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 @Service
 public class UpdateClienteUseCase {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    @Autowired ClienteRepository clienteRepository;
 
     public ClienteEntity execute(Long clienteId, UpdateClienteDTO updateClienteDTO) {
         ClienteEntity cliente = this.clienteRepository.findById(clienteId)

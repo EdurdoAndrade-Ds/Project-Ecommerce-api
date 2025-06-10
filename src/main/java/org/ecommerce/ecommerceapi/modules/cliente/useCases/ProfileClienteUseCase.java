@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProfileClienteUseCase {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    @Autowired ClienteRepository clienteRepository;
 
     public ProfileClienteResponseDTO execute(Long clienteId) {
         var cliente = this.clienteRepository.findById(clienteId)
