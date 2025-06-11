@@ -1,23 +1,12 @@
 package org.ecommerce.ecommerceapi.modules.pedido.repository;
 
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.Mockito;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+public class PedidoStatusTest {
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@DataJpaTest
-class PedidoStatusTest {
-
-    @Autowired
-    private PedidoRepository pedidoRepository;
-
+<<<<<<< HEAD
     @Autowired
     private org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository clienteRepository;
 
@@ -39,5 +28,11 @@ class PedidoStatusTest {
         assertThat(saved.getId()).isNotNull();
         assertThat(saved.getCliente().getId()).isEqualTo(1L);
         assertThat(saved.getTotal()).isEqualByComparingTo("100");
+=======
+    @Test
+    void testRepositoryMock() {
+        PedidoStatus repo = Mockito.mock(PedidoStatus.class);
+        assertNotNull(repo);
+>>>>>>> ab764e7c142e15083dc06c3d77cc7a4ac77f6659
     }
 }

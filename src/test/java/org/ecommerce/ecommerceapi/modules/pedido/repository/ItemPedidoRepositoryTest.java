@@ -1,24 +1,14 @@
 package org.ecommerce.ecommerceapi.modules.pedido.repository;
 
-import org.ecommerce.ecommerceapi.modules.pedido.entity.ItemPedido;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
-import org.ecommerce.ecommerceapi.modules.product.entities.Product;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.math.BigDecimal;
+import org.mockito.Mockito;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-@DataJpaTest
-class ItemPedidoRepositoryTest {
-
-    @Autowired
-    private ItemPedidoRepository itemPedidoRepository;
+public class ItemPedidoRepositoryTest {
 
     @Test
+<<<<<<< HEAD
     @DisplayName("Deve salvar e recuperar um ItemPedido com sucesso")
     void testSaveAndFindItemPedido() {
         Product produto = new Product();
@@ -43,5 +33,10 @@ class ItemPedidoRepositoryTest {
         assertThat(saved.getPrecoUnitario()).isEqualByComparingTo("19.99");
         assertThat(saved.getProduto()).isEqualTo(produto);
         assertThat(saved.getPedido()).isEqualTo(pedido);
+=======
+    void testRepositoryMock() {
+        ItemPedidoRepository repo = Mockito.mock(ItemPedidoRepository.class);
+        assertNotNull(repo);
+>>>>>>> ab764e7c142e15083dc06c3d77cc7a4ac77f6659
     }
 }

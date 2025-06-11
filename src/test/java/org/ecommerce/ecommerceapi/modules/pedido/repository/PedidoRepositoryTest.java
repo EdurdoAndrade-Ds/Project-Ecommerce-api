@@ -1,29 +1,16 @@
 package org.ecommerce.ecommerceapi.modules.pedido.repository;
 
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import static org.junit.jupiter.api.Assertions.*;
+import org.mockito.Mockito;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
-@DataJpaTest
-class PedidoRepositoryTest {
-
-    @Autowired
-    private PedidoRepository pedidoRepository;
+public class PedidoRepositoryTest {
 
     @Autowired
     private org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository clienteRepository;
 
     @Test
+<<<<<<< HEAD
     @DisplayName("Deve encontrar pedidos por clienteId")
     void testFindByClienteId() {
         ClienteEntity cliente = new ClienteEntity();
@@ -82,5 +69,10 @@ class PedidoRepositoryTest {
 
         assertThat(cancelados).hasSize(1);
         assertThat(cancelados.get(0).isCancelado()).isTrue();
+=======
+    void testRepositoryMock() {
+        PedidoRepository repo = Mockito.mock(PedidoRepository.class);
+        assertNotNull(repo);
+>>>>>>> ab764e7c142e15083dc06c3d77cc7a4ac77f6659
     }
 }
