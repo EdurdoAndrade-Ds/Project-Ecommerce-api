@@ -62,4 +62,3 @@ public class ClienteEntity {
 
     private boolean ativo = true;
 }
-

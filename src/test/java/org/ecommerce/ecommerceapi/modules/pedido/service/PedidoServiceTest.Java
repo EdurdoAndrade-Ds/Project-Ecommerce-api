@@ -9,45 +9,36 @@ import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
 import org.ecommerce.ecommerceapi.modules.product.entities.Product;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.ResponseEntity;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class PedidoServiceTest {
 
+    @InjectMocks
     private PedidoService pedidoService;
+
+    @Mock
     private PedidoRepository pedidoRepository;
+
+    @Mock
     private ClienteRepository clienteRepository;
+
+    @Mock
     private ProductService productService;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        pedidoRepository = mock(PedidoRepository.class);
-        clienteRepository = mock(ClienteRepository.class);
-        productService = mock(ProductService.class);
-
-        pedidoService = new PedidoService();
-
-        var f1 = PedidoService.class.getDeclaredField("pedidoRepository");
-        f1.setAccessible(true);
-        f1.set(pedidoService, pedidoRepository);
-
-        var f2 = PedidoService.class.getDeclaredField("clienteRepository");
-        f2.setAccessible(true);
-        f2.set(pedidoService, clienteRepository);
-
-        var f3 = PedidoService.class.getDeclaredField("productService");
-        f3.setAccessible(true);
-        f3.set(pedidoService, productService);
-    }
 
     @Test
     void criar_DeveCriarPedidoComSucesso() {
@@ -74,7 +65,7 @@ class PedidoServiceTest {
         pedidoSalvo.setId(999L);
         pedidoSalvo.setCliente(cliente);
         pedidoSalvo.setTotal(BigDecimal.valueOf(20));
-        pedidoSalvo.setItens(List.of()); // para simplificar
+        pedidoSalvo.setItens(List.of()); // Simplificado
         when(pedidoRepository.save(any(Pedido.class))).thenReturn(pedidoSalvo);
 
         PedidoResponseDTO response = pedidoService.criar(dto, clienteId);
@@ -187,6 +178,41 @@ class PedidoServiceTest {
 
         var lista = pedidoService.historico(clienteId);
         assertFalse(lista.isEmpty());
-        assertTrue(lista.get(0).getItens().isEmpty() || lista.get(0).getItens() != null); // Só garantir que mapeou
+        assertNotNull(lista.get(0).getItens());
+    }
+
+    @Test
+    void mapToResponseDTO_DeveMapearCorretamente() throws Exception {
+        Pedido pedido = new Pedido();
+        pedido.setId(1L);
+        pedido.setTotal(BigDecimal.valueOf(100));
+        ClienteEntity cliente = new ClienteEntity();
+        cliente.setId(10L);
+        pedido.setCliente(cliente);
+
+        ItemPedido item = new ItemPedido();
+        item.setProduto(new Product(){{
+            setId(20L);
+        }});
+        item.setNomeProduto("Produto X");
+        item.setQuantidade(5);
+        item.setPrecoUnitario(BigDecimal.valueOf(10));
+        pedido.setItens(List.of(item));
+
+        // Usa reflection para acessar o método privado
+        var method = PedidoService.class.getDeclaredMethod("mapToResponseDTO", Pedido.class);
+        method.setAccessible(true);
+        PedidoResponseDTO dto = (PedidoResponseDTO) method.invoke(pedidoService, pedido);
+
+        assertEquals(pedido.getId(), dto.getId());
+        assertEquals(cliente.getId(), dto.getClienteId());
+        assertEquals(pedido.getTotal(), dto.getTotal());
+
+        assertFalse(dto.getItens().isEmpty());
+        var itemDTO = dto.getItens().get(0);
+        assertEquals(item.getProduto().getId(), itemDTO.getProdutoId());
+        assertEquals(item.getNomeProduto(), itemDTO.getNomeProduto());
+        assertEquals(item.getQuantidade(), itemDTO.getQuantidade());
+        assertEquals(item.getPrecoUnitario(), itemDTO.getPrecoUnitario());
     }
 }

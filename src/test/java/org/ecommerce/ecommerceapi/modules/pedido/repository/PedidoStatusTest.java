@@ -1,38 +1,34 @@
 package org.ecommerce.ecommerceapi.modules.pedido.repository;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
-import org.mockito.Mockito;
 
-public class PedidoStatusTest {
-
-<<<<<<< HEAD
-    @Autowired
-    private org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository clienteRepository;
+class PedidoStatusTest {
 
     @Test
-    @DisplayName("Deve salvar e recuperar um pedido simples")
-    void testSalvarPedidoSemStatus() {
-        ClienteEntity cliente = new ClienteEntity();
-        cliente.setNome("Cliente Teste");
-        cliente.setEmail("cliente@teste.com");
-        cliente.setSenha("123456");
-        cliente = clienteRepository.save(cliente); // simulação
+    void testValues() {
+        PedidoStatus[] values = PedidoStatus.values();
+        assertNotNull(values);
+        assertEquals(4, values.length); // CRIADO, PAGO, ENVIADO, CANCELADO
 
-        Pedido pedido = new Pedido();
-        pedido.setCliente(cliente);
-        pedido.setTotal(BigDecimal.valueOf(100));
-        pedido.setDateCreate(LocalDateTime.now());
+        assertEquals(PedidoStatus.CRIADO, values[0]);
+        assertEquals(PedidoStatus.PAGO, values[1]);
+        assertEquals(PedidoStatus.ENVIADO, values[2]);
+        assertEquals(PedidoStatus.CANCELADO, values[3]);
+    }
 
-        Pedido saved = pedidoRepository.save(pedido);
-        assertThat(saved.getId()).isNotNull();
-        assertThat(saved.getCliente().getId()).isEqualTo(1L);
-        assertThat(saved.getTotal()).isEqualByComparingTo("100");
-=======
     @Test
-    void testRepositoryMock() {
-        PedidoStatus repo = Mockito.mock(PedidoStatus.class);
-        assertNotNull(repo);
->>>>>>> ab764e7c142e15083dc06c3d77cc7a4ac77f6659
+    void testValueOf() {
+        assertEquals(PedidoStatus.CRIADO, PedidoStatus.valueOf("CRIADO"));
+        assertEquals(PedidoStatus.PAGO, PedidoStatus.valueOf("PAGO"));
+        assertEquals(PedidoStatus.ENVIADO, PedidoStatus.valueOf("ENVIADO"));
+        assertEquals(PedidoStatus.CANCELADO, PedidoStatus.valueOf("CANCELADO"));
+
+        // Testa exceção se nome inválido
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            PedidoStatus.valueOf("INVALIDO");
+        });
+        assertTrue(exception.getMessage().contains("No enum constant"));
     }
 }
