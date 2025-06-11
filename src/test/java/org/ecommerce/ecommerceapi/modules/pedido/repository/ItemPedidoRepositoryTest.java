@@ -21,15 +21,13 @@ class ItemPedidoRepositoryTest {
     @Test
     @DisplayName("Deve salvar e recuperar um ItemPedido com sucesso")
     void testSaveAndFindItemPedido() {
-        // Criando produto e pedido fictícios (mockados)
         Product produto = new Product();
         produto.setId(1L);
         produto.setNome("Produto Teste");
 
         Pedido pedido = new Pedido();
-        pedido.setId(1L); // simulação, pois não estamos persistindo de fato
+        pedido.setId(1L);
 
-        // Criando o ItemPedido
         ItemPedido item = new ItemPedido();
         item.setNomeProduto("Produto Teste");
         item.setQuantidade(2);
@@ -37,10 +35,8 @@ class ItemPedidoRepositoryTest {
         item.setProduto(produto);
         item.setPedido(pedido);
 
-        // Salvando no repositório
         ItemPedido saved = itemPedidoRepository.save(item);
 
-        // Verificando persistência
         assertThat(saved.getId()).isNotNull();
         assertThat(saved.getNomeProduto()).isEqualTo("Produto Teste");
         assertThat(saved.getQuantidade()).isEqualTo(2);

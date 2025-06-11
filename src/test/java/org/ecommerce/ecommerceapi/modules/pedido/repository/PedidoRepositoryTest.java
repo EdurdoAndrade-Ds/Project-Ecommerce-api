@@ -20,11 +20,17 @@ class PedidoRepositoryTest {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @Autowired
+    private org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository clienteRepository;
+
     @Test
     @DisplayName("Deve encontrar pedidos por clienteId")
     void testFindByClienteId() {
         ClienteEntity cliente = new ClienteEntity();
-        cliente.setId(1L); // Supondo que o ID seja definido manualmente (ex: mockado)
+        cliente.setNome("Cliente Teste");
+        cliente.setEmail("cliente@teste.com");
+        cliente.setSenha("123456");
+        cliente = clienteRepository.save(cliente); // Supondo que o ID seja definido manualmente (ex: mockado)
 
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);

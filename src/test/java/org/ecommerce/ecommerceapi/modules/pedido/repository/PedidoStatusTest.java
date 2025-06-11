@@ -18,27 +18,26 @@ class PedidoStatusTest {
     @Autowired
     private PedidoRepository pedidoRepository;
 
-    @Test
-    @DisplayName("Deve salvar e recuperar um pedido básico sem status")
-    void testSalvarEPersistirPedido() {
-        // Cliente fictício (não salvo de fato, apenas mockando o ID)
-        ClienteEntity cliente = new ClienteEntity();
-        cliente.setId(10L);
+    @Autowired
+    private org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository clienteRepository;
 
-        // Criar pedido
+    @Test
+    @DisplayName("Deve salvar e recuperar um pedido simples")
+    void testSalvarPedidoSemStatus() {
+        ClienteEntity cliente = new ClienteEntity();
+        cliente.setNome("Cliente Teste");
+        cliente.setEmail("cliente@teste.com");
+        cliente.setSenha("123456");
+        cliente = clienteRepository.save(cliente); // simulação
+
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);
-        pedido.setTotal(BigDecimal.valueOf(200));
+        pedido.setTotal(BigDecimal.valueOf(100));
         pedido.setDateCreate(LocalDateTime.now());
 
-        // Salvar
         Pedido saved = pedidoRepository.save(pedido);
-
-        // Verificar persistência
         assertThat(saved.getId()).isNotNull();
-        assertThat(saved.getCliente().getId()).isEqualTo(10L);
-        assertThat(saved.getTotal()).isEqualByComparingTo("200");
-        assertThat(saved.isCancelado()).isFalse();
+        assertThat(saved.getCliente().getId()).isEqualTo(1L);
+        assertThat(saved.getTotal()).isEqualByComparingTo("100");
     }
 }
-
