@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class ProductServiceTest {
@@ -213,16 +214,12 @@ class ProductServiceTest {
     void testEquals() {
         ProductRepository mockRepository1 = mock(ProductRepository.class);
         ProductRepository mockRepository2 = mock(ProductRepository.class);
-
         ProductService service1 = new ProductService();
         service1.setRepository(mockRepository1);
-
         ProductService service2 = new ProductService();
         service2.setRepository(mockRepository1);
-
         ProductService service3 = new ProductService();
         service3.setRepository(mockRepository2);
-
         assertTrue(service1.equals(service1)); // mesmo objeto
         assertTrue(service1.equals(service2)); // mesmo repositório
         assertFalse(service1.equals(service3)); // repositório diferente
@@ -233,5 +230,29 @@ class ProductServiceTest {
     void testCanEqual() {
         assertTrue(productService.canEqual(new ProductService()));
         assertFalse(productService.canEqual(new Object()));
+    }
+
+    @Test
+    void criar_shouldThrowException_whenProdutoNulo() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+            productService.criar(null);
+        });
+        assertEquals("Produto não pode ser nulo", ex.getMessage());
+    }
+
+    @Test
+    void criar_shouldThrowException_whenNomeNuloOuVazio() {
+        ProductRequestDTO dto1 = new ProductRequestDTO();
+        dto1.setNome(null);
+        dto1.setPreco(BigDecimal.TEN);
+        dto1.setEstoque(5);
+        ProductRequestDTO dto2 = new ProductRequestDTO();
+        dto2.setNome("  ");
+        dto2.setPreco(BigDecimal.TEN);
+        dto2.setEstoque(5);
+        IllegalArgumentException ex1 = assertThrows(IllegalArgumentException.class, () -> productService.criar(dto1));
+        IllegalArgumentException ex2 = assertThrows(IllegalArgumentException.class, () -> productService.criar(dto2));
+        assertEquals("Nome do produto é obrigatório", ex1.getMessage());
+        assertEquals("Nome do produto é obrigatório", ex2.getMessage());
     }
 }
