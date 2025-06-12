@@ -6,6 +6,9 @@ import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
 import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Optional;
 
@@ -14,14 +17,15 @@ import static org.mockito.Mockito.*;
 
 class UpdateClienteUseCaseTest {
 
+    @InjectMocks
     private UpdateClienteUseCase updateClienteUseCase;
+
+    @Mock
     private ClienteRepository clienteRepository;
 
     @BeforeEach
     void setup() {
-        clienteRepository = mock(ClienteRepository.class);
-        updateClienteUseCase = new UpdateClienteUseCase();
-        updateClienteUseCase.clienteRepository = clienteRepository;
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
