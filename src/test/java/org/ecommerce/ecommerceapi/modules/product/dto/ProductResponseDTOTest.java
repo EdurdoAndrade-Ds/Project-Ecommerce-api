@@ -41,8 +41,17 @@ class ProductResponseDTOTest {
         dto2.setPreco(new BigDecimal("25.00"));
         dto2.setEstoque(10);
 
+        ProductResponseDTO dto3 = new ProductResponseDTO();
+        dto3.setId(2L);
+        dto3.setNome("Produto Diferente");
+        dto3.setDescricao("Descrição do Produto Diferente");
+        dto3.setPreco(new BigDecimal("30.00"));
+        dto3.setEstoque(5);
+
         assertEquals(dto1, dto2);
+        assertNotEquals(dto1, dto3);
         assertEquals(dto1.hashCode(), dto2.hashCode());
+        assertNotEquals(dto1.hashCode(), dto3.hashCode());
     }
 
     @Test
@@ -76,22 +85,9 @@ class ProductResponseDTOTest {
     }
 
     @Test
-    public void testProductResponseDTOGettersAndSetters() {
-        ProductResponseDTO productResponse = new ProductResponseDTO();
-        
-        // Testar o setter e getter para o ID
-        productResponse.setId(1L);
-        assertEquals(1L, productResponse.getId());
-
-        // Testar o setter e getter para o nome
-        productResponse.setNome("Product A");
-        assertEquals("Product A", productResponse.getNome());
-
-        // Testar o setter e getter para o preço usando BigDecimal
-        productResponse.setPreco(new BigDecimal("99.99")); 
-        assertEquals(new BigDecimal("99.99"), productResponse.getPreco());
-
-        // Continue para outros atributos conforme necessário
+    void testCanEqual() {
+        ProductResponseDTO dto = new ProductResponseDTO();
+        assertTrue(dto.canEqual(new ProductResponseDTO()));
+        assertFalse(dto.canEqual(new Object())); // Testa com um objeto de tipo diferente
     }
-    
 }

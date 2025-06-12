@@ -42,11 +42,27 @@ class PedidoRequestDTOTest {
 
         assertEquals(dto1, dto2);
         assertEquals(dto1.hashCode(), dto2.hashCode());
+    }
 
-        // Testa toString contendo dados esperados
-        String dto1String = dto1.toString();
-        assertTrue(dto1String.contains("produtoId=1"));
-        assertTrue(dto1String.contains("quantidade=5"));
+    @Test
+    void testToString() {
+        PedidoRequestDTO dto = new PedidoRequestDTO();
+        PedidoRequestDTO.ItemDTO item1 = new PedidoRequestDTO.ItemDTO();
+        item1.setProdutoId(1L);
+        item1.setQuantidade(5);
+        
+        PedidoRequestDTO.ItemDTO item2 = new PedidoRequestDTO.ItemDTO();
+        item2.setProdutoId(2L);
+        item2.setQuantidade(10);
+        
+        dto.setItens(Arrays.asList(item1, item2));
+
+        String dtoString = dto.toString();
+        assertTrue(dtoString.contains("itens="));
+        assertTrue(dtoString.contains("produtoId=1"));
+        assertTrue(dtoString.contains("quantidade=5"));
+        assertTrue(dtoString.contains("produtoId=2"));
+        assertTrue(dtoString.contains("quantidade=10"));
     }
 
     @Test
@@ -64,5 +80,26 @@ class PedidoRequestDTOTest {
         // Testa equals com null e objeto diferente
         assertFalse(item.equals(null));
         assertFalse(item.equals(new Object()));
+    }
+
+    @Test
+    void testPedidoRequestDTOWithNullItems() {
+        PedidoRequestDTO dto = new PedidoRequestDTO();
+        dto.setItens(null);
+
+        assertNull(dto.getItens());
+    }
+
+    @Test
+    void testItemDTOEqualsDifferentObjects() {
+        PedidoRequestDTO.ItemDTO item1 = new PedidoRequestDTO.ItemDTO();
+        item1.setProdutoId(1L);
+        item1.setQuantidade(5);
+
+        PedidoRequestDTO.ItemDTO item2 = new PedidoRequestDTO.ItemDTO();
+        item2.setProdutoId(2L);
+        item2.setQuantidade(10);
+
+        assertNotEquals(item1, item2);
     }
 }

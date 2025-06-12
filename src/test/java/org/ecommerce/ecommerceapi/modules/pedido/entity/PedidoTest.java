@@ -9,6 +9,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PedidoTest {
+
+    
     @Test
     void criarPedidoComDadosBasicos() {
         Pedido pedido = new Pedido();
@@ -39,4 +41,6 @@ class PedidoTest {
         assertEquals(1, pedido.getItens().size());
         assertEquals(2, pedido.getItens().get(0).getQuantidade());
     }
+
+    
 }

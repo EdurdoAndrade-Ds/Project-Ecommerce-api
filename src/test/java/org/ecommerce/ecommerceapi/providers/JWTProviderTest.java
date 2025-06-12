@@ -1,10 +1,9 @@
 package org.ecommerce.ecommerceapi.providers;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +16,7 @@ public class JWTProviderTest {
     void setUp() {
         jwtProvider = new JWTProvider();
 
-        // injetar manualmente o valor do secretKey já que não usamos o Spring aqui
+        // Injetar manualmente o valor do secretKey já que não usamos o Spring aqui
         try {
             java.lang.reflect.Field secretField = JWTProvider.class.getDeclaredField("secretKey");
             secretField.setAccessible(true);
@@ -53,6 +52,17 @@ public class JWTProviderTest {
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             jwtProvider.validateToken(tokenInvalido);
+        });
+
+        assertEquals("Token JWT inválido ou expirado", exception.getMessage());
+    }
+
+    @Test
+    void testGetDecodedJWTInvalido() {
+        String tokenInvalido = "abc.def.ghi"; // token malformado
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            jwtProvider.getDecodedJWT(tokenInvalido);
         });
 
         assertEquals("Token JWT inválido ou expirado", exception.getMessage());
