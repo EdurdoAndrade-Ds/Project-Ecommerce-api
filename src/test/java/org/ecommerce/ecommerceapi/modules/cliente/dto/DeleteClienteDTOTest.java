@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestDeleteClienteDTOValidation {
+class DeleteClienteDTOTest {
 
     private static Validator validator;
 

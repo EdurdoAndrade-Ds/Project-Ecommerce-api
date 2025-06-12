@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestClienteEntity {
+class ClienteEntityTest {
 
     @Test
     void testGettersAndSetters() {

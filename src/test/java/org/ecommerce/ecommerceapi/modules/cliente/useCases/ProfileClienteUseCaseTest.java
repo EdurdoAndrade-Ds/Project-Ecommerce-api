@@ -5,14 +5,13 @@ import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
 import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TestProfileClienteUseCase {
+class ProfileClienteUseCaseTest {
 
     private ProfileClienteUseCase profileClienteUseCase;
     private ClienteRepository clienteRepository;

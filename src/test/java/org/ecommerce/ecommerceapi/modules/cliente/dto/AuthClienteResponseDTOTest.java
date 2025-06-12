@@ -3,7 +3,7 @@ package org.ecommerce.ecommerceapi.modules.cliente.dto;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestAuthClienteResponseDTO {
+class AuthClienteResponseDTOTest {
 
     @Test
     void testGettersAndSetters() {

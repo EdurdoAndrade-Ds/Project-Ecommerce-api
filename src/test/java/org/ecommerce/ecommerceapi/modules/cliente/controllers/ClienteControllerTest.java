@@ -15,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TestClienteController {
+class ClienteControllerTest {
 
     private ClienteController clienteController;
     private CreateClienteUseCase createUseCase;

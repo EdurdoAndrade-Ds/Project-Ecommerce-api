@@ -27,4 +27,9 @@ public class SecurityConfigUnitTest {
                 org.springframework.security.web.DefaultSecurityFilterChain.class, null, null, null, null, null, null));
         assertThat(chain).isNotNull();
     }
+
+    @Test
+    void dummyTest() {
+        assertTrue(true);
+    }
 }

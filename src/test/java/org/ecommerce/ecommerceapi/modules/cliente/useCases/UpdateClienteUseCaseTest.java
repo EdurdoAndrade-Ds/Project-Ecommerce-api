@@ -12,7 +12,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TestUpdateClienteUseCase {
+class UpdateClienteUseCaseTest {
 
     private UpdateClienteUseCase updateClienteUseCase;
     private ClienteRepository clienteRepository;

@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TestProfileClienteController {
+class ProfileClienteControllerTest {
 
     private ProfileClienteController controller;
     private ProfileClienteUseCase profileUseCase;

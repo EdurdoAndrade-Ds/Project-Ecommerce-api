@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.pedido.service;
 
+import org.ecommerce.ecommerceapi.EcommerceApiApplication;
 import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
 import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoRequestDTO;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -17,7 +19,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+
+@ActiveProfiles("test")
+@SpringBootTest(classes = EcommerceApiApplication.class)
 @Transactional // garante rollback após cada teste
 class PedidoServiceIntegrationTest {
 
@@ -75,5 +79,10 @@ class PedidoServiceIntegrationTest {
         List<PedidoResponseDTO> pedidos = pedidoService.listarPorCliente(cliente.getId());
         assertFalse(pedidos.isEmpty());
         assertEquals(cliente.getId(), pedidos.get(0).getClienteId());
+    }
+
+    @Test
+    void contextLoads() {
+        // Testa apenas se o contexto do Spring carrega corretamente
     }
 }

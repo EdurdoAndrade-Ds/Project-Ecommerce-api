@@ -1,18 +1,21 @@
 package org.ecommerce.ecommerceapi.modules.cliente.useCases;
 
+import org.ecommerce.ecommerceapi.modules.cliente.dto.CreateClienteDTO;
 import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
 import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TestCreateClienteUseCase {
+import java.util.Optional;
+
+class CreateClienteUseCaseTest {
 
     private CreateClienteUseCase createClienteUseCase;
     private ClienteRepository clienteRepository;

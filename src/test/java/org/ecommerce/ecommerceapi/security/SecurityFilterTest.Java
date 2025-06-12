@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.security;
 
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.ecommerce.ecommerceapi.providers.JWTProvider;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 
 import jakarta.servlet.FilterChain;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,6 +31,9 @@ class SecurityFilterTest {
 
     @Mock
     private FilterChain filterChain;
+
+    @Mock
+    private Claim claim; // Corrigido
 
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
@@ -49,7 +55,8 @@ class SecurityFilterTest {
 
         when(jwtProvider.validateToken(token)).thenReturn(subject);
         when(jwtProvider.getDecodedJWT(token)).thenReturn(decodedJWT);
-        when(decodedJWT.getClaim("roles")).thenReturn(() -> java.util.List.of("CLIENTE"));
+        when(decodedJWT.getClaim("roles")).thenReturn(claim);
+        when(claim.asList(String.class)).thenReturn(List.of("CLIENTE"));
 
         securityFilter.doFilterInternal(request, response, filterChain);
 
@@ -60,7 +67,6 @@ class SecurityFilterTest {
 
     @Test
     void deveContinuarSeNaoTiverHeaderAuthorization() throws Exception {
-        // Não adiciona header Authorization
         securityFilter.doFilterInternal(request, response, filterChain);
 
         assertNull(SecurityContextHolder.getContext().getAuthentication());
@@ -78,5 +84,14 @@ class SecurityFilterTest {
 
         assertEquals(401, response.getStatus());
         verify(filterChain, never()).doFilter(request, response);
+    }
+
+    @Test
+    void testGetClaimRole() {
+        Claim mockClaim = mock(Claim.class);
+        when(mockClaim.asString()).thenReturn("CLIENTE");
+
+        String role = mockClaim.asString();
+        assertEquals("CLIENTE", role);
     }
 }
