@@ -8,6 +8,6 @@ class EcommerceApiApplicationTest {
 
     @Test
     void contextLoads() {
-        // Testa se o contexto Spring Boot carrega corretamente
+        // Teste que valida se o contexto da aplicação carrega sem erros.
     }
 }

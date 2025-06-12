@@ -94,4 +94,14 @@ class PedidoResponseDTOTest {
         assertTrue(dto1.canEqual(dto2));
         assertFalse(dto1.canEqual("obj"));
     }
+    
+
+    @Test
+    void testHashCode() {
+        PedidoResponseDTO dto1 = new PedidoResponseDTO();
+        PedidoResponseDTO dto2 = new PedidoResponseDTO();
+        // Configure dto1 e dto2 com dados equivalentes
+        assertEquals(dto1.hashCode(), dto2.hashCode());
+    }
+
 }

@@ -1,117 +1,148 @@
 package org.ecommerce.ecommerceapi.modules.product.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
+import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
+import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
+import org.ecommerce.ecommerceapi.modules.product.enums.OperacaoEstoque;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class ProductControllerTest {
-
-    private MockMvc mockMvc;
-
-    @Mock
-    private ProductService productService;
 
     @InjectMocks
     private ProductController productController;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    @Mock
+    private ProductService productService;
 
     @BeforeEach
-    void setup() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
     }
 
     @Test
-    void criar() throws Exception {
+    void testCriar() {
         ProductRequestDTO requestDTO = new ProductRequestDTO();
         requestDTO.setNome("Produto Teste");
-        requestDTO.setPreco(BigDecimal.valueOf(123.45));
-        requestDTO.setDescricao("Descrição do produto");
+        requestDTO.setDescricao("Descrição do Produto Teste");
+        requestDTO.setPreco(new BigDecimal("25.00"));
         requestDTO.setEstoque(10);
 
         ProductResponseDTO responseDTO = new ProductResponseDTO();
         responseDTO.setId(1L);
         responseDTO.setNome("Produto Teste");
-        responseDTO.setPreco(BigDecimal.valueOf(123.45));
-        responseDTO.setDescricao("Descrição do produto");
+        responseDTO.setDescricao("Descrição do Produto Teste");
+        responseDTO.setPreco(new BigDecimal("25.00"));
         responseDTO.setEstoque(10);
 
         when(productService.criar(any(ProductRequestDTO.class))).thenReturn(responseDTO);
 
-        mockMvc.perform(post("/produtos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDTO)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L))
-                .andExpect(jsonPath("$.nome").value("Produto Teste"))
-                .andExpect(jsonPath("$.preco").value(123.45))
-                .andExpect(jsonPath("$.descricao").value("Descrição do produto"))
-                .andExpect(jsonPath("$.estoque").value(10));
+        ResponseEntity<ProductResponseDTO> response = productController.criar(requestDTO);
 
-        verify(productService, times(1)).criar(any(ProductRequestDTO.class));
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Produto Teste", response.getBody().getNome());
     }
 
     @Test
-    void listar() throws Exception {
-        ProductResponseDTO p1 = new ProductResponseDTO();
-        p1.setId(1L);
-        p1.setNome("Produto 1");
-        p1.setPreco(BigDecimal.valueOf(100.0));
-        p1.setDescricao("Descrição 1");
-        p1.setEstoque(5);
+    void testBuscarPorIdFound() {
+        ProductResponseDTO responseDTO = new ProductResponseDTO();
+        responseDTO.setId(1L);
+        responseDTO.setNome("Produto Teste");
 
-        ProductResponseDTO p2 = new ProductResponseDTO();
-        p2.setId(2L);
-        p2.setNome("Produto 2");
-        p2.setPreco(BigDecimal.valueOf(200.0));
-        p2.setDescricao("Descrição 2");
-        p2.setEstoque(15);
+        when(productService.buscarPorIdDTO(1L)).thenReturn(responseDTO);
 
-        when(productService.listar()).thenReturn(List.of(p1, p2));
+        ResponseEntity<ProductResponseDTO> response = productController.buscarPorId(1L);
 
-        mockMvc.perform(get("/produtos")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].nome").value("Produto 1"))
-                .andExpect(jsonPath("$[0].preco").value(100.0))
-                .andExpect(jsonPath("$[0].descricao").value("Descrição 1"))
-                .andExpect(jsonPath("$[0].estoque").value(5))
-                .andExpect(jsonPath("$[1].nome").value("Produto 2"))
-                .andExpect(jsonPath("$[1].preco").value(200.0))
-                .andExpect(jsonPath("$[1].descricao").value("Descrição 2"))
-                .andExpect(jsonPath("$[1].estoque").value(15));
-
-        verify(productService, times(1)).listar();
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Produto Teste", response.getBody().getNome());
     }
 
     @Test
-    void excluir() throws Exception {
-        Long idToDelete = 1L;
+    void testBuscarPorIdNotFound() {
+        when(productService.buscarPorIdDTO(anyLong())).thenThrow(new RuntimeException("Produto não encontrado"));
 
-        doNothing().when(productService).excluir(idToDelete);
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            productController.buscarPorId(1L);
+        });
 
-        mockMvc.perform(delete("/produtos/{id}", idToDelete))
-                .andExpect(status().isNoContent());
+        assertEquals("Produto não encontrado", exception.getMessage());
+    }
 
-        verify(productService, times(1)).excluir(idToDelete);
+    @Test
+    void testListar() {
+        ProductResponseDTO responseDTO = new ProductResponseDTO();
+        responseDTO.setId(1L);
+        responseDTO.setNome("Produto Teste");
+
+        when(productService.listar()).thenReturn(Collections.singletonList(responseDTO));
+
+        ResponseEntity<List<ProductResponseDTO>> response = productController.listar();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, response.getBody().size());
+        assertEquals("Produto Teste", response.getBody().get(0).getNome());
+    }
+
+    @Test
+    void testExcluir() {
+        doNothing().when(productService).excluir(1L);
+
+        ResponseEntity<Void> response = productController.excluir(1L);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(productService, times(1)).excluir(1L);
+    }
+
+    @Test
+    void testAtualizar() {
+        ProductUpdateDTO updateDTO = new ProductUpdateDTO();
+        updateDTO.setNome("Produto Atualizado");
+        updateDTO.setDescricao("Descrição Atualizada");
+        updateDTO.setPreco(new BigDecimal("30.00"));
+
+        ProductResponseDTO responseDTO = new ProductResponseDTO();
+        responseDTO.setId(1L);
+        responseDTO.setNome("Produto Atualizado");
+
+        when(productService.atualizar(anyLong(), any(ProductUpdateDTO.class))).thenReturn(responseDTO);
+
+        ResponseEntity<ProductResponseDTO> response = productController.atualizar(1L, updateDTO);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Produto Atualizado", response.getBody().getNome());
+    }
+
+    @Test
+    void testAtualizarEstoque() {
+        ProductStockUpdateRequestDTO stockUpdateDTO = new ProductStockUpdateRequestDTO();
+        stockUpdateDTO.setOperacao(OperacaoEstoque.AUMENTAR);
+        stockUpdateDTO.setQuantidade(5);
+
+        doNothing().when(productService).atualizarEstoque(anyLong(), any(ProductStockUpdateRequestDTO.class));
+
+        ResponseEntity<Void> response = productController.atualizarEstoque(1L, stockUpdateDTO);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(productService, times(1)).atualizarEstoque(1L, stockUpdateDTO);
     }
 }

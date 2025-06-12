@@ -143,6 +143,4 @@ class PedidoServiceTest {
         assertEquals(1, historico.size());
         assertEquals(1L, historico.get(0).getClienteId());
     }
-
-    
 }
