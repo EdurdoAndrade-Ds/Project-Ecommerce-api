@@ -12,7 +12,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 
+import jakarta.persistence.EntityNotFoundException;
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 class ClienteControllerTest {
@@ -22,11 +27,14 @@ class ClienteControllerTest {
     private DeleteClienteUseCase deleteUseCase;
     private UpdateClienteUseCase updateUseCase;
 
+    private Authentication authentication;
+
     @BeforeEach
     void setUp() throws Exception {
         createUseCase = mock(CreateClienteUseCase.class);
         deleteUseCase = mock(DeleteClienteUseCase.class);
         updateUseCase = mock(UpdateClienteUseCase.class);
+        authentication = mock(Authentication.class);
 
         clienteController = new ClienteController();
 
@@ -76,10 +84,9 @@ class ClienteControllerTest {
         DeleteClienteDTO dto = new DeleteClienteDTO();
         dto.setSenha("senha123");
 
-        Authentication auth = mock(Authentication.class);
-        when(auth.getName()).thenReturn("1");
+        when(authentication.getName()).thenReturn("1");
 
-        ResponseEntity<Object> response = clienteController.delete(dto, auth);
+        ResponseEntity<Object> response = clienteController.delete(dto, authentication);
 
         assertEquals(204, response.getStatusCodeValue());
         verify(deleteUseCase, times(1)).execute(1L, "senha123");
@@ -95,14 +102,51 @@ class ClienteControllerTest {
                 .nome("João Atualizado")
                 .build();
 
-        Authentication auth = mock(Authentication.class);
-        when(auth.getName()).thenReturn("1");
-
+        when(authentication.getName()).thenReturn("1");
         when(updateUseCase.execute(1L, dto)).thenReturn(atualizado);
 
-        ResponseEntity<Object> response = clienteController.update(dto, auth);
+        ResponseEntity<Object> response = clienteController.update(dto, authentication);
 
         assertEquals(200, response.getStatusCodeValue());
         assertEquals(atualizado, response.getBody());
     }
-}
+
+    @Test
+    void testCreateCliente_comErro() {
+        CreateClienteDTO dto = new CreateClienteDTO();
+        dto.setNome("Erro");
+
+        when(createUseCase.execute(any())).thenThrow(new RuntimeException("Cliente já existe"));
+
+        ResponseEntity<Object> response = clienteController.create(dto);
+        assertEquals(400, response.getStatusCodeValue());
+        assertEquals("Cliente já existe", response.getBody());
+    }
+
+    @Test
+    void testDeleteCliente_comErro() {
+        DeleteClienteDTO dto = new DeleteClienteDTO();
+        dto.setSenha("senhaErrada");
+
+        when(authentication.getName()).thenReturn("1");
+        doThrow(new RuntimeException("Senha incorreta")).when(deleteUseCase).execute(anyLong(), any());
+
+        ResponseEntity<Object> response = clienteController.delete(dto, authentication);
+        assertEquals(400, response.getStatusCodeValue());
+        assertEquals("Senha incorreta", response.getBody());
+    }
+
+    @Test
+    void testUpdateCliente_notFound() {
+        UpdateClienteDTO dto = new UpdateClienteDTO();
+        dto.setEmail("novo@email.com");
+
+        when(authentication.getName()).thenReturn("1");
+        when(updateUseCase.execute(eq(1L), eq(dto)))
+            .thenThrow(new EntityNotFoundException("Cliente não encontrado"));
+
+        ResponseEntity<Object> response = clienteController.update(dto, authentication);
+        assertEquals(404, response.getStatusCodeValue());
+        assertEquals("Cliente não encontrado", response.getBody());
+    }
+}   

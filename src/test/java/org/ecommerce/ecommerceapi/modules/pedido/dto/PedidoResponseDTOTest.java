@@ -61,15 +61,18 @@ class PedidoResponseDTOTest {
         item3.setQuantidade(1);
         item3.setPrecoUnitario(BigDecimal.valueOf(20.00));
 
-        // equals and hashCode on ItemDTO
         assertEquals(item1, item2);
         assertEquals(item1.hashCode(), item2.hashCode());
         assertNotEquals(item1, item3);
+        assertNotEquals(item1, null);
+        assertNotEquals(item1, new Object());
 
         assertTrue(item1.toString().contains("produtoId=1"));
         assertTrue(item1.toString().contains("nomeProduto=Produto A"));
 
-        // Test PedidoResponseDTO equals/hashCode/toString
+        assertTrue(item1.canEqual(item2));
+        assertFalse(item1.canEqual("qualquer coisa"));
+
         PedidoResponseDTO dto1 = new PedidoResponseDTO();
         PedidoResponseDTO dto2 = new PedidoResponseDTO();
 
@@ -86,5 +89,9 @@ class PedidoResponseDTOTest {
         assertEquals(dto1, dto2);
         assertEquals(dto1.hashCode(), dto2.hashCode());
         assertTrue(dto1.toString().contains("itens"));
+        assertNotEquals(dto1, null);
+        assertNotEquals(dto1, new Object());
+        assertTrue(dto1.canEqual(dto2));
+        assertFalse(dto1.canEqual("obj"));
     }
 }
