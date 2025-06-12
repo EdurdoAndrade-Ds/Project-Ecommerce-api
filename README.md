@@ -158,17 +158,17 @@ docker-compose up --build
 - Ajuste de Bugs
 
 #### Jose Guilherme
-- Testes unitários com JUnit e Mockito
-- Implementacao de metodos do module clientes
-- Refatoracao do cliente
+- Testes unitários com JUnit e Mockito de Cliente e Pedido
+- Implementacao de metodos do modulo cliente
+- Refatoracao do modulo cliente
 
 #### Maria Eduarda
 - dockerfile
 
 #### Mateus
-- Testes unitários com JUnit e Mockito
-- Implementacao logica do Produto
-- Refatoracao do Produto
+- Testes unitários com JUnit e Mockito de Produto
+- Implementacao da logica do modulo Produto
+- Refatoracao do modulo Produto
 
 #### Pedro Costa
 - Implementacao do criar Pedido

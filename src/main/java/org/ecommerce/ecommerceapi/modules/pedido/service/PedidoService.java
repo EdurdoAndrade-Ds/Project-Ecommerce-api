@@ -31,6 +31,14 @@ public class PedidoService {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    public PedidoService(PedidoRepository pedidoRepository,
+                        ProductService productService,
+                        ClienteRepository clienteRepository) {
+        this.pedidoRepository = pedidoRepository;
+        this.productService = productService;
+        this.clienteRepository = clienteRepository;
+    }
+
     public PedidoResponseDTO criar(PedidoRequestDTO dto, Long clienteId) {
         Pedido pedido = new Pedido();
 

@@ -21,6 +21,8 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
+    
+
     public Product buscarPorId(Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
     }
