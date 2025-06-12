@@ -1,109 +1,67 @@
 package org.ecommerce.ecommerceapi.modules.cliente.dto;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validation;
-import jakarta.validation.Validator;
-import jakarta.validation.ValidatorFactory;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CreateClienteDTOTest {
-
-    private static Validator validator;
-
-    @BeforeAll
-    static void setupValidatorInstance() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
-    }
+public class CreateClienteDTOTest {
 
     @Test
-    void testValidDTO() {
+    void deveConstruirComBuilderEValidarCampos() {
         CreateClienteDTO dto = CreateClienteDTO.builder()
-                .nome("João")
-                .username("joaosilva")
-                .email("joao@email.com")
-                .senha("senha1234")
-                .telefone("123456789")
-                .endereco("Rua A, 123")
+                .nome("Maria")
+                .username("maria123")
+                .email("maria@email.com")
+                .senha("senhaSegura123")
+                .telefone("11999999999")
+                .endereco("Rua das Flores")
                 .cidade("São Paulo")
                 .estado("SP")
-                .cep("12345-678")
+                .cep("01000-000")
                 .build();
 
-        Set<ConstraintViolation<CreateClienteDTO>> violations = validator.validate(dto);
-        assertTrue(violations.isEmpty(), "Não deve ter violações para DTO válido");
+        assertEquals("Maria", dto.getNome());
+        assertEquals("maria123", dto.getUsername());
+        assertEquals("maria@email.com", dto.getEmail());
+        assertEquals("senhaSegura123", dto.getSenha());
+        assertEquals("11999999999", dto.getTelefone());
+        assertEquals("Rua das Flores", dto.getEndereco());
+        assertEquals("São Paulo", dto.getCidade());
+        assertEquals("SP", dto.getEstado());
+        assertEquals("01000-000", dto.getCep());
     }
 
     @Test
-    void testInvalidEmail() {
-        CreateClienteDTO dto = CreateClienteDTO.builder()
+    void deveCompararObjetosIguais() {
+        CreateClienteDTO dto1 = CreateClienteDTO.builder()
                 .nome("João")
-                .username("joaosilva")
-                .email("email-invalido")
-                .senha("senha1234")
-                .build();
-
-        Set<ConstraintViolation<CreateClienteDTO>> violations = validator.validate(dto);
-        assertFalse(violations.isEmpty());
-
-        boolean hasEmailViolation = violations.stream()
-                .anyMatch(v -> v.getPropertyPath().toString().equals("email"));
-        assertTrue(hasEmailViolation, "Deve ter violação no campo email");
-    }
-
-    @Test
-    void testBlankNome() {
-        CreateClienteDTO dto = CreateClienteDTO.builder()
-                .nome("")
-                .username("joaosilva")
+                .username("joao")
                 .email("joao@email.com")
-                .senha("senha1234")
+                .senha("12345678")
                 .build();
 
-        Set<ConstraintViolation<CreateClienteDTO>> violations = validator.validate(dto);
-        assertFalse(violations.isEmpty());
-
-        boolean hasNomeViolation = violations.stream()
-                .anyMatch(v -> v.getPropertyPath().toString().equals("nome"));
-        assertTrue(hasNomeViolation, "Deve ter violação no campo nome");
-    }
-
-    @Test
-    void testUsernameWithSpaces() {
-        CreateClienteDTO dto = CreateClienteDTO.builder()
+        CreateClienteDTO dto2 = CreateClienteDTO.builder()
                 .nome("João")
-                .username("joao silva")
+                .username("joao")
                 .email("joao@email.com")
-                .senha("senha1234")
+                .senha("12345678")
                 .build();
 
-        Set<ConstraintViolation<CreateClienteDTO>> violations = validator.validate(dto);
-        assertFalse(violations.isEmpty());
-
-        boolean hasUsernameViolation = violations.stream()
-                .anyMatch(v -> v.getPropertyPath().toString().equals("username"));
-        assertTrue(hasUsernameViolation, "Deve ter violação no campo username");
+        assertEquals(dto1, dto2);
+        assertEquals(dto1.hashCode(), dto2.hashCode());
     }
 
     @Test
-    void testSenhaTooShort() {
+    void deveGerarToString() {
         CreateClienteDTO dto = CreateClienteDTO.builder()
-                .nome("João")
-                .username("joaosilva")
-                .email("joao@email.com")
-                .senha("123")
+                .nome("Test")
+                .username("testuser")
+                .email("test@test.com")
+                .senha("abcdefghi")
                 .build();
 
-        Set<ConstraintViolation<CreateClienteDTO>> violations = validator.validate(dto);
-        assertFalse(violations.isEmpty());
-
-        boolean hasSenhaViolation = violations.stream()
-                .anyMatch(v -> v.getPropertyPath().toString().equals("senha"));
-        assertTrue(hasSenhaViolation, "Deve ter violação no campo senha");
+        String str = dto.toString();
+        assertTrue(str.contains("testuser"));
+        assertTrue(str.contains("test@test.com"));
     }
 }

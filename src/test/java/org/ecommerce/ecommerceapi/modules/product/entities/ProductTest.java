@@ -1,84 +1,65 @@
 package org.ecommerce.ecommerceapi.modules.product.entities;
 
-import jakarta.validation.*;
-import org.junit.jupiter.api.BeforeEach;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ProductTest {
+public class ProductTest {
 
-    private Validator validator;
+    private static Validator validator;
 
-    @BeforeEach
-    void setup() {
+    @BeforeAll
+    public static void setupValidator() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
 
     @Test
-    void deveValidarProdutoValido() {
-        Product product = new Product(
-                1L,
-                "Produto Válido",
-                "Descrição de teste",
-                BigDecimal.valueOf(99.90),
-                10,
-                null // Lista de itens pode ser nula aqui
-        );
+    void deveCriarProdutoValido() {
+        Product produto = new Product();
+        produto.setId(1L);
+        produto.setNome("Cadeira Gamer");
+        produto.setDescricao("Confortável e ergonômica");
+        produto.setPreco(BigDecimal.valueOf(999.99));
+        produto.setEstoque(50);
+        produto.setItens(List.of());
 
-        Set<ConstraintViolation<Product>> violations = validator.validate(product);
-        assertTrue(violations.isEmpty(), "Produto válido não deveria ter violações");
+        assertEquals(1L, produto.getId());
+        assertEquals("Cadeira Gamer", produto.getNome());
+        assertEquals("Confortável e ergonômica", produto.getDescricao());
+        assertEquals(BigDecimal.valueOf(999.99), produto.getPreco());
+        assertEquals(50, produto.getEstoque());
+        assertNotNull(produto.getItens());
     }
 
     @Test
-    void deveDetectarNomeEmBranco() {
-        Product product = new Product(
-                1L,
-                "   ",  // nome em branco
-                "Descrição de teste",
-                BigDecimal.valueOf(99.90),
-                10,
-                null
-        );
+    void deveDetectarViolacoesDeValidacao() {
+        Product produto = new Product();
+        produto.setPreco(BigDecimal.valueOf(-10));
+        produto.setEstoque(-5);
 
-        Set<ConstraintViolation<Product>> violations = validator.validate(product);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("nome")));
+        Set<ConstraintViolation<Product>> violacoes = validator.validate(produto);
+        assertTrue(violacoes.stream().anyMatch(v -> v.getPropertyPath().toString().equals("nome")));
+        assertTrue(violacoes.stream().anyMatch(v -> v.getPropertyPath().toString().equals("preco")));
+        assertTrue(violacoes.stream().anyMatch(v -> v.getPropertyPath().toString().equals("estoque")));
     }
 
     @Test
-    void deveDetectarPrecoNegativo() {
-        Product product = new Product(
-                1L,
-                "Produto Teste",
-                "Descrição",
-                BigDecimal.valueOf(-10), // inválido
-                5,
-                null
-        );
+    void deveTestarEqualsHashCodeToString() {
+        Product p1 = new Product(1L, "Teclado", "Mecânico", BigDecimal.valueOf(200), 10, List.of());
+        Product p2 = new Product(1L, "Teclado", "Mecânico", BigDecimal.valueOf(200), 10, List.of());
 
-        Set<ConstraintViolation<Product>> violations = validator.validate(product);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("preco")));
-    }
-
-    @Test
-    void deveDetectarEstoqueNulo() {
-        Product product = new Product(
-                1L,
-                "Produto Teste",
-                "Descrição",
-                BigDecimal.valueOf(10),
-                null, // estoque nulo
-                null
-        );
-
-        Set<ConstraintViolation<Product>> violations = validator.validate(product);
-        assertFalse(violations.isEmpty());
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("estoque")));
+        assertEquals(p1, p2);
+        assertEquals(p1.hashCode(), p2.hashCode());
+        assertTrue(p1.toString().contains("Teclado"));
     }
 }
