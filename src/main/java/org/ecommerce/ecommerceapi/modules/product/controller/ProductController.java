@@ -7,7 +7,6 @@ import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
-import org.ecommerce.ecommerceapi.modules.product.dto.PromocaoRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

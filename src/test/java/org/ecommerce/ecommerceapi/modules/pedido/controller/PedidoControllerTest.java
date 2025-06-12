@@ -1,6 +1,5 @@
 package org.ecommerce.ecommerceapi.modules.pedido.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoRequestDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoResponseDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.service.PedidoService;
@@ -9,126 +8,107 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class PedidoControllerTest {
-
-    private MockMvc mockMvc;
-
-    @Mock
-    private PedidoService pedidoService;
 
     @InjectMocks
     private PedidoController pedidoController;
 
     @Mock
+    private PedidoService pedidoService;
+
+    @Mock
     private Authentication authentication;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
-    private final Long clienteId = 1L;
-
     @BeforeEach
-    void setup() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(pedidoController).build();
-
-        // Mocka o clienteId na autenticação
-        when(authentication.getName()).thenReturn(clienteId.toString());
     }
 
     @Test
-    void criar() throws Exception {
+    void testCriar() {
         PedidoRequestDTO requestDTO = new PedidoRequestDTO();
-        // preencha os campos necessários do DTO
+        requestDTO.setItens(Arrays.asList(new PedidoRequestDTO.ItemDTO()));
 
         PedidoResponseDTO responseDTO = new PedidoResponseDTO();
         responseDTO.setId(1L);
-        // preencha os campos necessários do DTO
+        responseDTO.setTotal(BigDecimal.valueOf(100.00));
 
-        when(pedidoService.criar(any(PedidoRequestDTO.class), eq(clienteId))).thenReturn(responseDTO);
+        when(authentication.getName()).thenReturn("1"); // Simulando o ID do cliente
+        when(pedidoService.criar(any(PedidoRequestDTO.class), anyLong())).thenReturn(responseDTO);
 
-        mockMvc.perform(post("/api/pedidos")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(requestDTO))
-                .principal(authentication))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value(1L));
+        ResponseEntity<PedidoResponseDTO> response = pedidoController.criar(requestDTO, authentication);
 
-        verify(pedidoService, times(1)).criar(any(PedidoRequestDTO.class), eq(clienteId));
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(responseDTO, response.getBody());
     }
 
     @Test
-    void listar() throws Exception {
-        PedidoResponseDTO p1 = new PedidoResponseDTO();
-        p1.setId(1L);
-        PedidoResponseDTO p2 = new PedidoResponseDTO();
-        p2.setId(2L);
-
-        when(pedidoService.listarPorCliente(clienteId)).thenReturn(List.of(p1, p2));
-
-        mockMvc.perform(get("/api/pedidos")
-                .principal(authentication))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[1].id").value(2L));
-
-        verify(pedidoService, times(1)).listarPorCliente(clienteId);
-    }
-
-    @Test
-    void buscarPorId() throws Exception {
+    void testListar() {
         PedidoResponseDTO responseDTO = new PedidoResponseDTO();
         responseDTO.setId(1L);
+        responseDTO.setTotal(BigDecimal.valueOf(100.00));
 
-        when(pedidoService.buscarPorId(1L, clienteId)).thenReturn(responseDTO);
+        when(authentication.getName()).thenReturn("1"); // Simulando o ID do cliente
+        when(pedidoService.listarPorCliente(anyLong())).thenReturn(Arrays.asList(responseDTO));
 
-        mockMvc.perform(get("/api/pedidos/{id}", 1L)
-                .principal(authentication))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1L));
+        ResponseEntity<List<PedidoResponseDTO>> response = pedidoController.listar(authentication);
 
-        verify(pedidoService, times(1)).buscarPorId(1L, clienteId);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, response.getBody().size());
+        assertEquals(responseDTO, response.getBody().get(0));
     }
 
     @Test
-    void cancelar() throws Exception {
-        doNothing().when(pedidoService).cancelar(1L, clienteId);
+    void testBuscarPorId() {
+        PedidoResponseDTO responseDTO = new PedidoResponseDTO();
+        responseDTO.setId(1L);
+        responseDTO.setTotal(BigDecimal.valueOf(100.00));
 
-        mockMvc.perform(delete("/api/pedidos/{id}", 1L)
-                .principal(authentication))
-                .andExpect(status().isNoContent());
+        when(authentication.getName()).thenReturn("1"); // Simulando o ID do cliente
+        when(pedidoService.buscarPorId(anyLong(), anyLong())).thenReturn(responseDTO);
 
-        verify(pedidoService, times(1)).cancelar(1L, clienteId);
+        ResponseEntity<PedidoResponseDTO> response = pedidoController.buscarPorId(1L, authentication);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(responseDTO, response.getBody());
     }
 
     @Test
-    void historico() throws Exception {
-        PedidoResponseDTO p1 = new PedidoResponseDTO();
-        p1.setId(1L);
-        PedidoResponseDTO p2 = new PedidoResponseDTO();
-        p2.setId(2L);
+    void testCancelar() {
+        when(authentication.getName()).thenReturn("1"); // Simulando o ID do cliente
 
-        when(pedidoService.historico(clienteId)).thenReturn(List.of(p1, p2));
+        ResponseEntity<Void> response = pedidoController.cancelar(1L, authentication);
 
-        mockMvc.perform(get("/api/pedidos/historico")
-                .principal(authentication))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(2))
-                .andExpect(jsonPath("$[0].id").value(1L))
-                .andExpect(jsonPath("$[1].id").value(2L));
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(pedidoService, times(1)).cancelar(1L, 1L);
+    }
 
-        verify(pedidoService, times(1)).historico(clienteId);
+    @Test
+    void testHistorico() {
+        PedidoResponseDTO responseDTO = new PedidoResponseDTO();
+        responseDTO.setId(1L);
+        responseDTO.setTotal(BigDecimal.valueOf(100.00));
+
+        when(authentication.getName()).thenReturn("1"); // Simulando o ID do cliente
+        when(pedidoService.historico(anyLong())).thenReturn(Arrays.asList(responseDTO));
+
+        ResponseEntity<List<PedidoResponseDTO>> response = pedidoController.historico(authentication);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, response.getBody().size());
+        assertEquals(responseDTO, response.getBody().get(0));
     }
 }

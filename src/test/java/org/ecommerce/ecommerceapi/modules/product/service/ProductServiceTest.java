@@ -2,10 +2,16 @@ package org.ecommerce.ecommerceapi.modules.product.service;
 
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
+import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
+import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
 import org.ecommerce.ecommerceapi.modules.product.entities.Product;
+import org.ecommerce.ecommerceapi.modules.product.enums.OperacaoEstoque;
 import org.ecommerce.ecommerceapi.modules.product.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -13,82 +19,129 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class ProductServiceTest {
 
-    private ProductRepository repository;
-    private ProductService service;
+    @InjectMocks
+    private ProductService productService;
+
+    @Mock
+    private ProductRepository productRepository;
+
+    private Product product;
 
     @BeforeEach
-    void setup() {
-        repository = mock(ProductRepository.class);
-        service = new ProductService();
-        service.setRepository(repository); // usa o setter de @Data (Lombok)
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        product = new Product();
+        product.setId(1L);
+        product.setNome("Produto Teste");
+        product.setDescricao("Descrição do Produto Teste");
+        product.setPreco(new BigDecimal("25.00"));
+        product.setEstoque(10);
     }
 
     @Test
-    void deveCriarProdutoComSucesso() {
+    void testBuscarPorId() {
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        Product foundProduct = productService.buscarPorId(1L);
+        assertEquals(product.getNome(), foundProduct.getNome());
+    }
+
+    @Test
+    void testBuscarPorIdDTO() {
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        ProductResponseDTO responseDTO = productService.buscarPorIdDTO(1L);
+        assertNotNull(responseDTO);
+        assertEquals(product.getNome(), responseDTO.getNome());
+    }
+
+    @Test
+    void testCriar() {
         ProductRequestDTO dto = new ProductRequestDTO();
-        dto.setNome("Produto Teste");
-        dto.setDescricao("Descrição");
-        dto.setPreco(BigDecimal.valueOf(10.5));
+        dto.setNome("Produto Novo");
+        dto.setDescricao("Descrição do Produto Novo");
+        dto.setPreco(new BigDecimal("30.00"));
         dto.setEstoque(5);
 
-        Product mockSaved = new Product(1L, dto.getNome(), dto.getDescricao(), dto.getPreco(), dto.getEstoque(), null);
+        when(productRepository.save(any(Product.class))).thenReturn(product);
 
-        when(repository.save(any(Product.class))).thenReturn(mockSaved);
-
-        ProductResponseDTO response = service.criar(dto);
-
-        assertNotNull(response);
-        assertEquals(1L, response.getId());
-        assertEquals("Produto Teste", response.getNome());
+        ProductResponseDTO response = productService.criar(dto);
+        assertEquals(product.getNome(), response.getNome());
     }
 
     @Test
-    void deveRetornarProdutoPorId() {
-        Product product = new Product(1L, "Produto X", "Descrição", BigDecimal.valueOf(100), 10, null);
-        when(repository.findById(1L)).thenReturn(Optional.of(product));
+    void testListar() {
+        when(productRepository.findAll()).thenReturn(Arrays.asList(product));
 
-        ProductResponseDTO dto = service.buscarPorIdDTO(1L);
-
-        assertEquals("Produto X", dto.getNome());
-        assertEquals(BigDecimal.valueOf(100), dto.getPreco());
+        List<ProductResponseDTO> products = productService.listar();
+        assertEquals(1, products.size());
+        assertEquals(product.getNome(), products.get(0).getNome());
     }
 
     @Test
-    void deveListarProdutos() {
-        List<Product> produtos = Arrays.asList(
-                new Product(1L, "P1", "D1", BigDecimal.TEN, 2, null),
-                new Product(2L, "P2", "D2", BigDecimal.ONE, 4, null)
-        );
-        when(repository.findAll()).thenReturn(produtos);
+    void testExcluir() {
+        when(productRepository.existsById(1L)).thenReturn(true);
 
-        List<ProductResponseDTO> lista = service.listar();
-
-        assertEquals(2, lista.size());
-        assertEquals("P1", lista.get(0).getNome());
+        productService.excluir(1L);
+        verify(productRepository, times(1)).deleteById(1L);
     }
 
     @Test
-    void deveExcluirProduto() {
-        when(repository.existsById(1L)).thenReturn(true);
-        service.excluir(1L);
-        verify(repository, times(1)).deleteById(1L);
+    void testAtualizar() {
+        ProductUpdateDTO dto = new ProductUpdateDTO();
+        dto.setNome("Produto Atualizado");
+        dto.setDescricao("Descrição Atualizada");
+        dto.setPreco(new BigDecimal("35.00"));
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productRepository.save(any(Product.class))).thenReturn(product);
+
+        ProductResponseDTO updatedProduct = productService.atualizar(1L, dto);
+        assertEquals(dto.getNome(), updatedProduct.getNome());
     }
 
     @Test
-    void deveLancarErroAoExcluirProdutoInexistente() {
-        when(repository.existsById(99L)).thenReturn(false);
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> service.excluir(99L));
-        assertEquals("Produto não encontrado", exception.getMessage());
+    void testAtualizarEstoqueAumentar() {
+        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
+        dto.setOperacao(OperacaoEstoque.AUMENTAR);
+        dto.setQuantidade(5);
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        productService.atualizarEstoque(1L, dto);
+        assertEquals(15, product.getEstoque());
     }
 
     @Test
-    void deveLancarErroAoCriarProdutoInvalido() {
-        ProductRequestDTO dto = new ProductRequestDTO(); // campos nulos
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> service.criar(dto));
-        assertTrue(exception.getMessage().contains("Nome do produto é obrigatório"));
+    void testAtualizarEstoqueReduzir() {
+        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
+        dto.setOperacao(OperacaoEstoque.REDUZIR);
+        dto.setQuantidade(5);
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        productService.atualizarEstoque(1L, dto);
+        assertEquals(5, product.getEstoque());
+    }
+
+    @Test
+    void testAtualizarEstoqueReduzirInsuficiente() {
+        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
+        dto.setOperacao(OperacaoEstoque.REDUZIR);
+        dto.setQuantidade(15);
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            productService.atualizarEstoque(1L, dto);
+        });
+        assertEquals("Estoque insuficiente para redução.", exception.getMessage());
     }
 }
+

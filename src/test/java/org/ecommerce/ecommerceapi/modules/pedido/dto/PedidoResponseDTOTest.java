@@ -87,4 +87,14 @@ class PedidoResponseDTOTest {
         assertEquals(dto1.hashCode(), dto2.hashCode());
         assertTrue(dto1.toString().contains("itens"));
     }
+    
+
+    @Test
+    void testHashCode() {
+        PedidoResponseDTO dto1 = new PedidoResponseDTO();
+        PedidoResponseDTO dto2 = new PedidoResponseDTO();
+        // Configure dto1 e dto2 com dados equivalentes
+        assertEquals(dto1.hashCode(), dto2.hashCode());
+    }
+
 }
