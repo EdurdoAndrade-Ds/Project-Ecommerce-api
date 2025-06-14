@@ -57,8 +57,11 @@ public class ProductService {
     }
 
     public List<ProductResponseDTO> listar() {
-        return repository.findAll().stream().map(this::mapToDTO).collect(Collectors.toList());
+        return repository.findAll().stream()
+                .map(this::mapToDTOWithDiscount) // Certifique-se de usar o método que inclui desconto
+                .collect(Collectors.toList());
     }
+
 
     public void excluir(Long id) {
         if (id == null) {
@@ -166,4 +169,40 @@ public class ProductService {
     protected boolean canEqual(Object other) {
         return other instanceof ProductService;
     }
+
+    public ProductResponseDTO aplicarDesconto(Long id, Double descountPercentage) {
+        if (descountPercentage == null || descountPercentage < 0.0 || descountPercentage > 100.0) {
+            throw new IllegalArgumentException("Porcentagem de desconto inválida");
+        }
+
+        Product product = buscarPorId(id); // Busca o produto ou lança exceção se não encontrar
+        product.setDescontoPercentual(descountPercentage); // Atualiza o campo de desconto (supondo que seja descontoPercentual no modelo)
+        Product updatedProduct = repository.save(product); // Salva no banco
+
+        return mapToDTOWithDiscount(updatedProduct); // Retorna DTO com desconto aplicado
+    }
+
+    // Método auxiliar que mapeia product para ProductResponseDTO incluindo campos de desconto
+    private ProductResponseDTO mapToDTOWithDiscount(Product product) {
+        ProductResponseDTO dto = new ProductResponseDTO();
+        dto.setId(product.getId());
+        dto.setNome(product.getNome());
+        dto.setDescricao(product.getDescricao());
+        dto.setPreco(product.getPreco());
+        dto.setEstoque(product.getEstoque());
+
+        double discountPercentage = product.getDescontoPercentual() != null ? product.getDescontoPercentual() : 0.0;
+        dto.setDescountPercentage(discountPercentage);
+
+        if (discountPercentage > 0) {
+            BigDecimal discountedPrice = product.getPreco()
+                    .multiply(BigDecimal.valueOf(1 - discountPercentage / 100.0));
+            dto.setDescountedPrice(discountedPrice);
+        } else {
+            dto.setDescountedPrice(product.getPreco());
+        }
+
+        return dto;
+    }
+
 }

@@ -9,6 +9,8 @@ public class ProductResponseDTO {
     private String descricao;
     private BigDecimal preco;
     private Integer estoque;
+    private Double descountPercentage; 
+    private BigDecimal descountedPrice;
 
     // Getters e Setters
     public Long getId() {
@@ -51,6 +53,19 @@ public class ProductResponseDTO {
         this.estoque = estoque;
     }
 
+    public Double getDescountPercentage() {
+        return descountPercentage;
+    }
+    public void setDescountPercentage(Double descountPercentage) {
+        this.descountPercentage = descountPercentage;
+    }
+    public BigDecimal getDescountedPrice() {
+        return descountedPrice;
+    }
+    public void setDescountedPrice(BigDecimal descountedPrice) {
+        this.descountedPrice = descountedPrice;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,5 +97,10 @@ public class ProductResponseDTO {
     // Método canEqual para verificar igualdade
     protected boolean canEqual(Object other) {
         return other instanceof ProductResponseDTO;
+    }
+
+    public void setDescontoPercentual(double discountPercentage) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setDescontoPercentual'");
     }
 }

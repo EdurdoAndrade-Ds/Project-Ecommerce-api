@@ -19,6 +19,11 @@ public class Product {
 
     private Integer estoque;
 
+    @Column(nullable = false)
+    private Double descountPercentage = 0.0; 
+
+    private BigDecimal descountedPrice; 
+
     // Getters e Setters
 
     public Long getId() {
@@ -59,5 +64,17 @@ public class Product {
 
     public void setEstoque(Integer estoque) {
         this.estoque = estoque;
+    }
+    public Double getDescontoPercentual() {
+        return descountPercentage;
+    }
+    public void setDescontoPercentual(Double discountPercentage) {
+        this.descountPercentage = discountPercentage;
+    }
+    public BigDecimal getDescountPrice() {
+        return descountedPrice;
+    }
+    public void setDescountedPrice(BigDecimal discountedPrice) {
+        this.descountedPrice = discountedPrice;
     }
 }

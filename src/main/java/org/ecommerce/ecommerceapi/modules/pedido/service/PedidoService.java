@@ -54,14 +54,14 @@ public class PedidoService {
             item.setProduto(product);
             item.setNomeProduto(product.getNome());
             item.setQuantidade(itemDTO.getQuantidade());
-            item.setPrecoUnitario(product.getPreco());
+            item.setDescountPriceUnitario(product.getDescountPrice());
             item.setPedido(pedido);
             return item;
         }).collect(Collectors.toList());
 
         pedido.setItens(itens);
         pedido.setTotal(itens.stream()
-                .map(item -> item.getPrecoUnitario().multiply(BigDecimal.valueOf(item.getQuantidade())))
+                .map(item -> item.getDescountPriceUnitario().multiply(BigDecimal.valueOf(item.getQuantidade())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add));
 
         Pedido salvo = pedidoRepository.save(pedido);
@@ -103,7 +103,7 @@ public class PedidoService {
             ri.setProdutoId(i.getProduto().getId());
             ri.setNomeProduto(i.getNomeProduto());
             ri.setQuantidade(i.getQuantidade());
-            ri.setPrecoUnitario(i.getPrecoUnitario());
+            ri.setDescountPriceUnitario(i.getDescountPriceUnitario());
             return ri;
         }).toList());
         return response;

@@ -16,7 +16,7 @@ public class PedidoResponseDTO {
         private Long produtoId;
         private String nomeProduto;
         private Integer quantidade;
-        private BigDecimal precoUnitario;
+        private BigDecimal DescountPriceUnitario;
 
     }
 }

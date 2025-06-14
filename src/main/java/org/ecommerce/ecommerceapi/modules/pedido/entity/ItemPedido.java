@@ -16,7 +16,7 @@ public class ItemPedido {
 
     private String nomeProduto;
     private Integer quantidade;
-    private BigDecimal precoUnitario; // <- Aqui ficará o valor com ou sem desconto
+    private BigDecimal DescountPriceUnitario; // <- Aqui ficará o valor com ou sem desconto
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id")
