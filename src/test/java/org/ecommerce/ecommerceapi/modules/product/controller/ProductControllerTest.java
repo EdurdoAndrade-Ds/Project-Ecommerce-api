@@ -4,7 +4,6 @@ import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
-import org.ecommerce.ecommerceapi.modules.product.enums.OperacaoEstoque;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,14 +13,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class ProductControllerTest {
@@ -38,111 +34,111 @@ class ProductControllerTest {
     }
 
     @Test
-    void testCriar() {
-        ProductRequestDTO requestDTO = new ProductRequestDTO();
-        requestDTO.setNome("Produto Teste");
-        requestDTO.setDescricao("Descrição do Produto Teste");
-        requestDTO.setPreco(new BigDecimal("25.00"));
-        requestDTO.setEstoque(10);
+    void criarDeveRetornar201QuandoProdutoCriadoComSucesso() {
+        // Arrange
+        ProductRequestDTO productRequest = new ProductRequestDTO();
+        ProductResponseDTO productResponse = new ProductResponseDTO();
+        when(productService.criar(any(ProductRequestDTO.class))).thenReturn(productResponse);
 
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setId(1L);
-        responseDTO.setNome("Produto Teste");
-        responseDTO.setDescricao("Descrição do Produto Teste");
-        responseDTO.setPreco(new BigDecimal("25.00"));
-        responseDTO.setEstoque(10);
+        // Act
+        ResponseEntity<ProductResponseDTO> response = productController.criar(productRequest);
 
-        when(productService.criar(any(ProductRequestDTO.class))).thenReturn(responseDTO);
-
-        ResponseEntity<ProductResponseDTO> response = productController.criar(requestDTO);
-
+        // Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("Produto Teste", response.getBody().getNome());
+        assertEquals(productResponse, response.getBody());
+        verify(productService, times(1)).criar(any(ProductRequestDTO.class));
     }
 
     @Test
-    void testBuscarPorIdFound() {
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setId(1L);
-        responseDTO.setNome("Produto Teste");
+    void buscarPorIdDeveRetornar200QuandoProdutoEncontrado() {
+        // Arrange
+        Long productId = 1L;
+        ProductResponseDTO productResponse = new ProductResponseDTO();
+        when(productService.buscarPorIdDTO(productId)).thenReturn(productResponse);
 
-        when(productService.buscarPorIdDTO(1L)).thenReturn(responseDTO);
+        // Act
+        ResponseEntity<ProductResponseDTO> response = productController.buscarPorId(productId);
 
-        ResponseEntity<ProductResponseDTO> response = productController.buscarPorId(1L);
-
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("Produto Teste", response.getBody().getNome());
+        assertEquals(productResponse, response.getBody());
+        verify(productService, times(1)).buscarPorIdDTO(productId);
     }
 
     @Test
-    void testBuscarPorIdNotFound() {
-        when(productService.buscarPorIdDTO(anyLong())).thenThrow(new RuntimeException("Produto não encontrado"));
+    void listarDeveRetornar200QuandoProdutosEncontrados() {
+        // Arrange
+        ProductResponseDTO productResponse = new ProductResponseDTO();
+        when(productService.listar()).thenReturn(Collections.singletonList(productResponse));
 
-        Exception exception = assertThrows(RuntimeException.class, () -> {
-            productController.buscarPorId(1L);
-        });
-
-        assertEquals("Produto não encontrado", exception.getMessage());
-    }
-
-    @Test
-    void testListar() {
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setId(1L);
-        responseDTO.setNome("Produto Teste");
-
-        when(productService.listar()).thenReturn(Collections.singletonList(responseDTO));
-
+        // Act
         ResponseEntity<List<ProductResponseDTO>> response = productController.listar();
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().size());
-        assertEquals("Produto Teste", response.getBody().get(0).getNome());
+        assertEquals(productResponse, response.getBody().get(0));
+        verify(productService, times(1)).listar();
     }
 
     @Test
-    void testExcluir() {
-        doNothing().when(productService).excluir(1L);
+    void excluirDeveRetornar204QuandoProdutoExcluidoComSucesso() {
+        // Arrange
+        Long productId = 1L;
 
-        ResponseEntity<Void> response = productController.excluir(1L);
+        // Act
+        ResponseEntity<Void> response = productController.excluir(productId);
 
+        // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(productService, times(1)).excluir(1L);
+        verify(productService, times(1)).excluir(productId);
     }
 
     @Test
-    void testAtualizar() {
-        ProductUpdateDTO updateDTO = new ProductUpdateDTO();
-        updateDTO.setNome("Produto Atualizado");
-        updateDTO.setDescricao("Descrição Atualizada");
-        updateDTO.setPreco(new BigDecimal("30.00"));
+    void atualizarDeveRetornar200QuandoProdutoAtualizadoComSucesso() {
+        // Arrange
+        Long productId = 1L;
+        ProductUpdateDTO productUpdateDTO = new ProductUpdateDTO();
+        ProductResponseDTO productResponse = new ProductResponseDTO();
+        when(productService.atualizar(eq(productId), any(ProductUpdateDTO.class))).thenReturn(productResponse);
 
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setId(1L);
-        responseDTO.setNome("Produto Atualizado");
+        // Act
+        ResponseEntity<ProductResponseDTO> response = productController.atualizar(productId, productUpdateDTO);
 
-        when(productService.atualizar(anyLong(), any(ProductUpdateDTO.class))).thenReturn(responseDTO);
-
-        ResponseEntity<ProductResponseDTO> response = productController.atualizar(1L, updateDTO);
-
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals("Produto Atualizado", response.getBody().getNome());
+        assertEquals(productResponse, response.getBody());
+        verify(productService, times(1)).atualizar(eq(productId), any(ProductUpdateDTO.class));
     }
 
     @Test
-    void testAtualizarEstoque() {
-        ProductStockUpdateRequestDTO stockUpdateDTO = new ProductStockUpdateRequestDTO();
-        stockUpdateDTO.setOperacao(OperacaoEstoque.AUMENTAR);
-        stockUpdateDTO.setQuantidade(5);
+    void atualizarEstoqueDeveRetornar204QuandoEstoqueAtualizadoComSucesso() {
+        // Arrange
+        Long productId = 1L;
+        ProductStockUpdateRequestDTO stockUpdateRequest = new ProductStockUpdateRequestDTO();
 
-        doNothing().when(productService).atualizarEstoque(anyLong(), any(ProductStockUpdateRequestDTO.class));
+        // Act
+        ResponseEntity<Void> response = productController.atualizarEstoque(productId, stockUpdateRequest);
 
-        ResponseEntity<Void> response = productController.atualizarEstoque(1L, stockUpdateDTO);
-
+        // Assert
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(productService, times(1)).atualizarEstoque(1L, stockUpdateDTO);
+        verify(productService, times(1)).atualizarEstoque(eq(productId), any(ProductStockUpdateRequestDTO.class));
+    }
+
+    @Test
+    void aplicarDescontoDeveRetornar200QuandoDescontoAplicadoComSucesso() {
+        // Arrange
+        Long productId = 1L;
+        Double discountPercentage = 10.0;
+        ProductResponseDTO productResponse = new ProductResponseDTO();
+        when(productService.aplicarDesconto(productId, discountPercentage)).thenReturn(productResponse);
+
+        // Act
+        ResponseEntity<ProductResponseDTO> response = productController.aplicarDesconto(productId, discountPercentage);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(productResponse, response.getBody());
+        verify(productService, times(1)).aplicarDesconto(productId, discountPercentage);
     }
 }

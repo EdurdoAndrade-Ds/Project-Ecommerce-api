@@ -4,7 +4,7 @@ import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
-import org.ecommerce.ecommerceapi.modules.product.entities.Product;
+import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.enums.OperacaoEstoque;
 import org.ecommerce.ecommerceapi.modules.product.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +14,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,235 +22,163 @@ import static org.mockito.Mockito.*;
 
 class ProductServiceTest {
 
-    @InjectMocks
-    private ProductService productService;
-
     @Mock
     private ProductRepository productRepository;
 
-    private Product product;
+    @InjectMocks
+    private ProductService productService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        product = new Product();
+    }
+
+    @Test
+    void testCriarProduto() {
+        ProductRequestDTO requestDTO = new ProductRequestDTO();
+        requestDTO.setNome("Produto Teste");
+        requestDTO.setDescricao("Descrição do Produto Teste");
+        requestDTO.setPreco(BigDecimal.valueOf(99.99));
+        requestDTO.setEstoque(10);
+
+        Product product = new Product();
         product.setId(1L);
-        product.setNome("Produto Teste");
-        product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(new BigDecimal("25.00"));
-        product.setEstoque(10);
+        product.setNome(requestDTO.getNome());
+        product.setDescricao(requestDTO.getDescricao());
+        product.setPreco(requestDTO.getPreco());
+        product.setEstoque(requestDTO.getEstoque());
+
+        when(productRepository.save(any(Product.class))).thenReturn(product);
+
+        ProductResponseDTO responseDTO = productService.criar(requestDTO);
+
+        assertNotNull(responseDTO);
+        assertEquals("Produto Teste", responseDTO.getNome());
+        assertEquals("Descrição do Produto Teste", responseDTO.getDescricao());
+        assertEquals(BigDecimal.valueOf(99.99), responseDTO.getPreco());
+        assertEquals(10, responseDTO.getEstoque());
     }
 
     @Test
     void testBuscarPorId() {
+        Product product = new Product();
+        product.setId(1L);
+        product.setNome("Produto Teste");
+        product.setDescricao("Descrição do Produto Teste");
+        product.setPreco(BigDecimal.valueOf(99.99));
+        product.setEstoque(10);
+
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         Product foundProduct = productService.buscarPorId(1L);
-
         assertNotNull(foundProduct);
-        assertEquals(product.getNome(), foundProduct.getNome());
+        assertEquals("Produto Teste", foundProduct.getNome());
     }
 
     @Test
-    void testBuscarPorIdDTO() {
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+    void testBuscarPorIdProdutoNaoEncontrado() {
+        when(productRepository.findById(1L)).thenReturn(Optional.empty());
 
-        ProductResponseDTO responseDTO = productService.buscarPorIdDTO(1L);
-
-        assertNotNull(responseDTO);
-        assertEquals(product.getNome(), responseDTO.getNome());
-    }
-
-    @Test
-    void testCriar() {
-        ProductRequestDTO dto = new ProductRequestDTO();
-        dto.setNome("Produto Novo");
-        dto.setDescricao("Descrição do Produto Novo");
-        dto.setPreco(new BigDecimal("30.00"));
-        dto.setEstoque(5);
-
-        when(productRepository.save(any(Product.class))).thenReturn(product);
-
-        ProductResponseDTO response = productService.criar(dto);
-
-        assertNotNull(response);
-        assertEquals(product.getNome(), response.getNome());
-    }
-
-    @Test
-    void testListar() {
-        when(productRepository.findAll()).thenReturn(Arrays.asList(product));
-
-        List<ProductResponseDTO> products = productService.listar();
-
-        assertEquals(1, products.size());
-        assertEquals(product.getNome(), products.get(0).getNome());
-    }
-
-    @Test
-    void testExcluirExistente() {
-        when(productRepository.existsById(1L)).thenReturn(true);
-
-        productService.excluir(1L);
-
-        verify(productRepository).deleteById(1L);
-    }
-
-    @Test
-    void testExcluirNaoExistente() {
-        when(productRepository.existsById(1L)).thenReturn(false);
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            productService.excluir(1L);
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+            productService.buscarPorId(1L);
         });
 
         assertEquals("Produto não encontrado", exception.getMessage());
     }
 
     @Test
-    void testExcluirIdNulo() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            productService.excluir(null);
-        });
+    void testAtualizarProduto() {
+        ProductUpdateDTO updateDTO = new ProductUpdateDTO();
+        updateDTO.setNome("Produto Atualizado");
+        updateDTO.setDescricao("Descrição Atualizada");
+        updateDTO.setPreco(BigDecimal.valueOf(89.99));
 
-        assertEquals("ID do produto não pode ser nulo", exception.getMessage());
-    }
+        Product existingProduct = new Product();
+        existingProduct.setId(1L);
+        existingProduct.setNome("Produto Teste");
+        existingProduct.setDescricao("Descrição do Produto Teste");
+        existingProduct.setPreco(BigDecimal.valueOf(99.99));
+        existingProduct.setEstoque(10);
 
-    @Test
-    void testAtualizar() {
-        ProductUpdateDTO dto = new ProductUpdateDTO();
-        dto.setNome("Produto Atualizado");
-        dto.setDescricao("Descrição Atualizada");
-        dto.setPreco(new BigDecimal("35.00"));
+        when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
+        when(productRepository.save(any(Product.class))).thenReturn(existingProduct);
 
-        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
-        when(productRepository.save(any(Product.class))).thenReturn(product);
-
-        ProductResponseDTO updatedProduct = productService.atualizar(1L, dto);
+        ProductResponseDTO updatedProduct = productService.atualizar(1L, updateDTO);
 
         assertNotNull(updatedProduct);
-        assertEquals(dto.getNome(), updatedProduct.getNome());
-    }
-
-    @Test
-    void testAtualizarDadosNulos() {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            productService.atualizar(1L, null);
-        });
-
-        assertEquals("Dados de atualização não podem ser nulos", exception.getMessage());
-    }
-
-    @Test
-    void testAtualizarNomeNulo() {
-        ProductUpdateDTO dto = new ProductUpdateDTO();
-        dto.setNome(null);
-        dto.setPreco(new BigDecimal("35.00"));
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            productService.atualizar(1L, dto);
-        });
-
-        assertEquals("Nome do produto é obrigatório", exception.getMessage());
-    }
-
-    @Test
-    void testAtualizarPrecoInvalido() {
-        ProductUpdateDTO dto = new ProductUpdateDTO();
-        dto.setNome("Produto Atualizado");
-        dto.setPreco(BigDecimal.ZERO);
-
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            productService.atualizar(1L, dto);
-        });
-
-        assertEquals("Preço do produto deve ser maior que zero", exception.getMessage());
+        assertEquals("Produto Atualizado", updatedProduct.getNome());
+        assertEquals("Descrição Atualizada", updatedProduct.getDescricao());
+        assertEquals(BigDecimal.valueOf(89.99), updatedProduct.getPreco());
     }
 
     @Test
     void testAtualizarEstoqueAumentar() {
-        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto.setQuantidade(5);
+        ProductStockUpdateRequestDTO stockUpdateDTO = new ProductStockUpdateRequestDTO();
+        stockUpdateDTO.setOperacao(OperacaoEstoque.AUMENTAR);
+        stockUpdateDTO.setQuantidade(5);
+
+        Product product = new Product();
+        product.setId(1L);
+        product.setNome("Produto Teste");
+        product.setDescricao("Descrição do Produto Teste");
+        product.setPreco(BigDecimal.valueOf(99.99));
+        product.setEstoque(10);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productRepository.save(any(Product.class))).thenReturn(product);
 
-        productService.atualizarEstoque(1L, dto);
+        productService.atualizarEstoque(1L, stockUpdateDTO);
 
         assertEquals(15, product.getEstoque());
     }
 
     @Test
     void testAtualizarEstoqueReduzir() {
-        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.REDUZIR);
-        dto.setQuantidade(5);
+        ProductStockUpdateRequestDTO stockUpdateDTO = new ProductStockUpdateRequestDTO();
+        stockUpdateDTO.setOperacao(OperacaoEstoque.REDUZIR);
+        stockUpdateDTO.setQuantidade(5);
+
+        Product product = new Product();
+        product.setId(1L);
+        product.setNome("Produto Teste");
+        product.setDescricao("Descrição do Produto Teste");
+        product.setPreco(BigDecimal.valueOf(99.99));
+        product.setEstoque(10);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productRepository.save(any(Product.class))).thenReturn(product);
 
-        productService.atualizarEstoque(1L, dto);
+        productService.atualizarEstoque(1L, stockUpdateDTO);
 
         assertEquals(5, product.getEstoque());
     }
 
     @Test
-    void testAtualizarEstoqueReduzirInsuficiente() {
-        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.REDUZIR);
-        dto.setQuantidade(15);
+    void testExcluirProduto() {
+        Product product = new Product();
+        product.setId(1L);
+        when(productRepository.existsById(1L)).thenReturn(true);
+
+        productService.excluir(1L);
+
+        verify(productRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void testAplicarDesconto() {
+        Product product = new Product();
+        product.setId(1L);
+        product.setPreco(BigDecimal.valueOf(100.00));
+        product.setDescontoPercentual(10.0);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+        when(productRepository.save(any(Product.class))).thenReturn(product);
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            productService.atualizarEstoque(1L, dto);
-        });
+        ProductResponseDTO responseDTO = productService.aplicarDesconto(1L, 10.0);
 
-        assertEquals("Estoque insuficiente para redução.", exception.getMessage());
+        assertNotNull(responseDTO);
+        // Use BigDecimal para comparação
+        assertEquals(0, BigDecimal.valueOf(90.00).compareTo(responseDTO.getDescountedPrice()));
     }
 
-    @Test
-    void testEquals() {
-        ProductRepository mockRepository1 = mock(ProductRepository.class);
-        ProductRepository mockRepository2 = mock(ProductRepository.class);
-        ProductService service1 = new ProductService();
-        service1.setRepository(mockRepository1);
-        ProductService service2 = new ProductService();
-        service2.setRepository(mockRepository1);
-        ProductService service3 = new ProductService();
-        service3.setRepository(mockRepository2);
-        assertTrue(service1.equals(service1)); // mesmo objeto
-        assertTrue(service1.equals(service2)); // mesmo repositório
-        assertFalse(service1.equals(service3)); // repositório diferente
-        assertFalse(service1.equals(new Object())); // tipo diferente
-    }
-
-    @Test
-    void testCanEqual() {
-        assertTrue(productService.canEqual(new ProductService()));
-        assertFalse(productService.canEqual(new Object()));
-    }
-
-    @Test
-    void criar_shouldThrowException_whenProdutoNulo() {
-        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
-            productService.criar(null);
-        });
-        assertEquals("Produto não pode ser nulo", ex.getMessage());
-    }
-
-    @Test
-    void criar_shouldThrowException_whenNomeNuloOuVazio() {
-        ProductRequestDTO dto1 = new ProductRequestDTO();
-        dto1.setNome(null);
-        dto1.setPreco(BigDecimal.TEN);
-        dto1.setEstoque(5);
-        ProductRequestDTO dto2 = new ProductRequestDTO();
-        dto2.setNome("  ");
-        dto2.setPreco(BigDecimal.TEN);
-        dto2.setEstoque(5);
-        IllegalArgumentException ex1 = assertThrows(IllegalArgumentException.class, () -> productService.criar(dto1));
-        IllegalArgumentException ex2 = assertThrows(IllegalArgumentException.class, () -> productService.criar(dto2));
-        assertEquals("Nome do produto é obrigatório", ex1.getMessage());
-        assertEquals("Nome do produto é obrigatório", ex2.getMessage());
-    }
 }

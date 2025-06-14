@@ -8,7 +8,7 @@ import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoResponseDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.ItemPedido;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
-import org.ecommerce.ecommerceapi.modules.product.entities.Product;
+import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

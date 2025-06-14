@@ -2,9 +2,10 @@ package org.ecommerce.ecommerceapi.modules.pedido.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.ecommerce.ecommerceapi.modules.product.entities.Product;
 
 import java.math.BigDecimal;
+
+import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 
 @Entity
 @Data

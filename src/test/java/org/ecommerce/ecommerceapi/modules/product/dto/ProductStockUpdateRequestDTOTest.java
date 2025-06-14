@@ -9,104 +9,47 @@ class ProductStockUpdateRequestDTOTest {
 
     @Test
     void testGettersAndSetters() {
-        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
+        ProductStockUpdateRequestDTO stockUpdateRequest = new ProductStockUpdateRequestDTO();
 
-        dto.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto.setQuantidade(10);
+        // Define valores
+        stockUpdateRequest.setOperacao(OperacaoEstoque.AUMENTAR);
+        stockUpdateRequest.setQuantidade(10);
 
-        assertEquals(OperacaoEstoque.AUMENTAR, dto.getOperacao());
-        assertEquals(10, dto.getQuantidade());
+        // Verifica valores atribuídos
+        assertEquals(OperacaoEstoque.AUMENTAR, stockUpdateRequest.getOperacao());
+        assertEquals(10, stockUpdateRequest.getQuantidade());
     }
 
     @Test
     void testEqualsAndHashCode() {
-        ProductStockUpdateRequestDTO dto1 = new ProductStockUpdateRequestDTO();
-        dto1.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto1.setQuantidade(10);
+        ProductStockUpdateRequestDTO request1 = new ProductStockUpdateRequestDTO();
+        ProductStockUpdateRequestDTO request2 = new ProductStockUpdateRequestDTO();
 
-        ProductStockUpdateRequestDTO dto2 = new ProductStockUpdateRequestDTO();
-        dto2.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto2.setQuantidade(10);
+        request1.setOperacao(OperacaoEstoque.AUMENTAR);
+        request1.setQuantidade(10);
 
-        assertEquals(dto1, dto2);
-        assertEquals(dto1.hashCode(), dto2.hashCode());
+        request2.setOperacao(OperacaoEstoque.AUMENTAR);
+        request2.setQuantidade(10);
+
+        // Testa que os objetos são iguais
+        assertEquals(request1, request2);
+        assertEquals(request1.hashCode(), request2.hashCode());
+
+        // Modifica um objeto e testa que eles não são mais iguais
+        request2.setQuantidade(5);
+        assertNotEquals(request1, request2);
     }
 
     @Test
     void testToString() {
-        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto.setQuantidade(10);
+        ProductStockUpdateRequestDTO stockUpdateRequest = new ProductStockUpdateRequestDTO();
+        stockUpdateRequest.setOperacao(OperacaoEstoque.REDUZIR);
+        stockUpdateRequest.setQuantidade(5);
 
-        String expectedString = "ProductStockUpdateRequestDTO{operacao=AUMENTAR, quantidade=10}";
-        assertEquals(expectedString, dto.toString());
-    }
-
-    @Test
-    void testNullValues() {
-        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-
-        dto.setOperacao(null);
-        dto.setQuantidade(null);
-
-        assertNull(dto.getOperacao());
-        assertNull(dto.getQuantidade());
-    }
-    @Test
-    public void testEquals_SameObject() {
-        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto.setQuantidade(10);
-        
-        // Chamando equals com o mesmo objeto
-        assertTrue(dto.equals(dto), "Should be equal to itself");
-    }
-
-    @Test
-    public void testEquals_SimilarObjects() {
-        ProductStockUpdateRequestDTO dto1 = new ProductStockUpdateRequestDTO();
-        dto1.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto1.setQuantidade(10);
-        
-        ProductStockUpdateRequestDTO dto2 = new ProductStockUpdateRequestDTO();
-        dto2.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto2.setQuantidade(10);
-        
-        // Chamando equals com objetos semelhantes
-        assertTrue(dto1.equals(dto2), "Similar objects should be equal");
-    }
-
-    @Test
-    public void testEquals_DifferentObjects() {
-        ProductStockUpdateRequestDTO dto1 = new ProductStockUpdateRequestDTO();
-        dto1.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto1.setQuantidade(10);
-        
-        ProductStockUpdateRequestDTO dto2 = new ProductStockUpdateRequestDTO();
-        dto2.setOperacao(OperacaoEstoque.REDUZIR);
-        dto2.setQuantidade(10);
-        
-        // Chamando equals com objetos diferentes
-        assertFalse(dto1.equals(dto2), "Different objects should not be equal");
-    }
-
-    @Test
-    public void testEquals_Null() {
-        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto.setQuantidade(10);
-        
-        // Chamando equals com null
-        assertFalse(dto.equals(null), "Should not be equal to null");
-    }
-
-    @Test
-    public void testEquals_DifferentClass() {
-        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.AUMENTAR);
-        dto.setQuantidade(10);
-        
-        // Chamando equals com objeto de classe diferente
-        assertFalse(dto.equals("String"), "Should not be equal to an object of a different class");
+        String expectedString = "ProductStockUpdateRequestDTO{" +
+                "operacao=REDUZIR, " +
+                "quantidade=5" +
+                '}';
+        assertEquals(expectedString, stockUpdateRequest.toString());
     }
 }

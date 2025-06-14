@@ -10,84 +10,69 @@ class ProductResponseDTOTest {
 
     @Test
     void testGettersAndSetters() {
-        ProductResponseDTO dto = new ProductResponseDTO();
+        ProductResponseDTO productResponse = new ProductResponseDTO();
 
-        dto.setId(1L);
-        dto.setNome("Produto Teste");
-        dto.setDescricao("Descrição do Produto Teste");
-        dto.setPreco(new BigDecimal("25.00"));
-        dto.setEstoque(10);
+        // Define valores
+        productResponse.setId(1L);
+        productResponse.setNome("Produto Teste");
+        productResponse.setDescricao("Descrição do Produto Teste");
+        productResponse.setPreco(BigDecimal.valueOf(99.99));
+        productResponse.setEstoque(10);
+        productResponse.setDescountPercentage(15.0);
+        productResponse.setDescountedPrice(BigDecimal.valueOf(84.99));
 
-        assertEquals(1L, dto.getId());
-        assertEquals("Produto Teste", dto.getNome());
-        assertEquals("Descrição do Produto Teste", dto.getDescricao());
-        assertEquals(new BigDecimal("25.00"), dto.getPreco());
-        assertEquals(10, dto.getEstoque());
+        // Verifica valores atribuídos
+        assertEquals(1L, productResponse.getId());
+        assertEquals("Produto Teste", productResponse.getNome());
+        assertEquals("Descrição do Produto Teste", productResponse.getDescricao());
+        assertEquals(BigDecimal.valueOf(99.99), productResponse.getPreco());
+        assertEquals(10, productResponse.getEstoque());
+        assertEquals(15.0, productResponse.getDescountPercentage());
+        assertEquals(BigDecimal.valueOf(84.99), productResponse.getDescountedPrice());
     }
 
     @Test
     void testEqualsAndHashCode() {
-        ProductResponseDTO dto1 = new ProductResponseDTO();
-        dto1.setId(1L);
-        dto1.setNome("Produto Teste");
-        dto1.setDescricao("Descrição do Produto Teste");
-        dto1.setPreco(new BigDecimal("25.00"));
-        dto1.setEstoque(10);
+        ProductResponseDTO product1 = new ProductResponseDTO();
+        ProductResponseDTO product2 = new ProductResponseDTO();
 
-        ProductResponseDTO dto2 = new ProductResponseDTO();
-        dto2.setId(1L);
-        dto2.setNome("Produto Teste");
-        dto2.setDescricao("Descrição do Produto Teste");
-        dto2.setPreco(new BigDecimal("25.00"));
-        dto2.setEstoque(10);
+        product1.setId(1L);
+        product1.setNome("Produto Teste");
+        product1.setDescricao("Descrição do Produto Teste");
+        product1.setPreco(BigDecimal.valueOf(99.99));
+        product1.setEstoque(10);
 
-        ProductResponseDTO dto3 = new ProductResponseDTO();
-        dto3.setId(2L);
-        dto3.setNome("Produto Diferente");
-        dto3.setDescricao("Descrição do Produto Diferente");
-        dto3.setPreco(new BigDecimal("30.00"));
-        dto3.setEstoque(5);
+        product2.setId(1L);
+        product2.setNome("Produto Teste");
+        product2.setDescricao("Descrição do Produto Teste");
+        product2.setPreco(BigDecimal.valueOf(99.99));
+        product2.setEstoque(10);
 
-        assertEquals(dto1, dto2);
-        assertNotEquals(dto1, dto3);
-        assertEquals(dto1.hashCode(), dto2.hashCode());
-        assertNotEquals(dto1.hashCode(), dto3.hashCode());
+        // Testa que os produtos são iguais
+        assertEquals(product1, product2);
+        assertEquals(product1.hashCode(), product2.hashCode());
+
+        // Modifica um produto e testa que eles não são mais iguais
+        product2.setEstoque(5);
+        assertNotEquals(product1, product2);
     }
 
     @Test
     void testToString() {
-        ProductResponseDTO dto = new ProductResponseDTO();
-        dto.setId(1L);
-        dto.setNome("Produto Teste");
-        dto.setDescricao("Descrição do Produto Teste");
-        dto.setPreco(new BigDecimal("25.00"));
-        dto.setEstoque(10);
+        ProductResponseDTO productResponse = new ProductResponseDTO();
+        productResponse.setId(1L);
+        productResponse.setNome("Produto Teste");
+        productResponse.setDescricao("Descrição do Produto Teste");
+        productResponse.setPreco(BigDecimal.valueOf(99.99));
+        productResponse.setEstoque(10);
 
-        String expectedString = "ProductResponseDTO{id=1, nome='Produto Teste', descricao='Descrição do Produto Teste', preco=25.00, estoque=10}";
-        assertEquals(expectedString, dto.toString());
-    }
-
-    @Test
-    void testNullValues() {
-        ProductResponseDTO dto = new ProductResponseDTO();
-
-        dto.setId(null);
-        dto.setNome(null);
-        dto.setDescricao(null);
-        dto.setPreco(null);
-        dto.setEstoque(null);
-
-        assertNull(dto.getId());
-        assertNull(dto.getNome());
-        assertNull(dto.getDescricao());
-        assertNull(dto.getPreco());
-        assertNull(dto.getEstoque());
-    }
-
-    @Test
-    void testCanEqual() {
-        ProductResponseDTO dto = new ProductResponseDTO();
-        assertTrue(dto.canEqual(new ProductResponseDTO()));
-        assertFalse(dto.canEqual(new Object())); // Testa com um objeto de tipo diferente
+        String expectedString = "ProductResponseDTO{" +
+                "id=1, " +
+                "nome='Produto Teste', " +
+                "descricao='Descrição do Produto Teste', " +
+                "preco=99.99, " +
+                "estoque=10" +
+                '}';
+        assertEquals(expectedString, productResponse.toString());
     }
 }

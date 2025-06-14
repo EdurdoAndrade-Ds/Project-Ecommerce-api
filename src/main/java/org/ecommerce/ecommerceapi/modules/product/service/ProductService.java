@@ -6,7 +6,7 @@ import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
-import org.ecommerce.ecommerceapi.modules.product.entities.Product;
+import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.repository.ProductRepository;
 import org.ecommerce.ecommerceapi.modules.product.enums.OperacaoEstoque;
 import org.springframework.beans.factory.annotation.Autowired;

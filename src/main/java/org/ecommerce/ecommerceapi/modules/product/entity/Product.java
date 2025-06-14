@@ -1,4 +1,4 @@
-package org.ecommerce.ecommerceapi.modules.product.entities;
+package org.ecommerce.ecommerceapi.modules.product.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
