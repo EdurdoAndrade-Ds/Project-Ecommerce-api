@@ -17,7 +17,12 @@ public class ItemPedido {
 
     private String nomeProduto;
     private Integer quantidade;
-    private BigDecimal DescountPriceUnitario; // <- Aqui ficará o valor com ou sem desconto
+    private BigDecimal precoUnitario; // Preço unitário (pode ser com ou sem desconto)
+
+    @Column(name = "descount_price") // nome opcional para a coluna
+    private BigDecimal descountPrice; // Preço com desconto
+
+    private BigDecimal precoPago; // Preço total pago (quantidade * preço unitário com desconto)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id")
@@ -26,4 +31,7 @@ public class ItemPedido {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "produto_id")
     private Product produto;
+
+    // Lombok @Data já gera os getters e setters
+    // Se não usar Lombok, implemente getters e setters para as novas propriedades
 }

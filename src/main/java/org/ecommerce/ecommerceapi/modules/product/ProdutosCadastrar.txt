@@ -1,0 +1,63 @@
+
+{
+    "nome": "iPhone 14",
+    "descricao": "Smartphone Apple iPhone 14 com tela Super Retina XDR de 6.1 polegadas, câmera dupla de 12MP e chipset A15 Bionic.",
+    "preco": 5999.90,
+    "estoque": 50
+}
+{
+    "nome": "Samsung Galaxy S23",
+    "descricao": "Smartphone Samsung Galaxy S23 com display Dynamic AMOLED 2X de 6.1 polegadas, câmera traseira tripla e processador Snapdragon 8 Gen 2.",
+    "preco": 5799.00,
+    "estoque": 45
+}
+{
+    "nome": "MacBook Pro 14\"",
+    "descricao": "Laptop Apple MacBook Pro com chip M1 Pro, tela Liquid Retina XDR de 14 polegadas, 16GB RAM e 512GB SSD.",
+    "preco": 23999.00,
+    "estoque": 20
+}
+{
+    "nome": "Dell XPS 13",
+    "descricao": "Laptop Dell XPS 13 com processador Intel Core i7 de 11ª geração, tela InfinityEdge de 13.4 polegadas e 16GB RAM.",
+    "preco": 10999.00,
+    "estoque": 30
+}
+{
+    "nome": "iPad Air",
+    "descricao": "Tablet Apple iPad Air com chip M1, tela Liquid Retina de 10.9 polegadas, 64GB armazenamento e compatibilidade com Apple Pencil.",
+    "preco": 4999.00,
+    "estoque": 40
+}
+{
+    "nome": "Samsung Galaxy Tab S8",
+    "descricao": "Tablet Samsung Galaxy Tab S8 com display TFT de 11 polegadas, processador Snapdragon 8 Gen 1 e 128GB armazenamento.",
+    "preco": 4499.00,
+    "estoque": 35
+}
+{
+    "nome": "Fones de Ouvido Bluetooth Sony WH-1000XM4",
+    "descricao": "Fones de ouvido Bluetooth Sony WH-1000XM4 com cancelamento de ruído ativo, bateria de longa duração e som premium.",
+    "preco": 1499.90,
+    "estoque": 100
+}
+{
+    "nome": "Smartwatch Apple Watch Series 8",
+    "descricao": "Smartwatch Apple Watch Series 8 com monitoramento de saúde avançado, GPS integrado e resistência à água.",
+    "preco": 3499.00,
+    "estoque": 60
+}
+{
+    "nome": "Placa de Vídeo NVIDIA GeForce RTX 3080",
+    "descricao": "Placa de vídeo NVIDIA GeForce RTX 3080 com arquitetura Ampere, suporte ray tracing e 10GB GDDR6X de memória.",
+    "preco": 7499.00,
+    "estoque": 15
+}
+{
+    "nome": "SSD Samsung 970 EVO Plus 1TB",
+    "descricao": "SSD Samsung 970 EVO Plus com capacidade de 1TB, conexão NVMe M.2 e velocidades de leitura/escrita ultrarrápidas.",
+    "preco": 999.90,
+    "estoque": 80
+}
+
+

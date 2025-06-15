@@ -32,8 +32,8 @@ public class PedidoService {
     private ClienteRepository clienteRepository;
 
     public PedidoService(PedidoRepository pedidoRepository,
-                        ProductService productService,
-                        ClienteRepository clienteRepository) {
+                         ProductService productService,
+                         ClienteRepository clienteRepository) {
         this.pedidoRepository = pedidoRepository;
         this.productService = productService;
         this.clienteRepository = clienteRepository;
@@ -54,19 +54,34 @@ public class PedidoService {
             item.setProduto(product);
             item.setNomeProduto(product.getNome());
             item.setQuantidade(itemDTO.getQuantidade());
-            item.setDescountPriceUnitario(product.getDescountPrice());
+
+            // Definir o preço unitário como o preço original do produto
+            item.setPrecoUnitario(product.getPreco()); // Preço original
+            item.setDescountPrice(product.getDescountedPrice()); // Preço com desconto
+
             item.setPedido(pedido);
             return item;
         }).collect(Collectors.toList());
 
         pedido.setItens(itens);
-        pedido.setTotal(itens.stream()
-                .map(item -> item.getDescountPriceUnitario().multiply(BigDecimal.valueOf(item.getQuantidade())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add));
+        
+        // Calcular o total do pedido
+        BigDecimal total = itens.stream()
+                .map(item -> item.getDescountPrice().multiply(BigDecimal.valueOf(item.getQuantidade())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        pedido.setTotal(total);
+
+        // Definir precoPago como o total do pedido
+        for (ItemPedido item : itens) {
+            item.setPrecoPago(total); // Aqui você define o precoPago como o total do pedido
+        }
 
         Pedido salvo = pedidoRepository.save(pedido);
         return mapToResponseDTO(salvo);
     }
+
+
 
     public List<PedidoResponseDTO> listarPorCliente(Long clienteId) {
         return pedidoRepository.findByClienteId(clienteId).stream()
@@ -99,13 +114,15 @@ public class PedidoService {
         response.setClienteId(pedido.getCliente().getId());
         response.setTotal(pedido.getTotal());
         response.setItens(pedido.getItens().stream().map(i -> {
-            PedidoResponseDTO.ItemDTO ri = new PedidoResponseDTO.ItemDTO();
-            ri.setProdutoId(i.getProduto().getId());
-            ri.setNomeProduto(i.getNomeProduto());
-            ri.setQuantidade(i.getQuantidade());
-            ri.setDescountPriceUnitario(i.getDescountPriceUnitario());
-            return ri;
-        }).toList());
+            PedidoResponseDTO.ItemDTO itemDto = new PedidoResponseDTO.ItemDTO();
+            itemDto.setProdutoId(i.getProduto().getId());
+            itemDto.setNomeProduto(i.getNomeProduto());
+            itemDto.setQuantidade(i.getQuantidade());
+            itemDto.setPrecoUnitario(i.getPrecoUnitario());
+            itemDto.setDescountPrice(i.getDescountPrice()); // Preço com desconto
+            itemDto.setPrecoPago(pedido.getTotal()); // Preço total pago pelo pedido
+            return itemDto;
+        }).collect(Collectors.toList()));
         return response;
     }
 }

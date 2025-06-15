@@ -1,0 +1,56 @@
+{
+    "nome": "João Silva",
+    "username": "joaosilva",
+    "email": "joao.silva@email.com",
+    "senha": "123456789",
+    "telefone": "11987654321",
+    "endereco": "Rua das Flores, 45",
+    "cidade": "São Paulo",
+    "estado": "SP",
+    "cep": "01234-567"
+}
+{
+    "nome": "Maria Oliveira",
+    "username": "mariaoliveira",
+    "email": "maria.oliveira@email.com",
+    "senha": "123456789",
+    "telefone": "11998765432",
+    "endereco": "Avenida Brasil, 1000",
+    "cidade": "São Paulo",
+    "estado": "SP",
+    "cep": "02345-678"
+}
+{
+    "nome": "Carlos Pereira",
+    "username": "carlospereira",
+    "email": "carlos.pereira@email.com",
+    "senha": "123456789",
+    "telefone": "11999887766",
+    "endereco": "Rua do Comércio, 200",
+    "cidade": "São Paulo",
+    "estado": "SP",
+    "cep": "03456-789"
+}
+{
+    "nome": "Ana Costa",
+    "username": "anacosta",
+    "email": "ana.costa@email.com",
+    "senha": "123456789",
+    "telefone": "11995554433",
+    "endereco": "Praça da Liberdade, 10",
+    "cidade": "São Paulo",
+    "estado": "SP",
+    "cep": "04567-890"
+}
+{
+    "nome": "Lucas Santos",
+    "username": "lucassantos",
+    "email": "lucas.santos@email.com",
+    "senha": "123456789",
+    "telefone": "11994433211",
+    "endereco": "Rua da Paz, 75",
+    "cidade": "São Paulo",
+    "estado": "SP",
+    "cep": "05678-901"
+}
+

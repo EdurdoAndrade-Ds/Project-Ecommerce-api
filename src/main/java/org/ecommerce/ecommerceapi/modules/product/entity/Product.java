@@ -22,7 +22,10 @@ public class Product {
     @Column(nullable = false)
     private Double descountPercentage = 0.0; 
 
-    private BigDecimal descountedPrice; 
+    private BigDecimal descountedPrice; // Preço com desconto, calculado dinamicamente
+
+    // O campo descountedPrice pode ser removido, pois será calculado dinamicamente
+    // private BigDecimal descountedPrice; 
 
     // Getters e Setters
 
@@ -65,16 +68,28 @@ public class Product {
     public void setEstoque(Integer estoque) {
         this.estoque = estoque;
     }
+
     public Double getDescontoPercentual() {
         return descountPercentage;
     }
+
     public void setDescontoPercentual(Double discountPercentage) {
         this.descountPercentage = discountPercentage;
     }
-    public BigDecimal getDescountPrice() {
-        return descountedPrice;
+
+    public BigDecimal getDescountedPrice() {
+        return calcularDescountedPrice();
     }
-    public void setDescountedPrice(BigDecimal discountedPrice) {
-        this.descountedPrice = discountedPrice;
+    public void setDescountedPrice(BigDecimal descountedPrice) {
+        this.descountedPrice = descountedPrice;
+    }
+
+    // Método para calcular o preço com desconto
+    public BigDecimal calcularDescountedPrice() {
+        if (descountPercentage != null && descountPercentage > 0) {
+            BigDecimal discount = preco.multiply(BigDecimal.valueOf(descountPercentage / 100));
+            return preco.subtract(discount);
+        }
+        return preco; // Se não houver desconto, retorna o preço original
     }
 }
