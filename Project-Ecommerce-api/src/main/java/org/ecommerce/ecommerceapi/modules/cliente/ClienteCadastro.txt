@@ -1,0 +1,33 @@
+{
+    "nome": "Carlos Pereira",
+    "username": "carlospereira",
+    "email": "carlos.pereira@email.com",
+    "senha": "123456789",
+    "telefone": "11923456789",
+    "endereco": "Praça da Liberdade, 10",
+    "cidade": "Belo Horizonte",
+    "estado": "MG",
+    "cep": "03123-456"
+}
+{
+    "nome": "Ana Costa",
+    "username": "anacosta",
+    "email": "ana.costa@email.com",
+    "senha": "password123",
+    "telefone": "11934567890",
+    "endereco": "Rua do Comércio, 200",
+    "cidade": "Curitiba",
+    "estado": "PR",
+    "cep": "04567-890"
+}
+{
+    "nome": "Lucas Santos",
+    "username": "lucassantos",
+    "email": "lucas.santos@email.com",
+    "senha": "senha123",
+    "telefone": "11945678901",
+    "endereco": "Rua da Paz, 300",
+    "cidade": "Porto Alegre",
+    "estado": "RS",
+    "cep": "05678-901"
+}

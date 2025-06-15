@@ -1,0 +1,91 @@
+
+{
+    "nome": "Smartphone Ultra X",
+    "descricao": "Smartphone com tela AMOLED 6.7\", 128GB de armazenamento e câmera tripla 108MP.",
+    "preco": 4999.99,
+    "estoque": 25
+}
+{
+    "nome": "Notebook Pro 15",
+    "descricao": "Notebook com processador Intel Core i7, 16GB RAM, SSD 512GB e placa de vídeo dedicada.",
+    "preco": 7999.90,
+    "estoque": 15
+}
+{
+    "nome": "Fones de Ouvido Wireless Z",
+    "descricao": "Fones de ouvido Bluetooth com cancelamento de ruído ativo e 30 horas de autonomia.",
+    "preco": 699.50,
+    "estoque": 50
+}
+{
+    "nome": "Smartwatch Series 5",
+    "descricao": "Relógio inteligente com monitor cardíaco, GPS e resistência à água até 50 metros.",
+    "preco": 1299.00,
+    "estoque": 40
+}
+{
+    "nome": "Monitor Gamer 27\" 144Hz",
+    "descricao": "Monitor LED 27 polegadas, resolução Full HD, taxa de atualização 144Hz e tempo de resposta 1ms.",
+    "preco": 1499.99,
+    "estoque": 20
+}
+{
+    "nome": "Placa de Vídeo RTX 3060",
+    "descricao": "Placa de vídeo NVIDIA GeForce RTX 3060 com 12GB GDDR6, ideal para jogos em alta definição.",
+    "preco": 2999.99,
+    "estoque": 10
+}
+{
+    "nome": "Processador Intel Core i9",
+    "descricao": "Processador Intel Core i9-11900K, 8 núcleos, 16 threads, frequência de até 5.3 GHz.",
+    "preco": 3999.00,
+    "estoque": 5
+}
+{
+    "nome": "Memória RAM 16GB DDR4",
+    "descricao": "Memória RAM DDR4 16GB, 3200MHz, ideal para jogos e multitarefas.",
+    "preco": 699.90,
+    "estoque": 25
+}
+{
+    "nome": "SSD 1TB NVMe",
+    "descricao": "SSD NVMe de 1TB, velocidade de leitura de até 3500MB/s e escrita de 3000MB/s.",
+    "preco": 899.90,
+    "estoque": 15
+}
+{
+    "nome": "Fonte 750W 80 Plus Gold",
+    "descricao": "Fonte de alimentação de 750W com certificação 80 Plus Gold, ideal para sistemas de alto desempenho.",
+    "preco": 499.00,
+    "estoque": 20
+}
+{
+    "nome": "Teclado Mecânico RGB",
+    "descricao": "Teclado mecânico com retroiluminação RGB, switches mecânicos e design ergonômico.",
+    "preco": 349.90,
+    "estoque": 30
+}
+{
+    "nome": "Mouse Gamer Ergonomico",
+    "descricao": "Mouse gamer com 16.000 DPI, iluminação RGB e 6 botões programáveis.",
+    "preco": 199.90,
+    "estoque": 45
+}
+{
+    "nome": "Webcam Full HD 1080p",
+    "descricao": "Webcam com resolução Full HD, microfone embutido e ajuste automático de luz.",
+    "preco": 299.00,
+    "estoque": 25
+}
+{
+    "nome": "Headset Gamer com Microfone",
+    "descricao": "Headset com som surround, microfone ajustável e almofadas confortáveis.",
+    "preco": 249.90,
+    "estoque": 40
+}
+{
+    "nome": "Mesa Digitalizadora",
+    "descricao": "Mesa digitalizadora com área ativa de 10x6 polegadas e 8192 níveis de pressão.",
+    "preco": 499.00,
+    "estoque": 20
+}
