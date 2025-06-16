@@ -104,7 +104,7 @@ public class ProductService {
         return dto;
     }
 
-    private void validarProduto(ProductRequestDTO dto) {
+    public void validarProduto(ProductRequestDTO dto) {
         if (dto == null) {
             throw new IllegalArgumentException("Produto não pode ser nulo");
         }
@@ -118,6 +118,7 @@ public class ProductService {
             throw new IllegalArgumentException(MSG_ESTOQUE_NEGATIVO);
         }
     }
+
 
     public void atualizarEstoque(Long id, ProductStockUpdateRequestDTO dto) {
         if(dto == null) {

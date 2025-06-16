@@ -75,4 +75,10 @@ class ProductResponseDTOTest {
                 '}';
         assertEquals(expectedString, productResponse.toString());
     }
+    @Test
+    void testCanEqual() {
+        ProductResponseDTO productResponseDTO = new ProductResponseDTO();
+        assertTrue(productResponseDTO.canEqual(new ProductResponseDTO())); // Deve retornar true
+        assertFalse(productResponseDTO.canEqual(new Object())); // Deve retornar false
+    }
 }

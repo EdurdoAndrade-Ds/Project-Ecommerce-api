@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -60,6 +61,51 @@ class ProductServiceTest {
     }
 
     @Test
+    void testCriarProdutoComNomeNulo() {
+        ProductRequestDTO requestDTO = new ProductRequestDTO();
+        requestDTO.setNome(null); // Nome nulo
+        requestDTO.setDescricao("Descrição do Produto Teste");
+        requestDTO.setPreco(BigDecimal.valueOf(99.99));
+        requestDTO.setEstoque(10);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.criar(requestDTO);
+        });
+
+        assertEquals("Nome do produto é obrigatório", exception.getMessage());
+    }
+
+    @Test
+    void testCriarProdutoComPrecoInvalido() {
+        ProductRequestDTO requestDTO = new ProductRequestDTO();
+        requestDTO.setNome("Produto Teste");
+        requestDTO.setDescricao("Descrição do Produto Teste");
+        requestDTO.setPreco(BigDecimal.valueOf(-1.00)); // Preço inválido
+        requestDTO.setEstoque(10);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.criar(requestDTO);
+        });
+
+        assertEquals("Preço do produto deve ser maior que zero", exception.getMessage());
+    }
+
+    @Test
+    void testCriarProdutoComEstoqueNegativo() {
+        ProductRequestDTO requestDTO = new ProductRequestDTO();
+        requestDTO.setNome("Produto Teste");
+        requestDTO.setDescricao("Descrição do Produto Teste");
+        requestDTO.setPreco(BigDecimal.valueOf(99.99));
+        requestDTO.setEstoque(-5); // Estoque negativo
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.criar(requestDTO);
+        });
+
+        assertEquals("Estoque do produto não pode ser negativo", exception.getMessage());
+    }
+
+    @Test
     void testBuscarPorId() {
         Product product = new Product();
         product.setId(1L);
@@ -87,6 +133,32 @@ class ProductServiceTest {
     }
 
     @Test
+    void testListarProdutos() {
+        Product product1 = new Product();
+        product1.setId(1L);
+        product1.setNome("Produto 1");
+        product1.setDescricao("Descrição do Produto 1");
+        product1.setPreco(BigDecimal.valueOf(50.00));
+        product1.setEstoque(5);
+
+        Product product2 = new Product();
+        product2.setId(2L);
+        product2.setNome("Produto 2");
+        product2.setDescricao("Descrição do Produto 2");
+        product2.setPreco(BigDecimal.valueOf(100.00));
+        product2.setEstoque(10);
+
+        when(productRepository.findAll()).thenReturn(List.of(product1, product2));
+
+        List<ProductResponseDTO> produtos = productService.listar();
+
+        assertNotNull(produtos);
+        assertEquals(2, produtos.size());
+        assertEquals("Produto 1", produtos.get(0).getNome());
+        assertEquals("Produto 2", produtos.get(1).getNome());
+    }
+
+    @Test
     void testAtualizarProduto() {
         ProductUpdateDTO updateDTO = new ProductUpdateDTO();
         updateDTO.setNome("Produto Atualizado");
@@ -109,6 +181,15 @@ class ProductServiceTest {
         assertEquals("Produto Atualizado", updatedProduct.getNome());
         assertEquals("Descrição Atualizada", updatedProduct.getDescricao());
         assertEquals(BigDecimal.valueOf(89.99), updatedProduct.getPreco());
+    }
+
+    @Test
+    void testAtualizarProdutoComDadosNulos() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.atualizar(1L, null);
+        });
+
+        assertEquals("Dados de atualização não podem ser nulos", exception.getMessage());
     }
 
     @Test
@@ -165,6 +246,17 @@ class ProductServiceTest {
     }
 
     @Test
+    void testExcluirProdutoNaoEncontrado() {
+        when(productRepository.existsById(1L)).thenReturn(false);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.excluir(1L);
+        });
+
+        assertEquals("Produto não encontrado", exception.getMessage());
+    }
+
+    @Test
     void testAplicarDesconto() {
         Product product = new Product();
         product.setId(1L);
@@ -177,8 +269,32 @@ class ProductServiceTest {
         ProductResponseDTO responseDTO = productService.aplicarDesconto(1L, 10.0);
 
         assertNotNull(responseDTO);
-        // Use BigDecimal para comparação
         assertEquals(0, BigDecimal.valueOf(90.00).compareTo(responseDTO.getDescountedPrice()));
     }
 
+    @Test
+    void testAplicarDescontoComPorcentagemInvalida() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.aplicarDesconto(1L, -10.0); // Porcentagem negativa
+        });
+
+        assertEquals("Porcentagem de desconto inválida", exception.getMessage());
+    }
+
+    @Test
+    void testEquals() {
+        ProductService anotherProductService = new ProductService();
+        assertNotEquals(productService, anotherProductService); // Diferentes, pois têm repositórios diferentes
+
+        productService.setRepository(productRepository); // Define o mesmo repositório
+        anotherProductService.setRepository(productRepository); // Define o mesmo repositório
+
+        assertEquals(productService, anotherProductService); // Agora devem ser iguais
+    }
+
+    @Test
+    void testHashCode() {
+        int hashCode = productService.hashCode();
+        assertNotNull(hashCode); // Verifica se o hashCode não é nulo
+    }
 }

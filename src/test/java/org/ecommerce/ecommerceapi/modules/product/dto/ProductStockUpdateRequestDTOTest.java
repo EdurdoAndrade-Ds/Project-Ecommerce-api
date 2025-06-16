@@ -3,53 +3,52 @@ package org.ecommerce.ecommerceapi.modules.product.dto;
 import org.ecommerce.ecommerceapi.modules.product.enums.OperacaoEstoque;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects; // Adicione esta importação
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProductStockUpdateRequestDTOTest {
 
     @Test
-    void testGettersAndSetters() {
-        ProductStockUpdateRequestDTO stockUpdateRequest = new ProductStockUpdateRequestDTO();
-
-        // Define valores
-        stockUpdateRequest.setOperacao(OperacaoEstoque.AUMENTAR);
-        stockUpdateRequest.setQuantidade(10);
-
-        // Verifica valores atribuídos
-        assertEquals(OperacaoEstoque.AUMENTAR, stockUpdateRequest.getOperacao());
-        assertEquals(10, stockUpdateRequest.getQuantidade());
-    }
-
-    @Test
-    void testEqualsAndHashCode() {
+    void testEquals() {
         ProductStockUpdateRequestDTO request1 = new ProductStockUpdateRequestDTO();
-        ProductStockUpdateRequestDTO request2 = new ProductStockUpdateRequestDTO();
-
         request1.setOperacao(OperacaoEstoque.AUMENTAR);
         request1.setQuantidade(10);
 
+        ProductStockUpdateRequestDTO request2 = new ProductStockUpdateRequestDTO();
         request2.setOperacao(OperacaoEstoque.AUMENTAR);
         request2.setQuantidade(10);
 
-        // Testa que os objetos são iguais
-        assertEquals(request1, request2);
-        assertEquals(request1.hashCode(), request2.hashCode());
+        assertEquals(request1, request2); // Deve ser igual
 
-        // Modifica um objeto e testa que eles não são mais iguais
         request2.setQuantidade(5);
-        assertNotEquals(request1, request2);
+        assertNotEquals(request1, request2); // Não deve ser igual
+    }
+
+    @Test
+    void testHashCode() {
+        ProductStockUpdateRequestDTO request = new ProductStockUpdateRequestDTO();
+        request.setOperacao(OperacaoEstoque.AUMENTAR);
+        request.setQuantidade(10);
+
+        int expectedHashCode = Objects.hash(OperacaoEstoque.AUMENTAR, 10);
+        assertEquals(expectedHashCode, request.hashCode());
     }
 
     @Test
     void testToString() {
-        ProductStockUpdateRequestDTO stockUpdateRequest = new ProductStockUpdateRequestDTO();
-        stockUpdateRequest.setOperacao(OperacaoEstoque.REDUZIR);
-        stockUpdateRequest.setQuantidade(5);
+        ProductStockUpdateRequestDTO request = new ProductStockUpdateRequestDTO();
+        request.setOperacao(OperacaoEstoque.AUMENTAR);
+        request.setQuantidade(10);
 
-        String expectedString = "ProductStockUpdateRequestDTO{" +
-                "operacao=REDUZIR, " +
-                "quantidade=5" +
-                '}';
-        assertEquals(expectedString, stockUpdateRequest.toString());
+        String expectedString = "ProductStockUpdateRequestDTO{operacao=AUMENTAR, quantidade=10}";
+        assertEquals(expectedString, request.toString());
+    }
+
+    @Test
+    void testCanEqual() {
+        ProductStockUpdateRequestDTO requestDTO = new ProductStockUpdateRequestDTO();
+        assertTrue(requestDTO.canEqual(new ProductStockUpdateRequestDTO())); // Deve retornar true
+        assertFalse(requestDTO.canEqual(new Object())); // Deve retornar false
     }
 }

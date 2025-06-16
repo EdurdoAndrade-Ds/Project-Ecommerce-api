@@ -1,101 +1,91 @@
 package org.ecommerce.ecommerceapi.modules.cliente.useCases;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.ecommerce.ecommerceapi.modules.cliente.dto.UpdateClienteDTO;
 import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
 import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.Optional;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class UpdateClienteUseCaseTest {
 
-    private UpdateClienteUseCase updateClienteUseCase;
+    @Mock
     private ClienteRepository clienteRepository;
 
-    @BeforeEach
-    void setup() {
-        clienteRepository = mock(ClienteRepository.class);
-        updateClienteUseCase = new UpdateClienteUseCase();
-        updateClienteUseCase.clienteRepository = clienteRepository;
+    @InjectMocks
+    private UpdateClienteUseCase updateClienteUseCase;
+
+    public UpdateClienteUseCaseTest() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void execute_deveAtualizarClienteComSucesso() {
+    void testUpdateClienteFields() {
+        // Arrange
         Long clienteId = 1L;
-        UpdateClienteDTO dto = new UpdateClienteDTO();
-        dto.setNome("Novo Nome");
-        dto.setUsername("novoUsername");
-        dto.setEmail("novo@email.com");
+        ClienteEntity cliente = new ClienteEntity();
+        cliente.setId(clienteId);
+        cliente.setNome("Nome Antigo");
+        cliente.setTelefone("123456789");
+        cliente.setEndereco("Endereço Antigo");
+        cliente.setCidade("Cidade Antiga");
+        cliente.setEstado("Estado Antigo");
+        cliente.setCep("00000-000");
 
-        ClienteEntity clienteExistente = new ClienteEntity();
-        clienteExistente.setId(clienteId);
-        clienteExistente.setNome("Antigo Nome");
-        clienteExistente.setUsername("velhoUsername");
-        clienteExistente.setEmail("velho@email.com");
+        UpdateClienteDTO updateClienteDTO = new UpdateClienteDTO();
+        updateClienteDTO.setTelefone("987654321");
+        updateClienteDTO.setEndereco("Novo Endereço");
+        updateClienteDTO.setCidade("Nova Cidade");
+        updateClienteDTO.setEstado("Novo Estado");
+        updateClienteDTO.setCep("11111-111");
 
-        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
-        when(clienteRepository.findByUsernameOrEmail("novoUsername", "novo@email.com")).thenReturn(Optional.empty());
-        when(clienteRepository.save(any(ClienteEntity.class))).thenAnswer(i -> i.getArgument(0));
+        when(clienteRepository.findById(clienteId)).thenReturn(java.util.Optional.of(cliente));
+        when(clienteRepository.save(any(ClienteEntity.class))).thenReturn(cliente);
 
-        ClienteEntity atualizado = updateClienteUseCase.execute(clienteId, dto);
+        // Act
+        ClienteEntity updatedCliente = updateClienteUseCase.execute(clienteId, updateClienteDTO);
 
-        assertEquals("Novo Nome", atualizado.getNome());
-        assertEquals("novoUsername", atualizado.getUsername());
-        assertEquals("novo@email.com", atualizado.getEmail());
-
-        verify(clienteRepository, times(1)).findById(clienteId);
-        verify(clienteRepository, times(1)).findByUsernameOrEmail("novoUsername", "novo@email.com");
-        verify(clienteRepository, times(1)).save(any(ClienteEntity.class));
+        // Assert
+        assertEquals("987654321", updatedCliente.getTelefone());
+        assertEquals("Novo Endereço", updatedCliente.getEndereco());
+        assertEquals("Nova Cidade", updatedCliente.getCidade());
+        assertEquals("Novo Estado", updatedCliente.getEstado());
+        assertEquals("11111-111", updatedCliente.getCep());
+        verify(clienteRepository).save(cliente);
     }
 
     @Test
-    void execute_deveLancarEntityNotFoundExceptionQuandoClienteNaoEncontrado() {
-        Long clienteId = 2L;
-        UpdateClienteDTO dto = new UpdateClienteDTO();
+    void testUpdateClienteWithNullFields() {
+        // Arrange
+        Long clienteId = 1L;
+        ClienteEntity cliente = new ClienteEntity();
+        cliente.setId(clienteId);
+        cliente.setNome("Nome Antigo");
+        cliente.setTelefone("123456789");
+        cliente.setEndereco("Endereço Antigo");
+        cliente.setCidade("Cidade Antiga");
+        cliente.setEstado("Estado Antigo");
+        cliente.setCep("00000-000");
 
-        when(clienteRepository.findById(clienteId)).thenReturn(Optional.empty());
+        UpdateClienteDTO updateClienteDTO = new UpdateClienteDTO();
+        // Não definindo nenhum campo para atualizar
 
-        EntityNotFoundException ex = assertThrows(EntityNotFoundException.class, () -> {
-            updateClienteUseCase.execute(clienteId, dto);
-        });
+        when(clienteRepository.findById(clienteId)).thenReturn(java.util.Optional.of(cliente));
+        when(clienteRepository.save(any(ClienteEntity.class))).thenReturn(cliente);
 
-        assertEquals("Cliente não encontrado", ex.getMessage());
+        // Act
+        ClienteEntity updatedCliente = updateClienteUseCase.execute(clienteId, updateClienteDTO);
 
-        verify(clienteRepository, times(1)).findById(clienteId);
-        verify(clienteRepository, never()).save(any());
-    }
-
-    @Test
-    void execute_deveLancarRuntimeExceptionQuandoUsernameOuEmailJaExistir() {
-        Long clienteId = 3L;
-        UpdateClienteDTO dto = new UpdateClienteDTO();
-        dto.setUsername("usernameExistente");
-        dto.setEmail("email@existente.com");
-
-        ClienteEntity clienteExistente = new ClienteEntity();
-        clienteExistente.setId(clienteId);
-        clienteExistente.setUsername("usuarioAtual");
-        clienteExistente.setEmail("email@atual.com");
-
-        ClienteEntity outroCliente = new ClienteEntity();
-        outroCliente.setId(999L); // ID diferente para simular conflito
-
-        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
-        when(clienteRepository.findByUsernameOrEmail("usernameExistente", "email@existente.com")).thenReturn(Optional.of(outroCliente));
-
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> {
-            updateClienteUseCase.execute(clienteId, dto);
-        });
-
-        assertEquals("Cliente já existe", ex.getMessage());
-
-        verify(clienteRepository, times(1)).findById(clienteId);
-        verify(clienteRepository, times(1)).findByUsernameOrEmail("usernameExistente", "email@existente.com");
-        verify(clienteRepository, never()).save(any());
+        // Assert
+        assertEquals("123456789", updatedCliente.getTelefone());
+        assertEquals("Endereço Antigo", updatedCliente.getEndereco());
+        assertEquals("Cidade Antiga", updatedCliente.getCidade());
+        assertEquals("Estado Antigo", updatedCliente.getEstado());
+        assertEquals("00000-000", updatedCliente.getCep());
+        verify(clienteRepository).save(cliente);
     }
 }

@@ -1,4 +1,3 @@
-
 {
     "nome": "iPhone 14",
     "descricao": "Smartphone Apple iPhone 14 com tela Super Retina XDR de 6.1 polegadas, câmera dupla de 12MP e chipset A15 Bionic.",

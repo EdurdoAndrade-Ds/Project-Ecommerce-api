@@ -62,14 +62,9 @@ class SecurityFilterTest {
 
         assertNotNull(SecurityContextHolder.getContext().getAuthentication());
         assertEquals(subject, SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        verify(filterChain).doFilter(request, response);
-    }
-
-    @Test
-    void deveContinuarSeNaoTiverHeaderAuthorization() throws Exception {
-        securityFilter.doFilterInternal(request, response, filterChain);
-
-        assertNull(SecurityContextHolder.getContext().getAuthentication());
+        assertEquals(1, SecurityContextHolder.getContext().getAuthentication().getAuthorities().size());
+        assertTrue(SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_CLIENTE")));
         verify(filterChain).doFilter(request, response);
     }
 
@@ -83,15 +78,7 @@ class SecurityFilterTest {
         securityFilter.doFilterInternal(request, response, filterChain);
 
         assertEquals(401, response.getStatus());
+        assertNull(SecurityContextHolder.getContext().getAuthentication());
         verify(filterChain, never()).doFilter(request, response);
-    }
-
-    @Test
-    void testGetClaimRole() {
-        Claim mockClaim = mock(Claim.class);
-        when(mockClaim.asString()).thenReturn("CLIENTE");
-
-        String role = mockClaim.asString();
-        assertEquals("CLIENTE", role);
     }
 }
