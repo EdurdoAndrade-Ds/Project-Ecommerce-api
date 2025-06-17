@@ -52,6 +52,50 @@ public class CreateClienteDTOTest {
     }
 
     @Test
+    void deveCompararObjetosDiferentes() {
+        CreateClienteDTO dto1 = CreateClienteDTO.builder()
+                .nome("João")
+                .username("joao")
+                .email("joao@email.com")
+                .senha("12345678")
+                .build();
+
+        CreateClienteDTO dto2 = CreateClienteDTO.builder()
+                .nome("Maria")
+                .username("maria")
+                .email("maria@email.com")
+                .senha("87654321")
+                .build();
+
+        assertNotEquals(dto1, dto2);
+        assertNotEquals(dto1.hashCode(), dto2.hashCode());
+    }
+
+    @Test
+    void deveCompararComNull() {
+        CreateClienteDTO dto = CreateClienteDTO.builder()
+                .nome("João")
+                .username("joao")
+                .email("joao@email.com")
+                .senha("12345678")
+                .build();
+
+        assertNotEquals(dto, null);
+    }
+
+    @Test
+    void deveCompararComObjetoDeOutraClasse() {
+        CreateClienteDTO dto = CreateClienteDTO.builder()
+                .nome("João")
+                .username("joao")
+                .email("joao@email.com")
+                .senha("12345678")
+                .build();
+
+        assertNotEquals(dto, new Object());
+    }
+
+    @Test
     void deveGerarToString() {
         CreateClienteDTO dto = CreateClienteDTO.builder()
                 .nome("Test")

@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PedidoRequestDTOEqualsCanEqualTest {
+class PedidoRequestDTOTest {
 
     @Test
     void testPedidoRequestDTOEqualsAndCanEqual() {
@@ -59,5 +59,76 @@ class PedidoRequestDTOEqualsCanEqualTest {
         assertFalse(item1.canEqual(null));
         assertFalse(item1.canEqual(new Object()));
     }
-}
 
+    @Test
+    void testPedidoRequestDTOHashCode() {
+        PedidoRequestDTO pedido1 = new PedidoRequestDTO();
+        PedidoRequestDTO pedido2 = new PedidoRequestDTO();
+
+        // Inicializa itens iguais
+        PedidoRequestDTO.ItemDTO item1 = new PedidoRequestDTO.ItemDTO();
+        item1.setProdutoId(1L);
+        item1.setQuantidade(2);
+
+        PedidoRequestDTO.ItemDTO item2 = new PedidoRequestDTO.ItemDTO();
+        item2.setProdutoId(1L);
+        item2.setQuantidade(2);
+
+        pedido1.setItens(Arrays.asList(item1));
+        pedido2.setItens(Arrays.asList(item2));
+
+        // hashCode deve ser igual para objetos iguais
+        assertEquals(pedido1.hashCode(), pedido2.hashCode());
+
+        // Modificando um item para que os hashCodes sejam diferentes
+        item2.setQuantidade(3);
+        pedido2.setItens(Arrays.asList(item2));
+
+        // hashCode deve ser diferente para objetos diferentes
+        assertNotEquals(pedido1.hashCode(), pedido2.hashCode());
+    }
+
+    @Test
+    void testItemDTOHashCode() {
+        PedidoRequestDTO.ItemDTO item1 = new PedidoRequestDTO.ItemDTO();
+        PedidoRequestDTO.ItemDTO item2 = new PedidoRequestDTO.ItemDTO();
+
+        item1.setProdutoId(1L);
+        item1.setQuantidade(2);
+
+        item2.setProdutoId(1L);
+        item2.setQuantidade(2);
+
+        // hashCode deve ser igual para objetos iguais
+        assertEquals(item1.hashCode(), item2.hashCode());
+
+        // Modificando um campo para que os hashCodes sejam diferentes
+        item2.setQuantidade(3);
+
+        // hashCode deve ser diferente para objetos diferentes
+        assertNotEquals(item1.hashCode(), item2.hashCode());
+    }
+
+    @Test
+    void testPedidoRequestDTOToString() {
+        PedidoRequestDTO pedido = new PedidoRequestDTO();
+        PedidoRequestDTO.ItemDTO item = new PedidoRequestDTO.ItemDTO();
+        item.setProdutoId(1L);
+        item.setQuantidade(2);
+
+        pedido.setItens(Arrays.asList(item));
+
+        String expectedString = "PedidoRequestDTO{itens=[ItemDTO{produtoId=1, quantidade=2}]}";
+        assertEquals(expectedString, pedido.toString());
+    }
+
+    @Test
+    void testItemDTOToString() {
+        PedidoRequestDTO.ItemDTO item = new PedidoRequestDTO.ItemDTO();
+        item.setProdutoId(1L);
+        item.setQuantidade(2);
+
+        String expectedString = "ItemDTO{produtoId=1, quantidade=2}";
+        assertEquals(expectedString, item.toString());
+    }
+}

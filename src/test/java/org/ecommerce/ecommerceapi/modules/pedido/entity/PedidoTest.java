@@ -7,54 +7,86 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class PedidoTest {
 
-    private Pedido pedido;
+    private Pedido pedido1;
+    private Pedido pedido2;
     private ClienteEntity cliente;
-    private ItemPedido itemPedido;
 
     @BeforeEach
     void setUp() {
-        pedido = new Pedido();
-        cliente = new ClienteEntity(); // Supondo que você tenha um construtor padrão em ClienteEntity
+        cliente = new ClienteEntity();
         cliente.setId(1L);
-        cliente.setNome("Cliente A"); // Supondo que você tenha um método setNome
 
-        itemPedido = new ItemPedido();
-        itemPedido.setId(1L);
-        itemPedido.setNomeProduto("Produto A");
-        itemPedido.setQuantidade(2);
-        itemPedido.setPrecoUnitario(BigDecimal.valueOf(50.00));
-        itemPedido.setDescountPrice(BigDecimal.valueOf(45.00));
-        itemPedido.setPrecoPago(BigDecimal.valueOf(90.00));
-        itemPedido.setPedido(pedido); // Associando o item ao pedido
+        pedido1 = new Pedido();
+        pedido1.setId(10L);
+        pedido1.setCancelado(false);
+        pedido1.setTotal(BigDecimal.valueOf(100));
+        pedido1.setDateCreate(LocalDateTime.now());
+        pedido1.setCliente(cliente);
+        pedido1.setItens(new ArrayList<>());
 
-        List<ItemPedido> itens = new ArrayList<>();
-        itens.add(itemPedido);
-
-        pedido.setId(1L);
-        pedido.setCancelado(false);
-        pedido.setTotal(BigDecimal.valueOf(90.00));
-        pedido.setDateCreate(LocalDateTime.now());
-        pedido.setCliente(cliente);
-        pedido.setItens(itens);
+        pedido2 = new Pedido();
+        pedido2.setId(10L);
+        pedido2.setCancelado(false);
+        pedido2.setTotal(BigDecimal.valueOf(100));
+        pedido2.setDateCreate(pedido1.getDateCreate()); // mesma data para garantir igualdade
+        pedido2.setCliente(cliente);
+        pedido2.setItens(new ArrayList<>());
     }
 
     @Test
-    void testGettersAndSetters() {
-        assertEquals(1L, pedido.getId());
-        assertFalse(pedido.isCancelado());
-        assertTrue(pedido.getTotal().compareTo(BigDecimal.valueOf(90.00)) == 0);
-        assertNotNull(pedido.getDateCreate());
-        assertEquals(cliente, pedido.getCliente());
-        assertNotNull(pedido.getItens());
-        assertEquals(1, pedido.getItens().size());
-        assertEquals(itemPedido, pedido.getItens().get(0));
+    void testEquals_sameObject() {
+        assertEquals(pedido1, pedido1);
     }
 
-    
+    @Test
+    void testEquals_equalObjects() {
+        assertEquals(pedido1, pedido2);
+        assertTrue(pedido1.canEqual(pedido2));
+        assertEquals(pedido1.hashCode(), pedido2.hashCode());
+    }
+
+    @Test
+    void testEquals_differentObject() {
+        Pedido outroPedido = new Pedido();
+        outroPedido.setId(20L);
+        assertNotEquals(pedido1, outroPedido);
+    }
+
+    @Test
+    void testEquals_differentType() {
+        assertNotEquals(pedido1, "alguma String");
+    }
+
+    @Test
+    void testEquals_null() {
+        assertNotEquals(pedido1, null);
+    }
+
+    @Test
+    void testCanEqual() {
+        assertTrue(pedido1.canEqual(new Pedido()));
+        assertFalse(pedido1.canEqual(new Object()));
+    }
+
+    @Test
+    void testHashCode_consistency() {
+        int hash1 = pedido1.hashCode();
+        int hash2 = pedido1.hashCode();
+        assertEquals(hash1, hash2);
+    }
+
+    @Test
+    void testToString_containsFields() {
+        String toString = pedido1.toString();
+        assertTrue(toString.contains("id=" + pedido1.getId()));
+        assertTrue(toString.contains("cancelado=" + pedido1.isCancelado()));
+        assertTrue(toString.contains("total=" + pedido1.getTotal().toString()));
+        assertTrue(toString.contains("cliente="));
+        assertTrue(toString.contains("itens="));
+    }
 }

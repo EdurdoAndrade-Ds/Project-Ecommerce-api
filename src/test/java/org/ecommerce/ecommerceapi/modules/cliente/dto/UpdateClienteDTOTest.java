@@ -56,4 +56,18 @@ public class UpdateClienteDTOTest {
         assertTrue(texto.contains("Lucas"));
         assertTrue(texto.contains("Natal"));
     }
+
+    @Test
+    void deveSetarEmailCorretamente() {
+        UpdateClienteDTO dto = new UpdateClienteDTO();
+        dto.setEmail("novoemail@email.com");
+        assertEquals("novoemail@email.com", dto.getEmail());
+    }
+
+    @Test
+    void deveSetarUsernameCorretamente() {
+        UpdateClienteDTO dto = new UpdateClienteDTO();
+        dto.setUsername("novoUsername");
+        assertEquals("novoUsername", dto.getUsername());
+    }
 }
