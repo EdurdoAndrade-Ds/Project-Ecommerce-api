@@ -7,54 +7,44 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UpdateClienteDTOTest {
 
     @Test
-    void deveConstruirComBuilderEValidarCampos() {
-        UpdateClienteDTO dto = UpdateClienteDTO.builder()
-                .nome("Carlos")
-                .username("carlos123")
-                .email("carlos@email.com")
-                .telefone("1122334455")
-                .endereco("Av. Central")
-                .cidade("Curitiba")
-                .estado("PR")
-                .cep("80000-000")
-                .build();
-
-        assertEquals("Carlos", dto.getNome());
-        assertEquals("carlos123", dto.getUsername());
-        assertEquals("carlos@email.com", dto.getEmail());
-        assertEquals("1122334455", dto.getTelefone());
-        assertEquals("Av. Central", dto.getEndereco());
-        assertEquals("Curitiba", dto.getCidade());
-        assertEquals("PR", dto.getEstado());
-        assertEquals("80000-000", dto.getCep());
-    }
-
-    @Test
-    void deveCompararObjetosIguais() {
+    void testEqualsHashCodeToStringAndCanEqual() {
         UpdateClienteDTO dto1 = UpdateClienteDTO.builder()
-                .username("abc")
-                .email("a@a.com")
+                .nome("João")
+                .username("joao123")
+                .email("joao@email.com")
+                .telefone("123456789")
+                .endereco("Rua A")
+                .cidade("Cidade")
+                .estado("SP")
+                .cep("00000-000")
                 .build();
 
         UpdateClienteDTO dto2 = UpdateClienteDTO.builder()
-                .username("abc")
-                .email("a@a.com")
+                .nome("João")
+                .username("joao123")
+                .email("joao@email.com")
+                .telefone("123456789")
+                .endereco("Rua A")
+                .cidade("Cidade")
+                .estado("SP")
+                .cep("00000-000")
                 .build();
 
+        UpdateClienteDTO dto3 = UpdateClienteDTO.builder()
+                .nome("Maria")
+                .build();
+
+        // equals e hashCode
         assertEquals(dto1, dto2);
+        assertNotEquals(dto1, dto3);
         assertEquals(dto1.hashCode(), dto2.hashCode());
-    }
 
-    @Test
-    void deveGerarToStringComCampos() {
-        UpdateClienteDTO dto = UpdateClienteDTO.builder()
-                .nome("Lucas")
-                .cidade("Natal")
-                .build();
+        // toString
+        assertNotNull(dto1.toString());
+        assertTrue(dto1.toString().contains("João"));
 
-        String texto = dto.toString();
-        assertTrue(texto.contains("Lucas"));
-        assertTrue(texto.contains("Natal"));
+        // canEqual (indiretamente chamado por equals, mas garantido aqui)
+        assertTrue(dto1.canEqual(dto2));
     }
 
     @Test

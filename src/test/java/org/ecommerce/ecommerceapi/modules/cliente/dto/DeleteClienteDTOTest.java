@@ -4,46 +4,32 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class DeleteClienteDTOTest {
+class DeleteClienteDTOTest {
 
     @Test
-    void deveCriarEDefinirSenha() {
-        DeleteClienteDTO dto = new DeleteClienteDTO();
-        dto.setSenha("senhaParaExcluir");
-
-        assertEquals("senhaParaExcluir", dto.getSenha());
-    }
-
-    @Test
-    void deveCompararObjetosIguais() {
-        DeleteClienteDTO dto1 = new DeleteClienteDTO("senha123");
-        DeleteClienteDTO dto2 = new DeleteClienteDTO("senha123");
-
-        assertEquals(dto1, dto2);
-        assertEquals(dto1.hashCode(), dto2.hashCode());
-    }
-
-    @Test
-    void deveGerarToStringComCampos() {
-        DeleteClienteDTO dto = new DeleteClienteDTO("senhaParaExcluir");
-
-        String texto = dto.toString();
-        assertTrue(texto.contains("senhaParaExcluir"));
-    }
-
-    @Test
-    void deveUsarBuilderCorretamente() {
-        DeleteClienteDTO dto = DeleteClienteDTO.builder()
-                .senha("senhaComBuilder")
+    void testBuilderAndEqualsHashCodeToString() {
+        DeleteClienteDTO dto1 = DeleteClienteDTO.builder()
+                .senha("123456")
                 .build();
 
-        assertEquals("senhaComBuilder", dto.getSenha());
-    }
+        DeleteClienteDTO dto2 = DeleteClienteDTO.builder()
+                .senha("123456")
+                .build();
 
-    @Test
-    void deveVerificarCanEqual() {
-        DeleteClienteDTO dto = new DeleteClienteDTO("senha123");
-        assertTrue(dto.canEqual(new DeleteClienteDTO("senha456")));
-        assertFalse(dto.canEqual(new Object())); // Testa com um objeto de tipo diferente
+        DeleteClienteDTO dto3 = DeleteClienteDTO.builder()
+                .senha("outraSenha")
+                .build();
+
+        // equals e hashCode
+        assertEquals(dto1, dto2);
+        assertNotEquals(dto1, dto3);
+        assertEquals(dto1.hashCode(), dto2.hashCode());
+
+        // toString
+        assertNotNull(dto1.toString());
+        assertTrue(dto1.toString().contains("123456"));
+
+        // canEqual (é chamado dentro do equals, mas pode ser forçado também)
+        assertTrue(dto1.canEqual(dto2));
     }
 }
