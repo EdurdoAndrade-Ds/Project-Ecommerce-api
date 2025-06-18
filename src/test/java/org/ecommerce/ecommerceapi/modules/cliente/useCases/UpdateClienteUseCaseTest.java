@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class UpdateClienteUseCaseTest {
@@ -129,5 +130,16 @@ class UpdateClienteUseCaseTest {
         });
 
         assertEquals("Cliente não encontrado", exception.getMessage());
+    }
+    
+    @Test
+    void testUpdateClienteCep() {
+        UpdateClienteDTO updateClienteDTO = new UpdateClienteDTO();
+        updateClienteDTO.setCep("98765-432");
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+        when(clienteRepository.save(any(ClienteEntity.class))).thenReturn(cliente);
+        ClienteEntity updatedCliente = updateClienteUseCase.execute(1L, updateClienteDTO);
+        assertEquals("98765-432", updatedCliente.getCep());
+        verify(clienteRepository).save(cliente);
     }
 }

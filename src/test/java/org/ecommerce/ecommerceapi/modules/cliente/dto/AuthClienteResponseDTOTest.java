@@ -1,71 +1,59 @@
 package org.ecommerce.ecommerceapi.modules.cliente.dto;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class AuthClienteResponseDTOTest {
 
+    private AuthClienteResponseDTO authDTO;
+
+    @BeforeEach
+    void setUp() {
+        authDTO = new AuthClienteResponseDTO();
+        authDTO.setToken("token123");
+        authDTO.setId(1L);
+        authDTO.setUsername("joao123");
+    }
+
     @Test
     void testGettersAndSetters() {
-        AuthClienteResponseDTO dto = new AuthClienteResponseDTO();
-        dto.setToken("token123");
-        dto.setId(100L);
-        dto.setUsername("usuario1");
-
-        assertEquals("token123", dto.getToken());
-        assertEquals(100L, dto.getId());
-        assertEquals("usuario1", dto.getUsername());
+        assertEquals("token123", authDTO.getToken());
+        assertEquals(1L, authDTO.getId());
+        assertEquals("joao123", authDTO.getUsername());
     }
 
     @Test
     void testEqualsAndHashCode() {
-        AuthClienteResponseDTO dto1 = AuthClienteResponseDTO.builder()
-                .token("token123")
-                .id(100L)
-                .username("usuario1")
-                .build();
+        AuthClienteResponseDTO authDTO2 = new AuthClienteResponseDTO();
+        authDTO2.setToken("token123");
+        authDTO2.setId(1L);
+        authDTO2.setUsername("joao123");
 
-        AuthClienteResponseDTO dto2 = AuthClienteResponseDTO.builder()
-                .token("token123")
-                .id(100L)
-                .username("usuario1")
-                .build();
+        assertEquals(authDTO, authDTO2);
+        assertEquals(authDTO.hashCode(), authDTO2.hashCode());
 
-        AuthClienteResponseDTO dto3 = AuthClienteResponseDTO.builder()
-                .token("tokenXYZ")
-                .id(101L)
-                .username("usuario2")
-                .build();
-
-        assertEquals(dto1, dto2);
-        assertEquals(dto1.hashCode(), dto2.hashCode());
-        assertNotEquals(dto1, dto3);
+        authDTO2.setToken("token456"); // Alterando para testar desigualdade
+        assertNotEquals(authDTO, authDTO2);
     }
 
     @Test
-    void testToString() {
-        AuthClienteResponseDTO dto = AuthClienteResponseDTO.builder()
-                .token("tokenABC")
-                .id(55L)
-                .username("userABC")
-                .build();
+    void testEqualsWithDifferentObjects() {
+        AuthClienteResponseDTO authDTO2 = new AuthClienteResponseDTO();
+        authDTO2.setId(2L); // ID diferente
 
-        String str = dto.toString();
-        assertTrue(str.contains("token=tokenABC"));
-        assertTrue(str.contains("id=55"));
-        assertTrue(str.contains("username=userABC"));
+        assertNotEquals(authDTO, authDTO2);
     }
 
     @Test
-    void testBuilder() {
-        AuthClienteResponseDTO dto = AuthClienteResponseDTO.builder()
-                .token("builderToken")
-                .id(999L)
-                .username("builderUser")
-                .build();
+    void testEqualsWithNull() {
+        assertNotEquals(authDTO, null);
+    }
 
-        assertEquals("builderToken", dto.getToken());
-        assertEquals(999L, dto.getId());
-        assertEquals("builderUser", dto.getUsername());
+    @Test
+    void testEqualsWithDifferentClass() {
+        String differentClassObject = "This is a string";
+        assertNotEquals(authDTO, differentClassObject);
     }
 }

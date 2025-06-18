@@ -11,6 +11,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.util.Optional;
@@ -84,5 +86,18 @@ class CreateClienteUseCaseTest {
         verify(clienteRepository, times(1)).findByUsernameOrEmail("usuarioExistente", "existente@email.com");
         verify(passwordEncoder, never()).encode(anyString());
         verify(clienteRepository, never()).save(any(ClienteEntity.class));
+    }
+    @Test
+    void testEqualsAndHashCode() {
+        ClienteEntity cliente1 = new ClienteEntity();
+        cliente1.setUsername("usuario1");
+        cliente1.setEmail("usuario1@email.com");
+        ClienteEntity cliente2 = new ClienteEntity();
+        cliente2.setUsername("usuario1");
+        cliente2.setEmail("usuario1@email.com");
+        assertEquals(cliente1, cliente2);
+        assertEquals(cliente1.hashCode(), cliente2.hashCode());
+        cliente2.setEmail("usuario2@email.com"); // Alterando para testar desigualdade
+        assertNotEquals(cliente1, cliente2);
     }
 }

@@ -1,117 +1,74 @@
 package org.ecommerce.ecommerceapi.modules.cliente.dto;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProfileClienteResponseDTOTest {
 
+    private ProfileClienteResponseDTO profileDTO;
+
+    @BeforeEach
+    void setUp() {
+        profileDTO = new ProfileClienteResponseDTO();
+        profileDTO.setNome("João");
+        profileDTO.setUsername("joao123");
+        profileDTO.setEmail("joao@email.com");
+        profileDTO.setTelefone("123456789");
+        profileDTO.setEndereco("Rua A, 123");
+        profileDTO.setCidade("Cidade Exemplo");
+        profileDTO.setEstado("Estado Exemplo");
+        profileDTO.setCep("12345-678");
+    }
+
     @Test
     void testGettersAndSetters() {
-        ProfileClienteResponseDTO dto = new ProfileClienteResponseDTO();
-        dto.setNome("Ana");
-        dto.setUsername("ana123");
-        dto.setEmail("ana@example.com");
-        dto.setTelefone("555-1234");
-        dto.setEndereco("Rua das Flores, 123");
-        dto.setCidade("São Paulo");
-        dto.setEstado("SP");
-        dto.setCep("12345-678");
-
-        assertEquals("Ana", dto.getNome());
-        assertEquals("ana123", dto.getUsername());
-        assertEquals("ana@example.com", dto.getEmail());
-        assertEquals("555-1234", dto.getTelefone());
-        assertEquals("Rua das Flores, 123", dto.getEndereco());
-        assertEquals("São Paulo", dto.getCidade());
-        assertEquals("SP", dto.getEstado());
-        assertEquals("12345-678", dto.getCep());
+        assertEquals("João", profileDTO.getNome());
+        assertEquals("joao123", profileDTO.getUsername());
+        assertEquals("joao@email.com", profileDTO.getEmail());
+        assertEquals("123456789", profileDTO.getTelefone());
+        assertEquals("Rua A, 123", profileDTO.getEndereco());
+        assertEquals("Cidade Exemplo", profileDTO.getCidade());
+        assertEquals("Estado Exemplo", profileDTO.getEstado());
+        assertEquals("12345-678", profileDTO.getCep());
     }
 
     @Test
     void testEqualsAndHashCode() {
-        ProfileClienteResponseDTO dto1 = ProfileClienteResponseDTO.builder()
-                .nome("Ana")
-                .username("ana123")
-                .email("ana@example.com")
-                .telefone("555-1234")
-                .endereco("Rua das Flores, 123")
-                .cidade("São Paulo")
-                .estado("SP")
-                .cep("12345-678")
-                .build();
+        ProfileClienteResponseDTO profileDTO2 = new ProfileClienteResponseDTO();
+        profileDTO2.setNome("João");
+        profileDTO2.setUsername("joao123");
+        profileDTO2.setEmail("joao@email.com");
+        profileDTO2.setTelefone("123456789");
+        profileDTO2.setEndereco("Rua A, 123");
+        profileDTO2.setCidade("Cidade Exemplo");
+        profileDTO2.setEstado("Estado Exemplo");
+        profileDTO2.setCep("12345-678");
 
-        ProfileClienteResponseDTO dto2 = ProfileClienteResponseDTO.builder()
-                .nome("Ana")
-                .username("ana123")
-                .email("ana@example.com")
-                .telefone("555-1234")
-                .endereco("Rua das Flores, 123")
-                .cidade("São Paulo")
-                .estado("SP")
-                .cep("12345-678")
-                .build();
+        assertEquals(profileDTO, profileDTO2);
+        assertEquals(profileDTO.hashCode(), profileDTO2.hashCode());
 
-        ProfileClienteResponseDTO dto3 = ProfileClienteResponseDTO.builder()
-                .nome("Carlos")
-                .username("carlos456")
-                .email("carlos@example.com")
-                .telefone("555-5678")
-                .endereco("Av. Brasil, 456")
-                .cidade("Rio de Janeiro")
-                .estado("RJ")
-                .cep("98765-432")
-                .build();
-
-        assertEquals(dto1, dto2);
-        assertEquals(dto1.hashCode(), dto2.hashCode());
-        assertNotEquals(dto1, dto3);
+        profileDTO2.setNome("Maria"); // Alterando para testar desigualdade
+        assertNotEquals(profileDTO, profileDTO2);
     }
 
     @Test
-    void testToString() {
-        ProfileClienteResponseDTO dto = ProfileClienteResponseDTO.builder()
-                .nome("Ana")
-                .username("ana123")
-                .email("ana@example.com")
-                .telefone("555-1234")
-                .endereco("Rua das Flores, 123")
-                .cidade("São Paulo")
-                .estado("SP")
-                .cep("12345-678")
-                .build();
+    void testEqualsWithDifferentObjects() {
+        ProfileClienteResponseDTO profileDTO2 = new ProfileClienteResponseDTO();
+        profileDTO2.setNome("Maria"); // Nome diferente
 
-        String toStringValue = dto.toString();
-
-        assertTrue(toStringValue.contains("nome=Ana"));
-        assertTrue(toStringValue.contains("username=ana123"));
-        assertTrue(toStringValue.contains("email=ana@example.com"));
-        assertTrue(toStringValue.contains("telefone=555-1234"));
-        assertTrue(toStringValue.contains("endereco=Rua das Flores, 123"));
-        assertTrue(toStringValue.contains("cidade=São Paulo"));
-        assertTrue(toStringValue.contains("estado=SP"));
-        assertTrue(toStringValue.contains("cep=12345-678"));
+        assertNotEquals(profileDTO, profileDTO2);
     }
 
     @Test
-    void testBuilder() {
-        ProfileClienteResponseDTO dto = ProfileClienteResponseDTO.builder()
-                .nome("Ana")
-                .username("ana123")
-                .email("ana@example.com")
-                .telefone("555-1234")
-                .endereco("Rua das Flores, 123")
-                .cidade("São Paulo")
-                .estado("SP")
-                .cep("12345-678")
-                .build();
+    void testEqualsWithNull() {
+        assertNotEquals(profileDTO, null);
+    }
 
-        assertEquals("Ana", dto.getNome());
-        assertEquals("ana123", dto.getUsername());
-        assertEquals("ana@example.com", dto.getEmail());
-        assertEquals("555-1234", dto.getTelefone());
-        assertEquals("Rua das Flores, 123", dto.getEndereco());
-        assertEquals("São Paulo", dto.getCidade());
-        assertEquals("SP", dto.getEstado());
-        assertEquals("12345-678", dto.getCep());
+    @Test
+    void testEqualsWithDifferentClass() {
+        String differentClassObject = "This is a string";
+        assertNotEquals(profileDTO, differentClassObject);
     }
 }

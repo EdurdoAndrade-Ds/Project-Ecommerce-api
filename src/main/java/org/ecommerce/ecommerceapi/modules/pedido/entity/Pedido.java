@@ -3,12 +3,11 @@ package org.ecommerce.ecommerceapi.modules.pedido.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
-import java.util.List;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.CascadeType;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -34,4 +33,25 @@ public class Pedido {
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens;
+
+    // Implementação do equals
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; // Verifica se são o mesmo objeto
+        if (!(o instanceof Pedido)) return false; // Verifica se o objeto é da mesma classe
+        Pedido that = (Pedido) o; // Faz o cast
+
+        // Compara todos os campos relevantes
+        return Objects.equals(id, that.id) &&
+               cancelado == that.cancelado &&
+               Objects.equals(total, that.total) &&
+               Objects.equals(dateCreate, that.dateCreate) &&
+               Objects.equals(cliente, that.cliente);
+    }
+
+    // Implementação do hashCode
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, cancelado, total, dateCreate, cliente);
+    }
 }

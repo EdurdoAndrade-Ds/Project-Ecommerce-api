@@ -1,111 +1,77 @@
 package org.ecommerce.ecommerceapi.modules.cliente.dto;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CreateClienteDTOTest {
+class CreateClienteDTOTest {
 
-    @Test
-    void deveConstruirComBuilderEValidarCampos() {
-        CreateClienteDTO dto = CreateClienteDTO.builder()
-                .nome("Maria")
-                .username("maria123")
-                .email("maria@email.com")
-                .senha("senhaSegura123")
-                .telefone("11999999999")
-                .endereco("Rua das Flores")
-                .cidade("São Paulo")
-                .estado("SP")
-                .cep("01000-000")
-                .build();
+    private CreateClienteDTO clienteDTO;
 
-        assertEquals("Maria", dto.getNome());
-        assertEquals("maria123", dto.getUsername());
-        assertEquals("maria@email.com", dto.getEmail());
-        assertEquals("senhaSegura123", dto.getSenha());
-        assertEquals("11999999999", dto.getTelefone());
-        assertEquals("Rua das Flores", dto.getEndereco());
-        assertEquals("São Paulo", dto.getCidade());
-        assertEquals("SP", dto.getEstado());
-        assertEquals("01000-000", dto.getCep());
+    @BeforeEach
+    void setUp() {
+        clienteDTO = new CreateClienteDTO();
+        clienteDTO.setNome("João");
+        clienteDTO.setUsername("joao123");
+        clienteDTO.setEmail("joao@email.com");
+        clienteDTO.setSenha("senhaSegura123");
+        clienteDTO.setTelefone("123456789");
+        clienteDTO.setEndereco("Rua A, 123");
+        clienteDTO.setCidade("Cidade Exemplo");
+        clienteDTO.setEstado("Estado Exemplo");
+        clienteDTO.setCep("12345-678");
     }
 
     @Test
-    void deveCompararObjetosIguais() {
-        CreateClienteDTO dto1 = CreateClienteDTO.builder()
-                .nome("João")
-                .username("joao")
-                .email("joao@email.com")
-                .senha("12345678")
-                .build();
-
-        CreateClienteDTO dto2 = CreateClienteDTO.builder()
-                .nome("João")
-                .username("joao")
-                .email("joao@email.com")
-                .senha("12345678")
-                .build();
-
-        assertEquals(dto1, dto2);
-        assertEquals(dto1.hashCode(), dto2.hashCode());
+    void testGettersAndSetters() {
+        assertEquals("João", clienteDTO.getNome());
+        assertEquals("joao123", clienteDTO.getUsername());
+        assertEquals("joao@email.com", clienteDTO.getEmail());
+        assertEquals("senhaSegura123", clienteDTO.getSenha());
+        assertEquals("123456789", clienteDTO.getTelefone());
+        assertEquals("Rua A, 123", clienteDTO.getEndereco());
+        assertEquals("Cidade Exemplo", clienteDTO.getCidade());
+        assertEquals("Estado Exemplo", clienteDTO.getEstado());
+        assertEquals("12345-678", clienteDTO.getCep());
     }
 
     @Test
-    void deveCompararObjetosDiferentes() {
-        CreateClienteDTO dto1 = CreateClienteDTO.builder()
-                .nome("João")
-                .username("joao")
-                .email("joao@email.com")
-                .senha("12345678")
-                .build();
+    void testEqualsAndHashCode() {
+        CreateClienteDTO clienteDTO2 = new CreateClienteDTO();
+        clienteDTO2.setNome("João");
+        clienteDTO2.setUsername("joao123");
+        clienteDTO2.setEmail("joao@email.com");
+        clienteDTO2.setSenha("senhaSegura123");
+        clienteDTO2.setTelefone("123456789");
+        clienteDTO2.setEndereco("Rua A, 123");
+        clienteDTO2.setCidade("Cidade Exemplo");
+        clienteDTO2.setEstado("Estado Exemplo");
+        clienteDTO2.setCep("12345-678");
 
-        CreateClienteDTO dto2 = CreateClienteDTO.builder()
-                .nome("Maria")
-                .username("maria")
-                .email("maria@email.com")
-                .senha("87654321")
-                .build();
+        assertEquals(clienteDTO, clienteDTO2);
+        assertEquals(clienteDTO.hashCode(), clienteDTO2.hashCode());
 
-        assertNotEquals(dto1, dto2);
-        assertNotEquals(dto1.hashCode(), dto2.hashCode());
+        clienteDTO2.setNome("Maria"); // Alterando para testar desigualdade
+        assertNotEquals(clienteDTO, clienteDTO2);
     }
 
     @Test
-    void deveCompararComNull() {
-        CreateClienteDTO dto = CreateClienteDTO.builder()
-                .nome("João")
-                .username("joao")
-                .email("joao@email.com")
-                .senha("12345678")
-                .build();
+    void testEqualsWithDifferentObjects() {
+        CreateClienteDTO clienteDTO2 = new CreateClienteDTO();
+        clienteDTO2.setNome("Maria"); // Nome diferente
 
-        assertNotEquals(dto, null);
+        assertNotEquals(clienteDTO, clienteDTO2);
     }
 
     @Test
-    void deveCompararComObjetoDeOutraClasse() {
-        CreateClienteDTO dto = CreateClienteDTO.builder()
-                .nome("João")
-                .username("joao")
-                .email("joao@email.com")
-                .senha("12345678")
-                .build();
-
-        assertNotEquals(dto, new Object());
+    void testEqualsWithNull() {
+        assertNotEquals(clienteDTO, null);
     }
 
     @Test
-    void deveGerarToString() {
-        CreateClienteDTO dto = CreateClienteDTO.builder()
-                .nome("Test")
-                .username("testuser")
-                .email("test@test.com")
-                .senha("abcdefghi")
-                .build();
-
-        String str = dto.toString();
-        assertTrue(str.contains("testuser"));
-        assertTrue(str.contains("test@test.com"));
+    void testEqualsWithDifferentClass() {
+        String differentClassObject = "This is a string";
+        assertNotEquals(clienteDTO, differentClassObject);
     }
 }

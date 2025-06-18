@@ -4,32 +4,40 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DeleteClienteDTOTest {
+public class DeleteClienteDTOTest {
 
     @Test
-    void testBuilderAndEqualsHashCodeToString() {
-        DeleteClienteDTO dto1 = DeleteClienteDTO.builder()
-                .senha("123456")
-                .build();
+    void testSetAndGetSenha() {
+        DeleteClienteDTO dto = new DeleteClienteDTO();
+        dto.setSenha("minhaSenha");
+        assertEquals("minhaSenha", dto.getSenha());
+    }
 
-        DeleteClienteDTO dto2 = DeleteClienteDTO.builder()
-                .senha("123456")
-                .build();
+    @Test
+    void testEqualsAndHashCode() {
+        DeleteClienteDTO dto1 = new DeleteClienteDTO("senha123");
+        DeleteClienteDTO dto2 = new DeleteClienteDTO("senha123");
 
-        DeleteClienteDTO dto3 = DeleteClienteDTO.builder()
-                .senha("outraSenha")
-                .build();
-
-        // equals e hashCode
         assertEquals(dto1, dto2);
-        assertNotEquals(dto1, dto3);
         assertEquals(dto1.hashCode(), dto2.hashCode());
 
-        // toString
-        assertNotNull(dto1.toString());
-        assertTrue(dto1.toString().contains("123456"));
+        DeleteClienteDTO dto3 = new DeleteClienteDTO("senha456");
+        assertNotEquals(dto1, dto3);
+    }
 
-        // canEqual (é chamado dentro do equals, mas pode ser forçado também)
-        assertTrue(dto1.canEqual(dto2));
+    @Test
+    void testToString() {
+        DeleteClienteDTO dto = new DeleteClienteDTO("senha123");
+        String str = dto.toString();
+        assertTrue(str.contains("senha='senha123'"));
+    }
+
+    @Test
+    void testBuilder() {
+        DeleteClienteDTO dto = DeleteClienteDTO.builder()
+                .senha("senhaBuilder")
+                .build();
+
+        assertEquals("senhaBuilder", dto.getSenha());
     }
 }
