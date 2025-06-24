@@ -154,10 +154,21 @@ docker-compose up --build
 Se o ambiente não possuir acesso à internet, utilize um cache local do Maven copiando o diretório `~/.m2` de uma máquina conectada.
 Depois execute:
 
+
 ```bash
-./mvnw -o test
+./mvnw clean package -DskipTests
+docker-compose up --build
 ```
 
+## 🧪 Como executar os testes
+
+Para rodar todos os testes automatizados e gerar o relatório de cobertura:
+
+```bash
+./mvnw clean verify
+```
+
+O relatório do JaCoCo será gerado em `target/site/jacoco/index.html`.
 ---
 
 ## 👨‍💻 Autores
