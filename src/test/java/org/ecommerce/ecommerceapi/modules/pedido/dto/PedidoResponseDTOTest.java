@@ -19,7 +19,7 @@ class PedidoResponseDTOTest {
         item.setNomeProduto("Produto X");
         item.setQuantidade(3);
         item.setPrecoUnitario(BigDecimal.valueOf(29.99)); // Valor fracionado
-        item.setDiscountPrice(BigDecimal.valueOf(25.00));
+        item.setDescountPrice(BigDecimal.valueOf(25.00));
         item.setPrecoPago(BigDecimal.valueOf(89.97));
 
         List<PedidoResponseDTO.ItemDTO> itens = new ArrayList<>();
@@ -41,7 +41,7 @@ class PedidoResponseDTOTest {
         assertEquals("Produto X", retrievedItem.getNomeProduto());
         assertEquals(3, retrievedItem.getQuantidade());
         assertTrue(retrievedItem.getPrecoUnitario().compareTo(BigDecimal.valueOf(29.99)) == 0);
-        assertTrue(retrievedItem.getDiscountPrice().compareTo(BigDecimal.valueOf(25.00)) == 0);
+        assertTrue(retrievedItem.getDescountPrice().compareTo(BigDecimal.valueOf(25.00)) == 0);
         assertTrue(retrievedItem.getPrecoPago().compareTo(BigDecimal.valueOf(89.97)) == 0);
     }
 
@@ -55,7 +55,7 @@ class PedidoResponseDTOTest {
         item1.setNomeProduto("Produto A");
         item1.setQuantidade(2);
         item1.setPrecoUnitario(BigDecimal.valueOf(15.50));
-        item1.setDiscountPrice(BigDecimal.valueOf(14.50));
+        item1.setDescountPrice(BigDecimal.valueOf(14.50));
         item1.setPrecoPago(BigDecimal.valueOf(31.00));
 
         dto1.setId(1L);
@@ -68,7 +68,7 @@ class PedidoResponseDTOTest {
         item2.setNomeProduto("Produto A");
         item2.setQuantidade(2);
         item2.setPrecoUnitario(BigDecimal.valueOf(15.50));
-        item2.setDiscountPrice(BigDecimal.valueOf(14.50));
+        item2.setDescountPrice(BigDecimal.valueOf(14.50));
         item2.setPrecoPago(BigDecimal.valueOf(31.00));
 
         dto2.setId(1L);
@@ -94,7 +94,7 @@ class PedidoResponseDTOTest {
         item.setNomeProduto("Produto X");
         item.setQuantidade(3);
         item.setPrecoUnitario(BigDecimal.valueOf(29.99));
-        item.setDiscountPrice(BigDecimal.valueOf(25.00));
+        item.setDescountPrice(BigDecimal.valueOf(25.00));
         item.setPrecoPago(BigDecimal.valueOf(89.97));
 
         List<PedidoResponseDTO.ItemDTO> itens = new ArrayList<>();
@@ -113,7 +113,7 @@ class PedidoResponseDTOTest {
         assertTrue(toStringResult.contains("quantidade=3"));
         assertTrue(toStringResult.contains("precoUnitario=29.99"));
         // aceita as duas possíveis formatacoes em BigDecimal
-        assertTrue(toStringResult.contains("discountPrice=25.00") || toStringResult.contains("discountPrice=25.0"));
+        assertTrue(toStringResult.contains("descountPrice=25.00") || toStringResult.contains("descountPrice=25.0"));
         assertTrue(toStringResult.contains("precoPago=89.97"));
     }
 }

@@ -22,12 +22,8 @@ import jakarta.validation.Valid;
 @Tag(name = "Cliente", description = "Autenticação de cliente")
 public class AuthClienteController {
 
-    private final AuthClienteUseCase authClienteUseCase;
-
     @Autowired
-    public AuthClienteController(AuthClienteUseCase authClienteUseCase) {
-        this.authClienteUseCase = authClienteUseCase;
-    }
+    private AuthClienteUseCase authClienteUseCase;
 
     @PostMapping("/cliente")
     @Operation(
@@ -95,6 +91,10 @@ public class AuthClienteController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+    // Adiciona isso no controller temporariamente
+public void setAuthClienteUseCase(AuthClienteUseCase authClienteUseCase) {
+    this.authClienteUseCase = authClienteUseCase;
+}
 
 }
 

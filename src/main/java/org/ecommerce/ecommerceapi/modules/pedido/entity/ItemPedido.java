@@ -20,8 +20,8 @@ public class ItemPedido {
     private Integer quantidade;
     private BigDecimal precoUnitario; // Preço unitário (pode ser com ou sem desconto)
 
-    @Column(name = "discount_price") // nome opcional para a coluna
-    private BigDecimal discountPrice; // Preço com desconto
+    @Column(name = "descount_price") // nome opcional para a coluna
+    private BigDecimal descountPrice; // Preço com desconto
 
     private BigDecimal precoPago; // Preço total pago (quantidade * preço unitário com desconto)
 
@@ -69,12 +69,12 @@ public class ItemPedido {
         this.precoUnitario = precoUnitario;
     }
 
-    public BigDecimal getDiscountPrice() {
-        return discountPrice;
+    public BigDecimal getDescountPrice() {
+        return descountPrice;
     }
 
-    public void setDiscountPrice(BigDecimal discountPrice) {
-        this.discountPrice = discountPrice;
+    public void setDescountPrice(BigDecimal descountPrice) {
+        this.descountPrice = descountPrice;
     }
 
     public BigDecimal getPrecoPago() {
@@ -113,7 +113,7 @@ public class ItemPedido {
                Objects.equals(nomeProduto, that.nomeProduto) &&
                Objects.equals(quantidade, that.quantidade) &&
                Objects.equals(precoUnitario, that.precoUnitario) &&
-               Objects.equals(discountPrice, that.discountPrice) &&
+               Objects.equals(descountPrice, that.descountPrice) &&
                Objects.equals(precoPago, that.precoPago) &&
                Objects.equals(pedido, that.pedido) &&
                Objects.equals(produto, that.produto);
@@ -122,6 +122,6 @@ public class ItemPedido {
     // Implementação do hashCode
     @Override
     public int hashCode() {
-        return Objects.hash(id, nomeProduto, quantidade, precoUnitario, discountPrice, precoPago, pedido, produto);
+        return Objects.hash(id, nomeProduto, quantidade, precoUnitario, descountPrice, precoPago, pedido, produto);
     }
 }
