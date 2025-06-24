@@ -150,6 +150,16 @@ spring.jpa.show-sql=true
 docker-compose up --build
 ```
 
+## 🧪 Como executar os testes
+
+Para rodar todos os testes automatizados e gerar o relatório de cobertura:
+
+```bash
+./mvnw clean verify
+```
+
+O relatório do JaCoCo será gerado em `target/site/jacoco/index.html`.
+
 ---
 
 ## 👨‍💻 Autores
