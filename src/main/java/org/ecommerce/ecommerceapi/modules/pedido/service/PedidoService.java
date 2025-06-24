@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,7 +58,13 @@ public class PedidoService {
 
             // Definir o preço unitário como o preço original do produto
             item.setPrecoUnitario(product.getPreco()); // Preço original
-            item.setDescountPrice(product.getDescountedPrice()); // Preço com desconto
+            item.setDiscountPrice(product.getDiscountedPrice()); // Preço com desconto
+
+            // Valor pago por este item (quantidade x preço com desconto)
+            BigDecimal valorPago = item.getDiscountPrice()
+                    .multiply(BigDecimal.valueOf(item.getQuantidade()))
+                    .setScale(2, RoundingMode.HALF_UP);
+            item.setPrecoPago(valorPago);
 
             item.setPedido(pedido);
             return item;
@@ -67,15 +74,12 @@ public class PedidoService {
         
         // Calcular o total do pedido
         BigDecimal total = itens.stream()
-                .map(item -> item.getDescountPrice().multiply(BigDecimal.valueOf(item.getQuantidade())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .map(ItemPedido::getPrecoPago)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
         
         pedido.setTotal(total);
 
-        // Definir precoPago como o total do pedido
-        for (ItemPedido item : itens) {
-            item.setPrecoPago(total); // Aqui você define o precoPago como o total do pedido
-        }
 
         Pedido salvo = pedidoRepository.save(pedido);
         return mapToResponseDTO(salvo);
@@ -119,8 +123,8 @@ public class PedidoService {
             itemDto.setNomeProduto(i.getNomeProduto());
             itemDto.setQuantidade(i.getQuantidade());
             itemDto.setPrecoUnitario(i.getPrecoUnitario());
-            itemDto.setDescountPrice(i.getDescountPrice()); // Preço com desconto
-            itemDto.setPrecoPago(pedido.getTotal()); // Preço total pago pelo pedido
+            itemDto.setDiscountPrice(i.getDiscountPrice()); // Preço com desconto
+            itemDto.setPrecoPago(i.getPrecoPago()); // Total pago por este item
             return itemDto;
         }).collect(Collectors.toList()));
         return response;

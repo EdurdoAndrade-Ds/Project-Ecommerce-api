@@ -22,24 +22,24 @@ class ProductTest {
     }
 
     @Test
-    void testCalcularDescountedPriceSemDesconto() {
+    void testCalcularDiscountedPriceSemDesconto() {
         // Arrange
         product.setDescontoPercentual(0.0);
 
         // Act
-        BigDecimal discountedPrice = product.getDescountedPrice();
+        BigDecimal discountedPrice = product.getDiscountedPrice();
 
         // Assert
         assertEquals(product.getPreco(), discountedPrice);
     }
 
     @Test
-    void testCalcularDescountedPriceComDesconto() {
+    void testCalcularDiscountedPriceComDesconto() {
         // Arrange
         product.setDescontoPercentual(20.0); // 20% de desconto
 
         // Act
-        BigDecimal discountedPrice = product.getDescountedPrice();
+        BigDecimal discountedPrice = product.getDiscountedPrice();
 
         // Assert
         BigDecimal expectedPrice = product.getPreco().multiply(BigDecimal.valueOf(0.80)); // 100.00 - 20%
@@ -47,12 +47,12 @@ class ProductTest {
     }
 
     @Test
-    void testCalcularDescountedPriceComDescontoNulo() {
+    void testCalcularDiscountedPriceComDescontoNulo() {
         // Arrange
         product.setDescontoPercentual(null); // Desconto nulo
 
         // Act
-        BigDecimal discountedPrice = product.getDescountedPrice();
+        BigDecimal discountedPrice = product.getDiscountedPrice();
 
         // Assert
         assertEquals(product.getPreco(), discountedPrice);

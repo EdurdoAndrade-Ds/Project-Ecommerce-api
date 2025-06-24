@@ -18,8 +18,7 @@ class AuthClienteControllerTest {
     @BeforeEach
     void setUp() {
         authClienteUseCase = mock(AuthClienteUseCase.class);
-        authClienteController = new AuthClienteController();
-        authClienteController.setAuthClienteUseCase(authClienteUseCase); // usamos setter já que o controller usa @Autowired
+        authClienteController = new AuthClienteController(authClienteUseCase);
     }
 
     @Test
