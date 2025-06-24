@@ -99,8 +99,19 @@ public class ProductResponseDTO {
         return other instanceof ProductResponseDTO;
     }
 
+    /**
+     * Ajusta o percentual de desconto do produto e recalcula o valor com desconto
+     * se o preço estiver definido.
+     *
+     * @param discountPercentage percentual de desconto a ser aplicado
+     */
     public void setDescontoPercentual(double discountPercentage) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setDescontoPercentual'");
+        this.descountPercentage = discountPercentage;
+
+        if (this.preco != null) {
+            BigDecimal newPrice = this.preco.multiply(
+                    BigDecimal.valueOf(1 - (discountPercentage / 100.0)));
+            this.descountedPrice = newPrice;
+        }
     }
 }
