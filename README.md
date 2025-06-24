@@ -150,16 +150,6 @@ spring.jpa.show-sql=true
 docker-compose up --build
 ```
 
-### Executar testes sem internet
-Se o ambiente não possuir acesso à internet, utilize um cache local do Maven copiando o diretório `~/.m2` de uma máquina conectada.
-Depois execute:
-
-
-```bash
-./mvnw clean package -DskipTests
-docker-compose up --build
-```
-
 ## 🧪 Como executar os testes
 
 Para rodar todos os testes automatizados e gerar o relatório de cobertura:
@@ -169,6 +159,7 @@ Para rodar todos os testes automatizados e gerar o relatório de cobertura:
 ```
 
 O relatório do JaCoCo será gerado em `target/site/jacoco/index.html`.
+
 ---
 
 ## 👨‍💻 Autores

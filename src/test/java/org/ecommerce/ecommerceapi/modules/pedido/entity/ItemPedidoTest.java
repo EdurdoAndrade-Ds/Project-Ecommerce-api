@@ -26,7 +26,7 @@ class ItemPedidoTest {
         itemPedido.setNomeProduto("Produto A");
         itemPedido.setQuantidade(2);
         itemPedido.setPrecoUnitario(BigDecimal.valueOf(50.00));
-        itemPedido.setDiscountPrice(BigDecimal.valueOf(45.00));
+        itemPedido.setDescountPrice(BigDecimal.valueOf(45.00));
         itemPedido.setPrecoPago(BigDecimal.valueOf(90.00));
         itemPedido.setProduto(product);
         itemPedido.setPedido(pedido);
@@ -39,14 +39,14 @@ class ItemPedidoTest {
         itemPedido.setNomeProduto("Produto A");
         itemPedido.setQuantidade(2);
         itemPedido.setPrecoUnitario(BigDecimal.valueOf(50.00));
-        itemPedido.setDiscountPrice(BigDecimal.valueOf(45.00));
+        itemPedido.setDescountPrice(BigDecimal.valueOf(45.00));
         itemPedido.setPrecoPago(BigDecimal.valueOf(90.00));
 
         assertEquals(1L, itemPedido.getId());
         assertEquals("Produto A", itemPedido.getNomeProduto());
         assertEquals(2, itemPedido.getQuantidade());
         assertEquals(BigDecimal.valueOf(50.00), itemPedido.getPrecoUnitario());
-        assertEquals(BigDecimal.valueOf(45.00), itemPedido.getDiscountPrice());
+        assertEquals(BigDecimal.valueOf(45.00), itemPedido.getDescountPrice());
         assertEquals(BigDecimal.valueOf(90.00), itemPedido.getPrecoPago());
     }
     @Test
@@ -62,7 +62,7 @@ class ItemPedidoTest {
         assertTrue(toString.contains("nomeProduto=Produto A"));
         assertTrue(toString.contains("quantidade=2"));
         assertTrue(toString.contains("precoUnitario=50.00") || toString.contains("precoUnitario=50.0"));
-        assertTrue(toString.contains("discountPrice=45.00") || toString.contains("discountPrice=45.0"));
+        assertTrue(toString.contains("descountPrice=45.00") || toString.contains("descountPrice=45.0"));
         assertTrue(toString.contains("precoPago=90.00") || toString.contains("precoPago=90.0"));
     }
     
@@ -73,7 +73,7 @@ class ItemPedidoTest {
         item1.setNomeProduto("Produto A");
         item1.setQuantidade(2);
         item1.setPrecoUnitario(BigDecimal.valueOf(50.00));
-        item1.setDiscountPrice(BigDecimal.valueOf(45.00));
+        item1.setDescountPrice(BigDecimal.valueOf(45.00));
         item1.setPrecoPago(BigDecimal.valueOf(90.00));
 
         ItemPedido item2 = new ItemPedido();
@@ -81,7 +81,7 @@ class ItemPedidoTest {
         item2.setNomeProduto("Produto A");
         item2.setQuantidade(2);
         item2.setPrecoUnitario(BigDecimal.valueOf(50.00));
-        item2.setDiscountPrice(BigDecimal.valueOf(45.00));
+        item2.setDescountPrice(BigDecimal.valueOf(45.00));
         item2.setPrecoPago(BigDecimal.valueOf(90.00));
 
         assertEquals(item1, item2);

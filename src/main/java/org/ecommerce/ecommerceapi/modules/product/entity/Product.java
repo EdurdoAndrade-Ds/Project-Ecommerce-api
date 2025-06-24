@@ -20,12 +20,12 @@ public class Product {
     private Integer estoque;
 
     @Column(nullable = false)
-    private Double discountPercentage = 0.0;
+    private Double descountPercentage = 0.0; 
 
-    private BigDecimal discountedPrice; // Preço com desconto, calculado dinamicamente
+    private BigDecimal descountedPrice; // Preço com desconto, calculado dinamicamente
 
-    // O campo discountedPrice pode ser removido, pois será calculado dinamicamente
-    // private BigDecimal discountedPrice;
+    // O campo descountedPrice pode ser removido, pois será calculado dinamicamente
+    // private BigDecimal descountedPrice; 
 
     // Getters e Setters
 
@@ -70,24 +70,24 @@ public class Product {
     }
 
     public Double getDescontoPercentual() {
-        return discountPercentage;
+        return descountPercentage;
     }
 
     public void setDescontoPercentual(Double discountPercentage) {
-        this.discountPercentage = discountPercentage;
+        this.descountPercentage = discountPercentage;
     }
 
-    public BigDecimal getDiscountedPrice() {
-        return calcularDiscountedPrice();
+    public BigDecimal getDescountedPrice() {
+        return calcularDescountedPrice();
     }
-    public void setDiscountedPrice(BigDecimal discountedPrice) {
-        this.discountedPrice = discountedPrice;
+    public void setDescountedPrice(BigDecimal descountedPrice) {
+        this.descountedPrice = descountedPrice;
     }
 
     // Método para calcular o preço com desconto
-    public BigDecimal calcularDiscountedPrice() {
-        if (discountPercentage != null && discountPercentage > 0) {
-            BigDecimal discount = preco.multiply(BigDecimal.valueOf(discountPercentage / 100));
+    public BigDecimal calcularDescountedPrice() {
+        if (descountPercentage != null && descountPercentage > 0) {
+            BigDecimal discount = preco.multiply(BigDecimal.valueOf(descountPercentage / 100));
             return preco.subtract(discount);
         }
         return preco; // Se não houver desconto, retorna o preço original

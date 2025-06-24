@@ -35,7 +35,7 @@ public class PedidoResponseDTO {
         private String nomeProduto;   // Nome do produto
         private Integer quantidade;   // Quantidade do produto no pedido
         private BigDecimal precoUnitario; // Preço unitário do produto
-        private BigDecimal discountPrice; // Preço com desconto do produto, se aplicável
+        private BigDecimal descountPrice; // Preço com desconto do produto, se aplicável
         private BigDecimal precoPago; // Preço total pago pelo produto
 
         @Override
@@ -47,13 +47,13 @@ public class PedidoResponseDTO {
                    Objects.equals(nomeProduto, itemDTO.nomeProduto) &&
                    Objects.equals(quantidade, itemDTO.quantidade) &&
                    Objects.equals(precoUnitario, itemDTO.precoUnitario) &&
-                   Objects.equals(discountPrice, itemDTO.discountPrice) &&
+                   Objects.equals(descountPrice, itemDTO.descountPrice) &&
                    Objects.equals(precoPago, itemDTO.precoPago);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(produtoId, nomeProduto, quantidade, precoUnitario, discountPrice, precoPago);
+            return Objects.hash(produtoId, nomeProduto, quantidade, precoUnitario, descountPrice, precoPago);
         }
     }
 }
