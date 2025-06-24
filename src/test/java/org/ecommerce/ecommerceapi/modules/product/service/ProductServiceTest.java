@@ -261,7 +261,7 @@ class ProductServiceTest {
         Product product = new Product();
         product.setId(1L);
         product.setPreco(BigDecimal.valueOf(100.00));
-        product.setDescontoPercentual(10.0);
+        product.setDiscountPercentage(10.0);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(productRepository.save(any(Product.class))).thenReturn(product);
@@ -269,7 +269,7 @@ class ProductServiceTest {
         ProductResponseDTO responseDTO = productService.aplicarDesconto(1L, 10.0);
 
         assertNotNull(responseDTO);
-        assertEquals(0, BigDecimal.valueOf(90.00).compareTo(responseDTO.getDescountedPrice()));
+        assertEquals(0, BigDecimal.valueOf(90.00).compareTo(responseDTO.getDiscountedPrice()));
     }
 
     @Test
