@@ -9,8 +9,8 @@ public class ProductResponseDTO {
     private String descricao;
     private BigDecimal preco;
     private Integer estoque;
-    private Double descountPercentage; 
-    private BigDecimal descountedPrice;
+    private Double discountPercentage;
+    private BigDecimal discountedPrice;
 
     // Getters e Setters
     public Long getId() {
@@ -53,17 +53,17 @@ public class ProductResponseDTO {
         this.estoque = estoque;
     }
 
-    public Double getDescountPercentage() {
-        return descountPercentage;
+    public Double getDiscountPercentage() {
+        return discountPercentage;
     }
-    public void setDescountPercentage(Double descountPercentage) {
-        this.descountPercentage = descountPercentage;
+    public void setDiscountPercentage(Double discountPercentage) {
+        this.discountPercentage = discountPercentage;
     }
-    public BigDecimal getDescountedPrice() {
-        return descountedPrice;
+    public BigDecimal getDiscountedPrice() {
+        return discountedPrice;
     }
-    public void setDescountedPrice(BigDecimal descountedPrice) {
-        this.descountedPrice = descountedPrice;
+    public void setDiscountedPrice(BigDecimal discountedPrice) {
+        this.discountedPrice = discountedPrice;
     }
 
     @Override
@@ -106,12 +106,12 @@ public class ProductResponseDTO {
      * @param discountPercentage percentual de desconto a ser aplicado
      */
     public void setDescontoPercentual(double discountPercentage) {
-        this.descountPercentage = discountPercentage;
+        this.discountPercentage = discountPercentage;
 
         if (this.preco != null) {
             BigDecimal newPrice = this.preco.multiply(
                     BigDecimal.valueOf(1 - (discountPercentage / 100.0)));
-            this.descountedPrice = newPrice;
+            this.discountedPrice = newPrice;
         }
     }
 }

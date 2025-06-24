@@ -57,7 +57,9 @@ public class PedidoService {
 
             // Definir o preço unitário como o preço original do produto
             item.setPrecoUnitario(product.getPreco()); // Preço original
-            item.setDescountPrice(product.getDescountedPrice()); // Preço com desconto
+            item.setDiscountPrice(product.getDiscountedPrice()); // Preço com desconto
+            BigDecimal precoPago = item.getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantidade()));
+            item.setPrecoPago(precoPago);
 
             item.setPedido(pedido);
             return item;
@@ -67,15 +69,10 @@ public class PedidoService {
         
         // Calcular o total do pedido
         BigDecimal total = itens.stream()
-                .map(item -> item.getDescountPrice().multiply(BigDecimal.valueOf(item.getQuantidade())))
+                .map(ItemPedido::getPrecoPago)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         
         pedido.setTotal(total);
-
-        // Definir precoPago como o total do pedido
-        for (ItemPedido item : itens) {
-            item.setPrecoPago(total); // Aqui você define o precoPago como o total do pedido
-        }
 
         Pedido salvo = pedidoRepository.save(pedido);
         return mapToResponseDTO(salvo);
@@ -119,8 +116,8 @@ public class PedidoService {
             itemDto.setNomeProduto(i.getNomeProduto());
             itemDto.setQuantidade(i.getQuantidade());
             itemDto.setPrecoUnitario(i.getPrecoUnitario());
-            itemDto.setDescountPrice(i.getDescountPrice()); // Preço com desconto
-            itemDto.setPrecoPago(pedido.getTotal()); // Preço total pago pelo pedido
+            itemDto.setDiscountPrice(i.getDiscountPrice()); // Preço com desconto
+            itemDto.setPrecoPago(i.getPrecoPago()); // Preço total pago pelo item
             return itemDto;
         }).collect(Collectors.toList()));
         return response;

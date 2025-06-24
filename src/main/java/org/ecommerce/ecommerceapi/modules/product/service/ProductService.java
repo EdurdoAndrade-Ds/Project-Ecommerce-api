@@ -171,13 +171,13 @@ public class ProductService {
         return other instanceof ProductService;
     }
 
-    public ProductResponseDTO aplicarDesconto(Long id, Double descountPercentage) {
-        if (descountPercentage == null || descountPercentage < 0.0 || descountPercentage > 100.0) {
+    public ProductResponseDTO aplicarDesconto(Long id, Double discountPercentage) {
+        if (discountPercentage == null || discountPercentage < 0.0 || discountPercentage > 100.0) {
             throw new IllegalArgumentException("Porcentagem de desconto inválida");
         }
 
         Product product = buscarPorId(id); // Busca o produto ou lança exceção se não encontrar
-        product.setDescontoPercentual(descountPercentage); // Atualiza o campo de desconto (supondo que seja descontoPercentual no modelo)
+        product.setDiscountPercentage(discountPercentage); // Atualiza o campo de desconto
         Product updatedProduct = repository.save(product); // Salva no banco
 
         return mapToDTOWithDiscount(updatedProduct); // Retorna DTO com desconto aplicado
@@ -192,15 +192,15 @@ public class ProductService {
         dto.setPreco(product.getPreco());
         dto.setEstoque(product.getEstoque());
 
-        double discountPercentage = product.getDescontoPercentual() != null ? product.getDescontoPercentual() : 0.0;
-        dto.setDescountPercentage(discountPercentage);
+        double discountPercentage = product.getDiscountPercentage() != null ? product.getDiscountPercentage() : 0.0;
+        dto.setDiscountPercentage(discountPercentage);
 
         if (discountPercentage > 0) {
             BigDecimal discountedPrice = product.getPreco()
                     .multiply(BigDecimal.valueOf(1 - discountPercentage / 100.0));
-            dto.setDescountedPrice(discountedPrice);
+            dto.setDiscountedPrice(discountedPrice);
         } else {
-            dto.setDescountedPrice(product.getPreco());
+            dto.setDiscountedPrice(product.getPreco());
         }
 
         return dto;

@@ -158,6 +158,14 @@ Para rodar todos os testes automatizados e gerar o relatório de cobertura:
 ./mvnw clean verify
 ```
 
+### Execução offline
+
+Se o ambiente não possuir acesso à internet, certifique-se de ter o cache local do Maven previamente populado e utilize o modo offline:
+
+```bash
+./mvnw -o clean verify
+```
+
 O relatório do JaCoCo será gerado em `target/site/jacoco/index.html`.
 
 ---
