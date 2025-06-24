@@ -45,9 +45,10 @@ Este projeto simula uma plataforma robusta e escalável para o gerenciamento de 
 
 ✅ Cadastro, autenticação e gerenciamento de clientes  
 ✅ Cadastro, listagem, detalhamento, atualização e exclusão de produtos  
-✅ Criação e cancelamento de pedidos  
-✅ Listagem de pedidos por cliente  
-✅ Proteção de rotas com JWT  
+✅ Criação e cancelamento de pedidos
+✅ Listagem de pedidos por cliente
+✅ Pagamento de pedidos
+✅ Proteção de rotas com JWT
 ✅ Documentação automática com Swagger
 
 ---
@@ -69,12 +70,18 @@ ecommerce-api/
 │   │   ├── services/
 │   │   ├── repositories/
 │   │   └── entities/
-│   └── pedido/
+│   ├── pedido/
 │       ├── dtos/
 │       ├── controllers/
 │       ├── services/
 │       ├── repositories/
 │       └── entities/
+│   └── payment/
+│       ├── dto/
+│       ├── controller/
+│       ├── service/
+│       ├── repository/
+│       └── entity/
 ├── security/
 ├── providers/
 ├── exceptions/
