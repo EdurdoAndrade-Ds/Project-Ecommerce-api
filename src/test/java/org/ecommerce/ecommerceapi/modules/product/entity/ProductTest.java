@@ -24,7 +24,7 @@ class ProductTest {
     @Test
     void testCalcularDiscountedPriceSemDesconto() {
         // Arrange
-        product.setDescontoPercentual(0.0);
+        product.setDiscountPercentage(0.0);
 
         // Act
         BigDecimal discountedPrice = product.getDiscountedPrice();
@@ -36,7 +36,7 @@ class ProductTest {
     @Test
     void testCalcularDiscountedPriceComDesconto() {
         // Arrange
-        product.setDescontoPercentual(20.0); // 20% de desconto
+        product.setDiscountPercentage(20.0); // 20% de desconto
 
         // Act
         BigDecimal discountedPrice = product.getDiscountedPrice();
@@ -49,7 +49,7 @@ class ProductTest {
     @Test
     void testCalcularDiscountedPriceComDescontoNulo() {
         // Arrange
-        product.setDescontoPercentual(null); // Desconto nulo
+        product.setDiscountPercentage(null); // Desconto nulo
 
         // Act
         BigDecimal discountedPrice = product.getDiscountedPrice();

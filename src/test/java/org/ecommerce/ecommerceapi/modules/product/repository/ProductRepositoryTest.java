@@ -33,7 +33,7 @@ class ProductRepositoryTest {
         product.setDescricao("Descrição do Produto Teste");
         product.setPreco(BigDecimal.valueOf(99.99));
         product.setEstoque(10);
-        product.setDescontoPercentual(15.0);
+        product.setDiscountPercentage(15.0);
         product.setDiscountedPrice(BigDecimal.valueOf(84.99));
 
         // Salva o produto
@@ -55,7 +55,7 @@ class ProductRepositoryTest {
         product.setDescricao("Descrição do Produto Teste");
         product.setPreco(BigDecimal.valueOf(99.99));
         product.setEstoque(10);
-        product.setDescontoPercentual(15.0);
+        product.setDiscountPercentage(15.0);
         product.setDiscountedPrice(BigDecimal.valueOf(84.99));
         Product savedProduct = productRepository.save(product);
 

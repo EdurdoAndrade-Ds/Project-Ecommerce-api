@@ -261,7 +261,7 @@ class ProductServiceTest {
         Product product = new Product();
         product.setId(1L);
         product.setPreco(BigDecimal.valueOf(100.00));
-        product.setDescontoPercentual(10.0);
+        product.setDiscountPercentage(10.0);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(productRepository.save(any(Product.class))).thenReturn(product);

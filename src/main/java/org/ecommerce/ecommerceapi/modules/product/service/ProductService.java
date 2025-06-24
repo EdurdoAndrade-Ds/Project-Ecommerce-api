@@ -177,7 +177,7 @@ public class ProductService {
         }
 
         Product product = buscarPorId(id); // Busca o produto ou lança exceção se não encontrar
-        product.setDescontoPercentual(discountPercentage); // Atualiza o campo de desconto (supondo que seja descontoPercentual no modelo)
+        product.setDiscountPercentage(discountPercentage); // Atualiza o campo de desconto
         Product updatedProduct = repository.save(product); // Salva no banco
 
         return mapToDTOWithDiscount(updatedProduct); // Retorna DTO com desconto aplicado
@@ -192,7 +192,7 @@ public class ProductService {
         dto.setPreco(product.getPreco());
         dto.setEstoque(product.getEstoque());
 
-        double discountPercentage = product.getDescontoPercentual() != null ? product.getDescontoPercentual() : 0.0;
+        double discountPercentage = product.getDiscountPercentage() != null ? product.getDiscountPercentage() : 0.0;
         dto.setDiscountPercentage(discountPercentage);
 
         if (discountPercentage > 0) {

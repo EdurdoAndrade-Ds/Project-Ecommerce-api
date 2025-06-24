@@ -69,11 +69,11 @@ public class Product {
         this.estoque = estoque;
     }
 
-    public Double getDescontoPercentual() {
+    public Double getDiscountPercentage() {
         return discountPercentage;
     }
 
-    public void setDescontoPercentual(Double discountPercentage) {
+    public void setDiscountPercentage(Double discountPercentage) {
         this.discountPercentage = discountPercentage;
     }
 
