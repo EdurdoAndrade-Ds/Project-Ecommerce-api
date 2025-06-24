@@ -150,6 +150,14 @@ spring.jpa.show-sql=true
 docker-compose up --build
 ```
 
+### Executar testes sem internet
+Se o ambiente não possuir acesso à internet, utilize um cache local do Maven copiando o diretório `~/.m2` de uma máquina conectada.
+Depois execute:
+
+```bash
+./mvnw -o test
+```
+
 ---
 
 ## 👨‍💻 Autores

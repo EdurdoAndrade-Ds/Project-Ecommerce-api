@@ -269,7 +269,7 @@ class ProductServiceTest {
         ProductResponseDTO responseDTO = productService.aplicarDesconto(1L, 10.0);
 
         assertNotNull(responseDTO);
-        assertEquals(0, BigDecimal.valueOf(90.00).compareTo(responseDTO.getDescountedPrice()));
+        assertEquals(0, BigDecimal.valueOf(90.00).compareTo(responseDTO.getDiscountedPrice()));
     }
 
     @Test

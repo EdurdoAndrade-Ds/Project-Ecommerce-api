@@ -58,10 +58,10 @@ public class PedidoService {
 
             // Definir o preço unitário como o preço original do produto
             item.setPrecoUnitario(product.getPreco()); // Preço original
-            item.setDescountPrice(product.getDescountedPrice()); // Preço com desconto
+            item.setDiscountPrice(product.getDiscountedPrice()); // Preço com desconto
 
             // Valor pago por este item (quantidade x preço com desconto)
-            BigDecimal valorPago = item.getDescountPrice()
+            BigDecimal valorPago = item.getDiscountPrice()
                     .multiply(BigDecimal.valueOf(item.getQuantidade()))
                     .setScale(2, RoundingMode.HALF_UP);
             item.setPrecoPago(valorPago);
@@ -123,7 +123,7 @@ public class PedidoService {
             itemDto.setNomeProduto(i.getNomeProduto());
             itemDto.setQuantidade(i.getQuantidade());
             itemDto.setPrecoUnitario(i.getPrecoUnitario());
-            itemDto.setDescountPrice(i.getDescountPrice()); // Preço com desconto
+            itemDto.setDiscountPrice(i.getDiscountPrice()); // Preço com desconto
             itemDto.setPrecoPago(i.getPrecoPago()); // Total pago por este item
             return itemDto;
         }).collect(Collectors.toList()));
