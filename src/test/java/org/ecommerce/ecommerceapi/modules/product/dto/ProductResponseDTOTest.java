@@ -18,8 +18,8 @@ class ProductResponseDTOTest {
         productResponse.setDescricao("Descrição do Produto Teste");
         productResponse.setPreco(BigDecimal.valueOf(99.99));
         productResponse.setEstoque(10);
-        productResponse.setDescountPercentage(15.0);
-        productResponse.setDescountedPrice(BigDecimal.valueOf(84.99));
+        productResponse.setDiscountPercentage(15.0);
+        productResponse.setDiscountedPrice(BigDecimal.valueOf(84.99));
 
         // Verifica valores atribuídos
         assertEquals(1L, productResponse.getId());
@@ -27,8 +27,8 @@ class ProductResponseDTOTest {
         assertEquals("Descrição do Produto Teste", productResponse.getDescricao());
         assertEquals(BigDecimal.valueOf(99.99), productResponse.getPreco());
         assertEquals(10, productResponse.getEstoque());
-        assertEquals(15.0, productResponse.getDescountPercentage());
-        assertEquals(BigDecimal.valueOf(84.99), productResponse.getDescountedPrice());
+        assertEquals(15.0, productResponse.getDiscountPercentage());
+        assertEquals(BigDecimal.valueOf(84.99), productResponse.getDiscountedPrice());
     }
 
     @Test
