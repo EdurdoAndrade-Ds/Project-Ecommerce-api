@@ -78,14 +78,22 @@ public class Product {
     }
 
     public BigDecimal getDiscountedPrice() {
+
         return calcularDiscountedPrice();
+
+        return calculateDiscountedPrice();
+
     }
     public void setDiscountedPrice(BigDecimal discountedPrice) {
         this.discountedPrice = discountedPrice;
     }
 
     // Método para calcular o preço com desconto
+
     public BigDecimal calcularDiscountedPrice() {
+
+    public BigDecimal calculateDiscountedPrice() {
+
         if (discountPercentage != null && discountPercentage > 0) {
             BigDecimal discount = preco.multiply(BigDecimal.valueOf(discountPercentage / 100));
             return preco.subtract(discount);
