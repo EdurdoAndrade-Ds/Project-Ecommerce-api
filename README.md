@@ -125,6 +125,12 @@ seguido de um espaço e do token. As rotas protegidas, como a criação de pedid
 `/api/pedidos` e o pagamento de pedidos `/api/pagamentos`, passarão a funcionar
 sem retornar `403 Forbidden`.
 
+### Como autenticar no Swagger
+Após se cadastrar ou autenticar no endpoint `/auth/cliente`, copie o token JWT
+retornado e clique no botão **Authorize** da interface Swagger. Insira `Bearer`
+seguido de um espaço e do token. As rotas protegidas, como a criação de pedidos
+`/api/pedidos`, passarão a funcionar sem retornar `403 Forbidden`.
+
 ---
 
 ## 🚀 Como executar o projeto
@@ -152,6 +158,7 @@ spring.jpa.show-sql=true
 ```
 
 🐳 Alternativa com Docker
+
 ```bash
 ./mvnw clean package -DskipTests
 docker-compose up --build
@@ -166,6 +173,50 @@ Depois execute:
 ```
 
 ---
+
+
+```bash
+./mvnw clean package -DskipTests
+docker-compose up --build
+```
+
+### Executar testes sem internet
+Se o ambiente não possuir acesso à internet, utilize um cache local do Maven copiando o diretório `~/.m2` de uma máquina conectada.
+Depois execute:
+
+```bash
+./mvnw -o test
+```
+
+---
+
+```bash
+./mvnw clean package -DskipTests
+docker-compose up --build
+```
+Após a inicialização, acesse [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) para testar a API localmente.
+
+## 🧪 Como executar os testes
+
+Para rodar todos os testes automatizados e gerar o relatório de cobertura:
+
+```bash
+./mvnw clean verify
+```
+
+### Execução offline
+
+Se o ambiente não possuir acesso à internet, certifique-se de ter o cache local do Maven previamente populado e utilize o modo offline:
+
+```bash
+./mvnw -o clean verify
+```
+
+O relatório do JaCoCo será gerado em `target/site/jacoco/index.html`.
+
+---
+
+
 
 ## 👨‍💻 Autores
 
