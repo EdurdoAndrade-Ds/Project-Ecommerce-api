@@ -81,7 +81,11 @@ public class Product {
 
         return calcularDiscountedPrice();
 
+
+        return calcularDiscountedPrice();
+
         return calculateDiscountedPrice();
+
 
     }
     public void setDiscountedPrice(BigDecimal discountedPrice) {
@@ -92,7 +96,11 @@ public class Product {
 
     public BigDecimal calcularDiscountedPrice() {
 
+
+    public BigDecimal calcularDiscountedPrice() {
+
     public BigDecimal calculateDiscountedPrice() {
+
 
         if (discountPercentage != null && discountPercentage > 0) {
             BigDecimal discount = preco.multiply(BigDecimal.valueOf(discountPercentage / 100));

@@ -2,7 +2,9 @@ package org.ecommerce.ecommerceapi.modules.payment.service;
 
 
 
+
 import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
+
 
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentRequestDTO;
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentResponseDTO;
@@ -12,6 +14,10 @@ import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
 
 import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
+
+
+import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
+
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +46,9 @@ class PaymentServiceTest {
 
     private Pedido pedido;
 
+
     private PaymentRequestDTO requestDTO;
+
 
 
     @BeforeEach
@@ -91,6 +99,7 @@ class PaymentServiceTest {
 
         assertEquals("Valor do pagamento inválido", ex.getMessage());
         verify(paymentRepository, never()).save(any());
+
 
         pedido.setId(1L);
         pedido.setCliente(cliente);

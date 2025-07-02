@@ -108,7 +108,11 @@ public class ProductResponseDTO {
 
     public void applyDiscountPercentage(double discountPercentage) {
 
+
+    public void applyDiscountPercentage(double discountPercentage) {
+
     public void setDescontoPercentual(double discountPercentage) {
+
 
         this.discountPercentage = discountPercentage;
 
