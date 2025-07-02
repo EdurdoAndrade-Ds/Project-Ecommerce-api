@@ -95,5 +95,6 @@ public class AuthClienteController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
+
 }
 

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,8 +59,16 @@ public class PedidoService {
             // Definir o preço unitário como o preço original do produto
             item.setPrecoUnitario(product.getPreco()); // Preço original
             item.setDiscountPrice(product.getDiscountedPrice()); // Preço com desconto
+
+
+            // Valor pago por este item (quantidade x preço com desconto)
+            BigDecimal valorPago = item.getDiscountPrice()
+                    .multiply(BigDecimal.valueOf(item.getQuantidade()))
+                    .setScale(2, RoundingMode.HALF_UP);
+
             BigDecimal precoPago = item.getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantidade()));
             item.setPrecoPago(precoPago);
+
 
             item.setPedido(pedido);
             return item;
@@ -70,9 +79,17 @@ public class PedidoService {
         // Calcular o total do pedido
         BigDecimal total = itens.stream()
                 .map(ItemPedido::getPrecoPago)
+
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .setScale(2, RoundingMode.HALF_UP);
+        
+        pedido.setTotal(total);
+
+
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
         
         pedido.setTotal(total);
+
 
         Pedido salvo = pedidoRepository.save(pedido);
         return mapToResponseDTO(salvo);
@@ -117,7 +134,11 @@ public class PedidoService {
             itemDto.setQuantidade(i.getQuantidade());
             itemDto.setPrecoUnitario(i.getPrecoUnitario());
             itemDto.setDiscountPrice(i.getDiscountPrice()); // Preço com desconto
+
+            itemDto.setPrecoPago(i.getPrecoPago()); // Total pago por este item
+
             itemDto.setPrecoPago(i.getPrecoPago()); // Preço total pago pelo item
+
             return itemDto;
         }).collect(Collectors.toList()));
         return response;
