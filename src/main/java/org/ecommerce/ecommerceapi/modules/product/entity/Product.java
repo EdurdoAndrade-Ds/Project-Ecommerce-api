@@ -79,11 +79,6 @@ public class Product {
 
     public BigDecimal getDiscountedPrice() {
 
-        return calcularDiscountedPrice();
-
-
-        return calcularDiscountedPrice();
-
         return calculateDiscountedPrice();
 
 
@@ -94,10 +89,6 @@ public class Product {
 
     // Método para calcular o preço com desconto
 
-    public BigDecimal calcularDiscountedPrice() {
-
-
-    public BigDecimal calcularDiscountedPrice() {
 
     public BigDecimal calculateDiscountedPrice() {
 

@@ -54,4 +54,36 @@ public class Pedido {
     public int hashCode() {
         return Objects.hash(id, cancelado, total, dateCreate, cliente);
     }
+
+    public ClienteEntity getCliente() {
+        return cliente;
+    }
+
+    public boolean isCancelado() {
+        return cancelado;
+    }
+
+    public void setCliente(ClienteEntity cliente) {
+        this.cliente = cliente;
+    }
+
+    public void setDateCreate(LocalDateTime now) {
+        this.dateCreate = now;
+    }
+
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens;
+    }
+
+    public void setTotal(BigDecimal total) {
+        this.total = total;
+    }
+
+    public void setCancelado(boolean b) {
+        this.cancelado = b;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
 }

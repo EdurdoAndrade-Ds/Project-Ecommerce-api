@@ -31,6 +31,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class PaymentServiceTest {
@@ -45,23 +46,27 @@ class PaymentServiceTest {
     private PaymentService paymentService;
 
     private Pedido pedido;
-
-
     private PaymentRequestDTO requestDTO;
-
-
+    private ClienteEntity cliente;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        ClienteEntity cliente = new ClienteEntity();
+        cliente = new ClienteEntity();
         cliente.setId(1L);
+        cliente.setNome("Teste");
+        cliente.setEmail("teste@email.com");
+        // preencha outros campos obrigatórios se necessário
 
         pedido = new Pedido();
 
-        pedido.setId(2L);
+        pedido.setId(1L);
         pedido.setCliente(cliente);
         pedido.setTotal(BigDecimal.valueOf(100));
+
+        requestDTO = new PaymentRequestDTO();
+        requestDTO.setPedidoId(1L);
+        requestDTO.setValor(BigDecimal.valueOf(100));
     }
 
     @Test

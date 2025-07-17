@@ -39,15 +39,16 @@ public class PaymentService {
         payment.setDataPagamento(LocalDateTime.now());
 
         Payment saved = paymentRepository.save(payment);
-        return mapToDTO(saved);
+        return mapToDTO(saved, pedido);
     }
 
-    private PaymentResponseDTO mapToDTO(Payment payment) {
+    private PaymentResponseDTO mapToDTO(Payment payment, Pedido pedido) {
         PaymentResponseDTO dto = new PaymentResponseDTO();
         dto.setId(payment.getId());
         dto.setPedidoId(payment.getPedido().getId());
         dto.setValor(payment.getValor());
         dto.setDataPagamento(payment.getDataPagamento());
+        dto.setClienteId(pedido.getCliente().getId());
         return dto;
     }
 }

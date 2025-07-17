@@ -106,12 +106,7 @@ public class ProductResponseDTO {
      * @param discountPercentage percentual de desconto a ser aplicado
      */
 
-    public void applyDiscountPercentage(double discountPercentage) {
-
-
-    public void applyDiscountPercentage(double discountPercentage) {
-
-    public void setDescontoPercentual(double discountPercentage) {
+    public void setDiscountPercentage(double discountPercentage) {
 
 
         this.discountPercentage = discountPercentage;

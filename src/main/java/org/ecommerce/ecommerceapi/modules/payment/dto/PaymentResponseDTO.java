@@ -10,4 +10,17 @@ public class PaymentResponseDTO {
     private Long pedidoId;
     private BigDecimal valor;
     private LocalDateTime dataPagamento;
+    private Long clienteId;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getClienteId() {
+        return clienteId;
+    }
+
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
+    }
 }

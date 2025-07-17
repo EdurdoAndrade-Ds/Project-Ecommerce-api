@@ -24,4 +24,26 @@ public class Payment {
 
     @Column(name = "data_pagamento", nullable = false)
     private LocalDateTime dataPagamento;
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public void setDataPagamento(LocalDateTime now) {
+        this.dataPagamento = now;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    
 }

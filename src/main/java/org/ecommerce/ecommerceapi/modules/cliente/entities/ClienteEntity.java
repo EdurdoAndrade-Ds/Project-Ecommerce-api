@@ -17,6 +17,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -61,4 +62,8 @@ public class ClienteEntity {
     private LocalDateTime updatedAt;
 
     private boolean ativo = true;
+
+    public Long getId() {
+        return id;
+    }
 }

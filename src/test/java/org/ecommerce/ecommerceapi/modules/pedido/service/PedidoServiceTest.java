@@ -4,7 +4,6 @@ import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
 import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoRequestDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoResponseDTO;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.ItemPedido;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
@@ -14,15 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 
 class PedidoServiceTest {
 
@@ -167,7 +165,7 @@ class PedidoServiceTest {
         assertEquals(cliente.getId(), response.getClienteId());
         assertEquals(1, response.getItens().size());
         assertEquals(produto.getId(), response.getItens().get(0).getProdutoId());
-        assertEquals(BigDecimal.valueOf(30.00), response.getTotal());
+        assertEquals(0, response.getTotal().compareTo(new BigDecimal("30.00")));
     }
 
     @Test

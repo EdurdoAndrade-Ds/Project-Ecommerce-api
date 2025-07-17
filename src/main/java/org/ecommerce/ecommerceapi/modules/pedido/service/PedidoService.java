@@ -62,10 +62,10 @@ public class PedidoService {
 
             // Valor pago por este item (quantidade x preço com desconto)
             BigDecimal valorPago = item.getDiscountPrice()
-                    .multiply(BigDecimal.valueOf(item.getQuantidade()))
-                    .setScale(2, RoundingMode.HALF_UP);
+    .multiply(BigDecimal.valueOf(item.getQuantidade()))
+    .setScale(2, RoundingMode.HALF_UP);
 
-            item.setPrecoPago(valorPago);
+item.setPrecoPago(valorPago);
 
 
             BigDecimal precoPago = item.getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantidade()));
@@ -81,23 +81,11 @@ public class PedidoService {
         
         // Calcular o total do pedido
         BigDecimal total = itens.stream()
-                .map(ItemPedido::getPrecoPago)
+    .map(ItemPedido::getPrecoPago)
+    .reduce(BigDecimal.ZERO, BigDecimal::add)
+    .setScale(2, RoundingMode.HALF_UP);
 
-                .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .setScale(2, RoundingMode.HALF_UP);
-
-
-                .reduce(BigDecimal.ZERO, BigDecimal::add)
-                .setScale(2, RoundingMode.HALF_UP);
-        
-        pedido.setTotal(total);
-
-
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        
-        pedido.setTotal(total);
-
+pedido.setTotal(total);
 
         Pedido salvo = pedidoRepository.save(pedido);
         return mapToResponseDTO(salvo);
@@ -144,10 +132,6 @@ public class PedidoService {
             itemDto.setDiscountPrice(i.getDiscountPrice()); // Preço com desconto
 
             itemDto.setPrecoPago(i.getPrecoPago()); // Total pago por este item
-
-
-            itemDto.setPrecoPago(i.getPrecoPago()); // Total pago por este item
-
             itemDto.setPrecoPago(i.getPrecoPago()); // Preço total pago pelo item
 
             return itemDto;

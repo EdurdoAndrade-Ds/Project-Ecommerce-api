@@ -61,4 +61,17 @@ class PaymentControllerTest {
         assertEquals(requestDTO.getPedidoId(), captor.getValue().getPedidoId());
         assertEquals(requestDTO.getValor(), captor.getValue().getValor());
     }
+
+    @Test
+    void testPagar_ValorCorreto() {
+        when(authentication.getName()).thenReturn("1");
+        when(paymentService.pagar(any(PaymentRequestDTO.class), eq(1L))).thenReturn(responseDTO);
+
+        ResponseEntity<PaymentResponseDTO> response = paymentController.pagar(requestDTO, authentication);
+
+        BigDecimal valorEsperado = requestDTO.getValor();
+        BigDecimal valorRetornado = response.getBody().getValor();
+
+        assertEquals(0, valorEsperado.compareTo(valorRetornado));
+    }
 }
