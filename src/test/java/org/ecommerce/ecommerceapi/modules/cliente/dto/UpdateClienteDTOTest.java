@@ -71,4 +71,83 @@ class UpdateClienteDTOTest {
         String differentClassObject = "This is a string";
         assertNotEquals(clienteDTO, differentClassObject);
     }
+
+    private UpdateClienteDTO copy(UpdateClienteDTO s) {
+        UpdateClienteDTO c = new UpdateClienteDTO();
+        c.setNome(s.getNome());
+        c.setUsername(s.getUsername());
+        c.setEmail(s.getEmail());
+        c.setTelefone(s.getTelefone());
+        c.setEndereco(s.getEndereco());
+        c.setCidade(s.getCidade());
+        c.setEstado(s.getEstado());
+        c.setCep(s.getCep());
+        return c;
+    }
+
+    @Test
+    void equals_branch_nullVsNonNull_perField_souldBeDifferent() {
+        UpdateClienteDTO d1 = copy(clienteDTO)
+                ;
+        d1.setNome(null);
+        assertNotEquals(clienteDTO, d1);
+
+        UpdateClienteDTO d2 = copy(clienteDTO);
+        d2.setUsername(null);
+        assertNotEquals(clienteDTO, d2);
+
+
+        UpdateClienteDTO d3 = copy(clienteDTO);
+        d3.setEmail(null);
+        assertNotEquals(clienteDTO, d3);
+
+
+        UpdateClienteDTO d4 = copy(clienteDTO);
+        d4.setTelefone(null);
+        assertNotEquals(clienteDTO, d4);
+
+
+        UpdateClienteDTO d5 = copy(clienteDTO);
+        d5.setEndereco(null);
+        assertNotEquals(clienteDTO, d5);
+
+
+        UpdateClienteDTO d6 = copy(clienteDTO);
+        d6.setCidade(null);
+        assertNotEquals(clienteDTO, d6);
+
+
+        UpdateClienteDTO d7 = copy(clienteDTO);
+        d7.setEstado(null);
+        assertNotEquals(clienteDTO, d7);
+
+        UpdateClienteDTO d8 = copy(clienteDTO);
+        d8.setCep(null);
+        assertNotEquals(clienteDTO, d8);
+    }
+
+    @Test
+    void equals_branch_bothNullOnAField_shouldStillBeEqual() {
+        UpdateClienteDTO a = copy(clienteDTO);
+        UpdateClienteDTO b = copy(clienteDTO);
+        a.setNome(null);
+        b.setNome(null);
+        assertEquals(a, b);
+
+        a = copy(clienteDTO);
+        b = copy(clienteDTO);
+        a.setEmail(null);
+        b.setEmail(null);
+        assertEquals(a, b);
+    }
+
+    @Test
+    void equals_hashCode_consistency_and_symmetry() {
+        UpdateClienteDTO a = copy(clienteDTO);
+        UpdateClienteDTO b = copy(clienteDTO);
+
+        assertEquals(a, b);
+        assertEquals(b, a);
+        assertEquals(a.hashCode(), b.hashCode());
+    }
 }

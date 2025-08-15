@@ -89,15 +89,25 @@ class CreateClienteUseCaseTest {
     }
     @Test
     void testEqualsAndHashCode() {
-        ClienteEntity cliente1 = new ClienteEntity();
-        cliente1.setUsername("usuario1");
-        cliente1.setEmail("usuario1@email.com");
-        ClienteEntity cliente2 = new ClienteEntity();
-        cliente2.setUsername("usuario1");
-        cliente2.setEmail("usuario1@email.com");
-        assertEquals(cliente1, cliente2);
-        assertEquals(cliente1.hashCode(), cliente2.hashCode());
-        cliente2.setEmail("usuario2@email.com"); // Alterando para testar desigualdade
-        assertNotEquals(cliente1, cliente2);
+        ClienteEntity a = new ClienteEntity();
+        a.setId(1L);
+
+        ClienteEntity b = new ClienteEntity();
+        b.setId(1L);
+
+        assertEquals(a, b);
+        assertEquals(a.hashCode(), b.hashCode());
+
+        ClienteEntity t1 = new ClienteEntity();
+        ClienteEntity t2 = new ClienteEntity();
+        assertNotEquals(t1, t2);
+
+        b.setId(2L);
+        assertNotEquals(a, b);
+
+        ClienteEntity c = new ClienteEntity();
+        c.setId(null);
+        assertNotEquals(a, c);
+
     }
 }

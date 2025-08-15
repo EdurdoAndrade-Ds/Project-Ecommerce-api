@@ -1,6 +1,9 @@
 package org.ecommerce.ecommerceapi.modules.cliente.entities;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
@@ -12,18 +15,16 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
-@Data
+@Entity
+@Table(name = "clientes")
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "clientes")
+@ToString
 public class ClienteEntity {
 
     @Id
@@ -63,7 +64,16 @@ public class ClienteEntity {
 
     private boolean ativo = true;
 
-    public Long getId() {
-        return id;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClienteEntity)) return false;
+        ClienteEntity that = (ClienteEntity) o;
+        return this.id != null && this.id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return (id != null) ? id.hashCode() : System.identityHashCode(this);
     }
 }

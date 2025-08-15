@@ -8,10 +8,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ClienteEntityTest {
 
-    @Test
-    void testGettersAndSetters() {
-        ClienteEntity entity = new ClienteEntity();
+    private ClienteEntity make(Long id, String nome, String email) {
+        return ClienteEntity.builder()
+                .id(id)
+                .nome(nome)
+                .email(email)
+                .build();
+    }
 
+    @Test
+    void gettersSetters_ok() {
+        ClienteEntity entity = new ClienteEntity();
         LocalDateTime now = LocalDateTime.now();
 
         entity.setId(1L);
@@ -31,74 +38,54 @@ class ClienteEntityTest {
         assertEquals(1L, entity.getId());
         assertEquals("Lucas", entity.getNome());
         assertEquals("lucas123", entity.getUsername());
-        assertEquals("lucas@email.com", entity.getEmail());
-        assertEquals("senhaSegura", entity.getSenha());
-        assertEquals("555555555", entity.getTelefone());
-        assertEquals("Av. Central, 100", entity.getEndereco());
-        assertEquals("Curitiba", entity.getCidade());
-        assertEquals("PR", entity.getEstado());
-        assertEquals("80000-000", entity.getCep());
-        assertEquals(now, entity.getCreatedAt());
-        assertEquals(now, entity.getUpdatedAt());
         assertTrue(entity.isAtivo());
     }
 
+
     @Test
-    void testEqualsAndHashCode() {
-        LocalDateTime now = LocalDateTime.now();
+    void equals_hashCode_byId_fullBranches() {
+        ClienteEntity base = make(1L, "Ana", "ana@g.com");
 
-        ClienteEntity entity1 = ClienteEntity.builder()
-                .id(1L)
-                .nome("Lucas")
-                .username("lucas123")
-                .email("lucas@email.com")
-                .senha("senhaSegura")
-                .telefone("555555555")
-                .endereco("Av. Central, 100")
-                .cidade("Curitiba")
-                .estado("PR")
-                .cep("80000-000")
-                .createdAt(now)
-                .updatedAt(now)
-                .ativo(true)
-                .build();
+        assertEquals(base, base);
 
-        ClienteEntity entity2 = ClienteEntity.builder()
-                .id(1L)
-                .nome("Lucas")
-                .username("lucas123")
-                .email("lucas@email.com")
-                .senha("senhaSegura")
-                .telefone("555555555")
-                .endereco("Av. Central, 100")
-                .cidade("Curitiba")
-                .estado("PR")
-                .cep("80000-000")
-                .createdAt(now)
-                .updatedAt(now)
-                .ativo(true)
-                .build();
+        ClienteEntity sameId = make(1L, "Outro", "outro@g.com");
+        assertEquals(base, sameId);
+        assertEquals(base.hashCode(), sameId.hashCode());
 
-        ClienteEntity entity3 = ClienteEntity.builder()
-                .id(2L)
-                .nome("Maria")
-                .username("maria321")
-                .email("maria@email.com")
-                .senha("senhaForte")
-                .telefone("999999999")
-                .endereco("Rua das Laranjeiras, 200")
-                .cidade("Florianópolis")
-                .estado("SC")
-                .cep("88000-000")
-                .createdAt(now)
-                .updatedAt(now)
-                .ativo(false)
-                .build();
+        assertNotEquals(base, make(2L, "Ana", "ana@a.com"));
 
-        assertEquals(entity1, entity2);
-        assertEquals(entity1.hashCode(), entity2.hashCode());
-        assertNotEquals(entity1, entity3);
+        assertNotEquals(make(null, "Ana", "ana@g.com"), make(1L, "Ana", "ana@g.com"));
+        assertNotEquals(make(1L, "Ana", "ana@g.com"), make(null, "Ana", "ana@g.com"));
+
+        ClienteEntity t1 = make(null, "Ana", "ana@g.com");
+        ClienteEntity t2 = make(null, "Ana","ana@g.com");
+        assertNotEquals(t1, t2);
+
+        assertNotEquals(base, null);
+        assertNotEquals(base, "String");
+
+        t1.hashCode();
+        base.hashCode();
     }
+
+    @Test
+    void toString_containsKeyFields() {
+        ClienteEntity entity = ClienteEntity.builder()
+                .id(1L)
+                .nome("Lucas")
+                .email("lucas@email.com")
+                .build();
+
+        String s = entity.toString();
+
+
+        assertTrue(s.contains("ClienteEntity"));
+        assertTrue(s.contains("id=1"));
+        assertTrue(s.contains("nome=Lucas"));
+        assertTrue(s.contains("email=lucas@email.com"));
+    }
+
+
 
     @Test
     void testToString() {

@@ -33,9 +33,9 @@ public class CreateClienteDTO {
     // Implementação do equals
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true; // Verifica se são o mesmo objeto
-        if (!(o instanceof CreateClienteDTO)) return false; // Verifica se o objeto é da mesma classe
-        CreateClienteDTO that = (CreateClienteDTO) o; // Faz o cast
+        if (this == o) return true;
+        if (!(o instanceof CreateClienteDTO)) return false;
+        CreateClienteDTO that = (CreateClienteDTO) o;
 
         // Compara todos os campos relevantes
         return Objects.equals(nome, that.nome) &&

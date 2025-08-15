@@ -6,6 +6,62 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AuthClienteDTOTest {
 
+    private AuthClienteDTO make(String username, String senha) {
+        AuthClienteDTO dto = new AuthClienteDTO();
+        dto.setUsername(username);
+        dto.setSenha(senha);
+        return dto;
+    }
+
+    @Test
+    void equals_hashCode_fullBranches() {
+        AuthClienteDTO base = make("user", "123");
+
+        assertEquals(base, base);
+
+        AuthClienteDTO igual = make(new String("user"), new String("123"));
+        assertEquals(base, igual);
+        assertEquals(base.hashCode(), igual.hashCode());
+
+        assertNotEquals(base, null);
+        assertNotEquals(base, "string");
+
+        AuthClienteDTO diffUsername = make("user2", "123");
+        assertNotEquals(base, diffUsername);
+
+        AuthClienteDTO diffSenha = make("user", "999");
+        assertNotEquals(base, diffSenha);
+
+        assertNotEquals(make(null, "123"), make("user", "123"));
+        assertNotEquals(make("user", null), make("user", "123"));
+
+        assertEquals(make(null, "123"), make(null, "123"));
+        assertEquals(make("user", null), make("user", null));
+
+        assertTrue(base.canEqual(igual));
+        assertFalse(base.canEqual("string"));
+        assertTrue(base.toString().contains("AuthClienteDTO"));
+
+        AuthClienteDTO viaBuilder = AuthClienteDTO.builder()
+                .username("user")
+                .senha("123")
+                .build();
+        assertEquals(base, viaBuilder);
+    }
+
+    @Test
+    void testHashCodeWithNulls() {
+
+        AuthClienteDTO ambosNull = make(null, null);
+        ambosNull.hashCode();
+
+        AuthClienteDTO usernameNull = make(null, "123");
+        usernameNull.hashCode();
+
+        AuthClienteDTO senhaNull = make("user", null);
+        senhaNull.hashCode();
+    }
+
     @Test
     void testGettersAndSetters() {
         AuthClienteDTO dto = new AuthClienteDTO();
