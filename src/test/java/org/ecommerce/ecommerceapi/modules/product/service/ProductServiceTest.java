@@ -133,6 +133,36 @@ class ProductServiceTest {
     }
 
     @Test
+    void testBuscarPorIdDTO() {
+        Product product = new Product();
+        product.setId(1L);
+        product.setNome("Produto Teste");
+        product.setDescricao("Descrição do Produto Teste");
+        product.setPreco(BigDecimal.valueOf(99.99));
+        product.setEstoque(10);
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        ProductResponseDTO dto = productService.buscarPorIdDTO(1L);
+
+        assertNotNull(dto);
+        assertEquals(1L, dto.getId());
+        assertEquals("Produto Teste", dto.getNome());
+        assertEquals(BigDecimal.valueOf(99.99), dto.getPreco());
+    }
+
+    @Test
+    void testBuscarPorIdDTOProdutoNaoEncontrado() {
+        when(productRepository.findById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            productService.buscarPorIdDTO(1L);
+        });
+
+        assertEquals("Produto não encontrado", exception.getMessage());
+    }
+
+    @Test
     void testListarProdutos() {
         Product product1 = new Product();
         product1.setId(1L);
@@ -193,6 +223,34 @@ class ProductServiceTest {
     }
 
     @Test
+    void testAtualizarProdutoComNomeInvalido() {
+        ProductUpdateDTO updateDTO = new ProductUpdateDTO();
+        updateDTO.setNome("  ");
+        updateDTO.setDescricao("Descrição");
+        updateDTO.setPreco(BigDecimal.valueOf(10));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.atualizar(1L, updateDTO);
+        });
+
+        assertEquals("Nome do produto é obrigatório", exception.getMessage());
+    }
+
+    @Test
+    void testAtualizarProdutoComPrecoInvalido() {
+        ProductUpdateDTO updateDTO = new ProductUpdateDTO();
+        updateDTO.setNome("Produto");
+        updateDTO.setDescricao("Descrição");
+        updateDTO.setPreco(BigDecimal.ZERO);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.atualizar(1L, updateDTO);
+        });
+
+        assertEquals("Preço do produto deve ser maior que zero", exception.getMessage());
+    }
+
+    @Test
     void testAtualizarEstoqueAumentar() {
         ProductStockUpdateRequestDTO stockUpdateDTO = new ProductStockUpdateRequestDTO();
         stockUpdateDTO.setOperacao(OperacaoEstoque.AUMENTAR);
@@ -235,6 +293,72 @@ class ProductServiceTest {
     }
 
     @Test
+    void testAtualizarEstoqueComDtoNulo() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.atualizarEstoque(1L, null);
+        });
+
+        assertEquals("Dados de atualização de estoque não podem ser nulos.", exception.getMessage());
+    }
+
+    @Test
+    void testAtualizarEstoqueQuantidadeNaoPositiva() {
+        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
+        dto.setOperacao(OperacaoEstoque.AUMENTAR);
+        dto.setQuantidade(0);
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.atualizarEstoque(1L, dto);
+        });
+
+        assertEquals("A quantidade deve ser maior que zero.", exception.getMessage());
+    }
+
+    @Test
+    void testAtualizarEstoqueReduzirEstoqueInsuficiente() {
+        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
+        dto.setOperacao(OperacaoEstoque.REDUZIR);
+        dto.setQuantidade(10);
+
+        Product product = new Product();
+        product.setId(1L);
+        product.setNome("Produto Teste");
+        product.setDescricao("Descrição do Produto Teste");
+        product.setPreco(BigDecimal.valueOf(99.99));
+        product.setEstoque(5);
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.atualizarEstoque(1L, dto);
+        });
+
+        assertEquals("Estoque insuficiente para redução.", exception.getMessage());
+    }
+
+    @Test
+    void testAtualizarEstoqueComEstoqueNaoDefinido() {
+        ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
+        dto.setOperacao(OperacaoEstoque.AUMENTAR);
+        dto.setQuantidade(5);
+
+        Product product = new Product();
+        product.setId(1L);
+        product.setNome("Produto Teste");
+        product.setDescricao("Descrição do Produto Teste");
+        product.setPreco(BigDecimal.valueOf(99.99));
+        product.setEstoque(null);
+
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        Exception exception = assertThrows(IllegalStateException.class, () -> {
+            productService.atualizarEstoque(1L, dto);
+        });
+
+        assertEquals("Estoque do produto não está definido.", exception.getMessage());
+    }
+
+    @Test
     void testExcluirProduto() {
         Product product = new Product();
         product.setId(1L);
@@ -254,6 +378,15 @@ class ProductServiceTest {
         });
 
         assertEquals("Produto não encontrado", exception.getMessage());
+    }
+
+    @Test
+    void testExcluirProdutoComIdNulo() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            productService.excluir(null);
+        });
+
+        assertEquals("ID do produto não pode ser nulo", exception.getMessage());
     }
 
     @Test
