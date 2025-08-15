@@ -240,7 +240,7 @@ O relatório do JaCoCo será gerado em `target/site/jacoco/index.html`.
 
 #### Mateus
 - Testes unitários com JUnit e Mockito de Produto
-- Implementacao da logica do modulo Produto
+- Implementacao da logica do modulo P[application-dev.properties](src/main/resources/application-dev.properties)roduto
 - Refatoracao do modulo Produto
 
 #### Pedro Costa

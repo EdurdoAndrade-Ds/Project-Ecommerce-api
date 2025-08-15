@@ -56,11 +56,10 @@ public class PedidoService {
             item.setNomeProduto(product.getNome());
             item.setQuantidade(itemDTO.getQuantidade());
 
-            // Definir o preço unitário como o preço original do produto
-            item.setPrecoUnitario(product.getPreco()); // Preço original
-            item.setDiscountPrice(product.getDiscountedPrice()); // Preço com desconto
 
-            // Valor pago por este item (quantidade x preço com desconto)
+            item.setPrecoUnitario(product.getPreco());
+            item.setDiscountPrice(product.getDiscountedPrice());
+
             BigDecimal valorPago = item.getDiscountPrice()
     .multiply(BigDecimal.valueOf(item.getQuantidade()))
     .setScale(2, RoundingMode.HALF_UP);
