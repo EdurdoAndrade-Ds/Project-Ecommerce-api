@@ -1,12 +1,8 @@
 package org.ecommerce.ecommerceapi.modules.payment.dto;
 
-import net.bytebuddy.asm.Advice;
 import org.junit.jupiter.api.Test;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentResponseDTOTest {
