@@ -1,8 +1,8 @@
 package org.ecommerce.ecommerceapi.modules.pedido.service;
 
 import lombok.Data;
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
-import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
+import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
+import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoRequestDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoResponseDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.ItemPedido;
@@ -30,20 +30,20 @@ public class PedidoService {
     private ProductService productService;
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClientRepository clientRepository;
 
     public PedidoService(PedidoRepository pedidoRepository,
                          ProductService productService,
-                         ClienteRepository clienteRepository) {
+                         ClientRepository clientRepository) {
         this.pedidoRepository = pedidoRepository;
         this.productService = productService;
-        this.clienteRepository = clienteRepository;
+        this.clientRepository = clientRepository;
     }
 
     public PedidoResponseDTO criar(PedidoRequestDTO dto, Long clienteId) {
         Pedido pedido = new Pedido();
 
-        ClienteEntity cliente = clienteRepository.findById(clienteId)
+        ClientEntity cliente = clientRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         pedido.setCliente(cliente);

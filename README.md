@@ -194,7 +194,7 @@ Depois execute:
 ./mvnw clean package -DskipTests
 docker-compose up --build
 ```
-Após a inicialização, acesse [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) para testar a API localmente.
+Após a inicialização, acesse [http://localhost:8080/api/v1/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) para testar a API localmente.
 
 ## 🧪 Como executar os testes
 

@@ -1,7 +1,7 @@
 package org.ecommerce.ecommerceapi.modules.pedido.service;
 
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
-import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
+import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
+import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoRequestDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoResponseDTO;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
@@ -34,21 +34,21 @@ class PedidoServiceTest {
     private ProductService productService;
 
     @Mock
-    private ClienteRepository clienteRepository;
+    private ClientRepository clientRepository;
 
-    private ClienteEntity cliente;
+    private ClientEntity cliente;
     private Product produto;
 
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
 
-        cliente = new ClienteEntity();
+        cliente = new ClientEntity();
         cliente.setId(1L);
-        cliente.setNome("Cliente Teste");
+        cliente.setName("Cliente Teste");
         cliente.setUsername("cliente1");
         cliente.setEmail("cliente1@test.com");
-        cliente.setSenha("senha123");
+        cliente.setPassword("senha123");
 
         produto = new Product();
         produto.setId(1L);
@@ -94,8 +94,8 @@ class PedidoServiceTest {
     
     @Test
     void testEqualsAndHashCode() {
-        PedidoService service1 = new PedidoService(pedidoRepository, productService, clienteRepository);
-        PedidoService service2 = new PedidoService(pedidoRepository, productService, clienteRepository);
+        PedidoService service1 = new PedidoService(pedidoRepository, productService, clientRepository);
+        PedidoService service2 = new PedidoService(pedidoRepository, productService, clientRepository);
 
         assertEquals(service1, service2);
         assertEquals(service1.hashCode(), service2.hashCode());
@@ -135,7 +135,7 @@ class PedidoServiceTest {
     
     @Test
     void testToString() {
-        PedidoService service = new PedidoService(pedidoRepository, productService, clienteRepository);
+        PedidoService service = new PedidoService(pedidoRepository, productService, clientRepository);
         String str = service.toString();
         assertNotNull(str);
         assertTrue(str.contains("pedidoRepository"));
@@ -155,7 +155,7 @@ class PedidoServiceTest {
         itens.add(itemDTO);
         request.setItens(itens);
 
-        when(clienteRepository.findById(cliente.getId())).thenReturn(Optional.of(cliente));
+        when(clientRepository.findById(cliente.getId())).thenReturn(Optional.of(cliente));
         when(productService.buscarPorId(produto.getId())).thenReturn(produto);
         when(pedidoRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -213,15 +213,15 @@ class PedidoServiceTest {
 
     @Test
     void testSetClienteRepository() {
-        ClienteRepository newRepository = mock(ClienteRepository.class);
-        pedidoService.setClienteRepository(newRepository);
-        assertEquals(newRepository, pedidoService.getClienteRepository());
+        ClientRepository newRepository = mock(ClientRepository.class);
+        pedidoService.setClientRepository(newRepository);
+        assertEquals(newRepository, pedidoService.getClientRepository());
     }
 
     @Test
     void testCanEqual() {
-        PedidoService service = new PedidoService(pedidoRepository, productService, clienteRepository);
-        assertTrue(service.canEqual(new PedidoService(pedidoRepository, productService, clienteRepository)));
+        PedidoService service = new PedidoService(pedidoRepository, productService, clientRepository);
+        assertTrue(service.canEqual(new PedidoService(pedidoRepository, productService, clientRepository)));
         assertFalse(service.canEqual(new Object()));
     }
     public boolean canEqual(Object other) {
@@ -238,7 +238,7 @@ class PedidoServiceTest {
         request.setItens(itens);
 
         // Simula que o cliente não foi encontrado
-        when(clienteRepository.findById(cliente.getId())).thenReturn(Optional.empty());
+        when(clientRepository.findById(cliente.getId())).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             pedidoService.criar(request, cliente.getId());

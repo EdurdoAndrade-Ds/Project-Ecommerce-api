@@ -3,7 +3,7 @@ package org.ecommerce.ecommerceapi.modules.payment.service;
 
 
 
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
+import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 
 
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentRequestDTO;
@@ -12,11 +12,6 @@ import org.ecommerce.ecommerceapi.modules.payment.entity.Payment;
 import org.ecommerce.ecommerceapi.modules.payment.repository.PaymentRepository;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
-
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
-
-
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
 
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +26,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class PaymentServiceTest {
@@ -47,14 +41,14 @@ class PaymentServiceTest {
 
     private Pedido pedido;
     private PaymentRequestDTO requestDTO;
-    private ClienteEntity cliente;
+    private ClientEntity cliente;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        cliente = new ClienteEntity();
+        cliente = new ClientEntity();
         cliente.setId(1L);
-        cliente.setNome("Teste");
+        cliente.setName("Teste");
         cliente.setEmail("teste@email.com");
         // preencha outros campos obrigatórios se necessário
 
@@ -143,7 +137,7 @@ class PaymentServiceTest {
 
     @Test
     void testPagarClienteInvalido() {
-        ClienteEntity outro = new ClienteEntity();
+        ClientEntity outro = new ClientEntity();
         outro.setId(2L);
         pedido.setCliente(outro);
         when(pedidoRepository.findById(1L)).thenReturn(Optional.of(pedido));

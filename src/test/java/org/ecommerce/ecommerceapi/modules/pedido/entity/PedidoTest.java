@@ -1,6 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.pedido.entity;
 
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
+import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class PedidoTest {
 
     private Pedido pedido;
-    private ClienteEntity cliente;
+    private ClientEntity cliente;
 
     @BeforeEach
     void setUp() {
-        cliente = new ClienteEntity();
+        cliente = new ClientEntity();
         cliente.setId(1L); // Definindo um ID para o cliente
 
         pedido = new Pedido();

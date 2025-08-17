@@ -1,7 +1,7 @@
 package org.ecommerce.ecommerceapi.modules.payment.repository;
 
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
-import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
+import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
+import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.payment.entity.Payment;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
@@ -26,24 +26,24 @@ class PaymentRepositoryTest {
     private PedidoRepository pedidoRepository;
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClientRepository clientRepository;
 
     @BeforeEach
     void setUp() {
         paymentRepository.deleteAll();
         pedidoRepository.deleteAll();
-        clienteRepository.deleteAll();
+        clientRepository.deleteAll();
     }
 
     @Test
     void testFindByPedidoId() {
-        ClienteEntity cliente = new ClienteEntity();
+        ClientEntity cliente = new ClientEntity();
         cliente.setUsername("cliente1");
         cliente.setEmail("cliente1@test.com");
-        cliente.setNome("Cliente");
-        cliente.setSenha("senha123");
-        cliente.setAtivo(true);
-        cliente = clienteRepository.save(cliente);
+        cliente.setName("Cliente");
+        cliente.setPassword("senha123");
+        cliente.setActive(true);
+        cliente = clientRepository.save(cliente);
 
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente);

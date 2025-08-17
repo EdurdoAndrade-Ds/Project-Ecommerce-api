@@ -1,7 +1,7 @@
 package org.ecommerce.ecommerceapi.modules.pedido.repository;
 
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
-import org.ecommerce.ecommerceapi.modules.cliente.repositories.ClienteRepository;
+import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
+import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,10 +26,10 @@ class PedidoRepositoryTest {
     private PedidoRepository pedidoRepository;
 
     @Autowired
-    private ClienteRepository clienteRepository;
+    private ClientRepository clientRepository;
 
-    private ClienteEntity cliente1;
-    private ClienteEntity cliente2;
+    private ClientEntity cliente1;
+    private ClientEntity cliente2;
 
     private Pedido pedido1Cliente1;
     private Pedido pedido2Cliente1;
@@ -38,21 +38,21 @@ class PedidoRepositoryTest {
     @BeforeEach
     void setup() {
         // Criar e salvar clientes
-        cliente1 = ClienteEntity.builder()
-            .nome("Cliente 1")
+        cliente1 = ClientEntity.builder()
+            .name("Cliente 1")
             .username("cliente1")
             .email("cliente1@email.com")
-            .senha("senha123") // válido (8+ caracteres)
+            .password("senha123") // válido (8+ caracteres)
             .build();
-        cliente1 = clienteRepository.save(cliente1); // salvar no banco
+        cliente1 = clientRepository.save(cliente1); // salvar no banco
 
-        cliente2 = ClienteEntity.builder()
-            .nome("Cliente 2")
+        cliente2 = ClientEntity.builder()
+            .name("Cliente 2")
             .username("cliente2")
             .email("cliente2@email.com")
-            .senha("senha123") // válido (8+ caracteres)
+            .password("senha123") // válido (8+ caracteres)
             .build();
-        cliente2 = clienteRepository.save(cliente2);
+        cliente2 = clientRepository.save(cliente2);
 
         // Criar e salvar pedidos
         pedido1Cliente1 = new Pedido();

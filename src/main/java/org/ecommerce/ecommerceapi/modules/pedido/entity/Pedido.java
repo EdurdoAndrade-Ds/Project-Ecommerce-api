@@ -2,7 +2,7 @@ package org.ecommerce.ecommerceapi.modules.pedido.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.ecommerce.ecommerceapi.modules.cliente.entities.ClienteEntity;
+import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,7 +29,7 @@ public class Pedido {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clientes_id", nullable = false)
-    private ClienteEntity cliente;
+    private ClientEntity cliente;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens;
@@ -55,7 +55,7 @@ public class Pedido {
         return Objects.hash(id, cancelado, total, dateCreate, cliente);
     }
 
-    public ClienteEntity getCliente() {
+    public ClientEntity getCliente() {
         return cliente;
     }
 
@@ -63,7 +63,7 @@ public class Pedido {
         return cancelado;
     }
 
-    public void setCliente(ClienteEntity cliente) {
+    public void setCliente(ClientEntity cliente) {
         this.cliente = cliente;
     }
 
