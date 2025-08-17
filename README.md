@@ -7,7 +7,7 @@
 Microserviço de E-commerce desenvolvido com Java 17 e Spring Boot, seguindo boas práticas de arquitetura e segurança. O projeto é responsável por realizar a gestão de produtos, pedidos e autenticação com usuários e clientes.
 
 🔗 Acesso público à API Swagger:  
-👉 [Swagger UI](https://project-ecommerce-api.onrender.com/swagger-ui/index.html)
+👉 [Swagger UI]([https://project-ecommerce-api.onrender.com/swagger-ui/index.html](https://project-ecommerce-api.onrender.com/api/v1/swagger-ui/index.html#/))
 
 ---
 
@@ -260,3 +260,4 @@ Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICEN
 ---
 
 > Projeto desenvolvido com fins educacionais como parte de um sistema completo de e-commerce em Java com Spring Boot.
+
