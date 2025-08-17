@@ -55,15 +55,15 @@ public class ClientController {
                                             name = "Resposta de Sucesso",
                                             value = """
                         {
-                            "id": 1,
-                            "nome": "João Silva",
-                            "username": "joaosilva",
-                            "email": "joao@email.com",
-                            "telefone": "(11) 99999-9999",
-                            "endereco": "Rua das Flores, 123",
-                            "cidade": "São Paulo",
-                            "estado": "SP",
-                            "cep": "01234-567"
+                            "name": "User Teste",
+                            "username": "user",
+                            "email": "user@example.com",
+                            "password": "12345678",
+                            "phone": "11999999999",
+                            "address": "Rua Exemplo, 123",
+                            "city": "São Paulo",
+                            "state": "SP",
+                            "cep": "06789-123"
                         }
                         """
                                     )
@@ -96,10 +96,10 @@ public class ClientController {
                             name = "ExemploCliente",
                             value = """
             {
-              "nome": "user",
+              "name": "User Test",
               "username": "user",
               "email": "user@email.com",
-              "senha": "123456789",
+              "password": "123456789",
               "telefone": "11999999999",
               "endereco": "Rua Exemplo, 123",
               "cidade": "São Paulo",

@@ -79,8 +79,8 @@ public class AuthClientController {
                                     name = "Credenciais de Cliente",
                                     value = """
                     {
-                        "username": "joaosilva",
-                        "senha": "senha123456"
+                        "username": "user",
+                        "password": "123456789"
                     }
                     """
                             )

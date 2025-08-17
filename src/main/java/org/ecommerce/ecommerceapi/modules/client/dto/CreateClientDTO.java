@@ -16,6 +16,7 @@ import java.util.Objects;
 @Setter
 public class CreateClientDTO {
 
+    @JsonProperty("name")   // aceita "name" no JSON
     @NotBlank(message = "O campo [nome] é obrigatório")
     private String name;
 
@@ -27,6 +28,7 @@ public class CreateClientDTO {
     @NotBlank(message = "O campo [email] é obrigatório")
     private String email;
 
+    @JsonProperty("password")
     @Length(min=8, max=100, message= "A senha deve ter entre 8 e 100 caracteres")
     @NotBlank(message = "O campo [senha] é obrigatório")
     private String password;
