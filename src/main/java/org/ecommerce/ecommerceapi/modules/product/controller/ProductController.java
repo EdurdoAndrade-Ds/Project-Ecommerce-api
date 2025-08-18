@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
@@ -13,7 +12,6 @@ import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +33,7 @@ public class ProductController {
     public ResponseEntity<ProductResponseDTO> criar(@RequestBody ProductRequestDTO dto) {
         return new ResponseEntity<>(productService.criar(dto), HttpStatus.CREATED);
     }
-    
+
     @GetMapping("/{id}")
     @Operation(summary = "Busca produto por ID")
     @ApiResponses(value = {
@@ -77,7 +75,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}/estoque")
-    @Operation(summary = "Aumentar/reduzir produto em estoque")
+    @Operation(summary = "Aumentar/reduzir produto em stock")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "204", description = "Estoque atualizado com sucesso"),
         @ApiResponse(responseCode = "404", description = "Produto não encontrado")

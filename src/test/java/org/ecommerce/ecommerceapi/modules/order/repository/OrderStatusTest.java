@@ -25,7 +25,7 @@ class OrderStatusTest {
         assertEquals(OrderStatus.ENVIADO, OrderStatus.valueOf("ENVIADO"));
         assertEquals(OrderStatus.CANCELADO, OrderStatus.valueOf("CANCELADO"));
 
-        // Testa exceção se nome inválido
+        // Testa exceção se name inválido
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             OrderStatus.valueOf("INVALIDO");
         });

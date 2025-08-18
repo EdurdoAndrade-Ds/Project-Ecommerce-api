@@ -49,7 +49,7 @@ class ProductRequestDTOTest {
         product.setPreco(BigDecimal.valueOf(99.99));
         product.setEstoque(10);
 
-        String expectedString = "ProductRequestDTO{nome='Produto Teste', descricao='Descrição do Produto Teste', preco=99.99, estoque=10}";
+        String expectedString = "ProductRequestDTO{name='Produto Teste', descricao='Descrição do Produto Teste', price=99.99, stock=10}";
         assertEquals(expectedString, product.toString());
     }
 

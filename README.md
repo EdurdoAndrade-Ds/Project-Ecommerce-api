@@ -70,7 +70,7 @@ ecommerce-api/
 │   │   ├── services/
 │   │   ├── repositories/
 │   │   └── entities/
-│   ├── pedido/
+│   ├── order/
 │       ├── dtos/
 │       ├── controllers/
 │       ├── services/

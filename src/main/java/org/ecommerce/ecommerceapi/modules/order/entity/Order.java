@@ -2,17 +2,20 @@ package org.ecommerce.ecommerceapi.modules.order.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Data
+@Getter @Setter
 @Table(name = "tb_pedido")
-public class Pedido {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,15 +34,15 @@ public class Pedido {
     @JoinColumn(name = "clientes_id", nullable = false)
     private ClientEntity cliente;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> itens;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> itens = new ArrayList<>();
 
     // Implementação do equals
     @Override
     public boolean equals(Object o) {
         if (this == o) return true; // Verifica se são o mesmo objeto
-        if (!(o instanceof Pedido)) return false; // Verifica se o objeto é da mesma classe
-        Pedido that = (Pedido) o; // Faz o cast
+        if (!(o instanceof Order)) return false; // Verifica se o objeto é da mesma classe
+        Order that = (Order) o; // Faz o cast
 
         // Compara todos os campos relevantes
         return Objects.equals(id, that.id) &&
@@ -53,37 +56,5 @@ public class Pedido {
     @Override
     public int hashCode() {
         return Objects.hash(id, cancelado, total, dateCreate, cliente);
-    }
-
-    public ClientEntity getCliente() {
-        return cliente;
-    }
-
-    public boolean isCancelado() {
-        return cancelado;
-    }
-
-    public void setCliente(ClientEntity cliente) {
-        this.cliente = cliente;
-    }
-
-    public void setDateCreate(LocalDateTime now) {
-        this.dateCreate = now;
-    }
-
-    public void setItens(List<OrderItem> itens) {
-        this.itens = itens;
-    }
-
-    public void setTotal(BigDecimal total) {
-        this.total = total;
-    }
-
-    public void setCancelado(boolean b) {
-        this.cancelado = b;
-    }
-
-    public BigDecimal getTotal() {
-        return total;
     }
 }

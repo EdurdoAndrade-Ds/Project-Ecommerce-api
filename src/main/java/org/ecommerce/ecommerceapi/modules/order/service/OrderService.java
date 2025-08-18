@@ -1,15 +1,17 @@
 package org.ecommerce.ecommerceapi.modules.order.service;
 
 import lombok.Data;
+import lombok.ToString;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.order.dto.OrderRequestDTO;
 import org.ecommerce.ecommerceapi.modules.order.dto.OrderResponseDTO;
+import org.ecommerce.ecommerceapi.modules.order.entity.Order;
 import org.ecommerce.ecommerceapi.modules.order.entity.OrderItem;
-import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
+import org.mapstruct.TargetPropertyName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Data
+@ToString
 @Service
 public class OrderService {
 
@@ -41,23 +43,23 @@ public class OrderService {
     }
 
     public OrderResponseDTO create(OrderRequestDTO dto, Long clienteId) {
-        Pedido pedido = new Pedido();
+        Order order = new Order();
 
         ClientEntity cliente = clientRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        pedido.setCliente(cliente);
-        pedido.setDateCreate(LocalDateTime.now());
+        order.setCliente(cliente);
+        order.setDateCreate(LocalDateTime.now());
 
         List<OrderItem> itens = dto.getItens().stream().map(itemDTO -> {
             Product product = productService.buscarPorId(itemDTO.getProdutoId());
             OrderItem item = new OrderItem();
             item.setProduct(product);
-            item.setNameProduct(product.getNome());
+            item.setNameProduct(product.getName());
             item.setQuantity(itemDTO.getQuantidade());
 
 
-            item.setUnitPrice(product.getPreco());
+            item.setUnitPrice(product.getPrice());
             item.setDiscountPrice(product.getDiscountedPrice());
 
             BigDecimal valorPago = item.getDiscountPrice()
@@ -72,11 +74,11 @@ item.setPricePad(valorPago);
 
 
 
-            item.setPedido(pedido);
+            item.setOrder(order);
             return item;
         }).collect(Collectors.toList());
 
-        pedido.setItens(itens);
+        order.setItens(itens);
         
         // Calcular o total do pedido
         BigDecimal total = itens.stream()
@@ -84,9 +86,9 @@ item.setPricePad(valorPago);
     .reduce(BigDecimal.ZERO, BigDecimal::add)
     .setScale(2, RoundingMode.HALF_UP);
 
-pedido.setTotal(total);
+order.setTotal(total);
 
-        Pedido salvo = orderRepository.save(pedido);
+        Order salvo = orderRepository.save(order);
         return mapToResponseDTO(salvo);
     }
 
@@ -99,16 +101,16 @@ pedido.setTotal(total);
     }
 
         public OrderResponseDTO searchById(Long id, Long clienteId) {
-        Pedido pedido = orderRepository.findByIdAndClienteId(id, clienteId)
+        Order order = orderRepository.findByIdAndClienteId(id, clienteId)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado ou acesso negado"));
-        return mapToResponseDTO(pedido);
+        return mapToResponseDTO(order);
     }
 
     public void cancel(Long id, Long clienteId) {
-        Pedido pedido = orderRepository.findByIdAndClienteId(id, clienteId)
+        Order order = orderRepository.findByIdAndClienteId(id, clienteId)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado ou acesso negado"));
-        pedido.setCancelado(true);
-        orderRepository.save(pedido);
+        order.setCancelado(true);
+        orderRepository.save(order);
     }
 
     public List<OrderResponseDTO> history(Long clienteId) {
@@ -117,12 +119,12 @@ pedido.setTotal(total);
                 .collect(Collectors.toList());
     }
 
-    private OrderResponseDTO mapToResponseDTO(Pedido pedido) {
+    private OrderResponseDTO mapToResponseDTO(Order order) {
         OrderResponseDTO response = new OrderResponseDTO();
-        response.setId(pedido.getId());
-        response.setClienteId(pedido.getCliente().getId());
-        response.setTotal(pedido.getTotal());
-        response.setItens(pedido.getItens().stream().map(i -> {
+        response.setId(order.getId());
+        response.setClienteId(order.getCliente().getId());
+        response.setTotal(order.getTotal());
+        response.setItens(order.getItens().stream().map(i -> {
             OrderResponseDTO.ItemDTO itemDto = new OrderResponseDTO.ItemDTO();
             itemDto.setProdutoId(i.getProduct().getId());
             itemDto.setNomeProduto(i.getNameProduct());

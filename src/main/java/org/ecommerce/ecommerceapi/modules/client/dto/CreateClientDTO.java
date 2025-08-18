@@ -17,7 +17,7 @@ import java.util.Objects;
 public class CreateClientDTO {
 
     @JsonProperty("name")   // aceita "name" no JSON
-    @NotBlank(message = "O campo [nome] é obrigatório")
+    @NotBlank(message = "O campo [name] é obrigatório")
     private String name;
 
     @NotBlank(message = "O campo [username] é obrigatório")

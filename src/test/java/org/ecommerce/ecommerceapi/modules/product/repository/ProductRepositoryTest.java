@@ -29,11 +29,11 @@ class ProductRepositoryTest {
     void testSaveAndFindProduct() {
         // Cria um novo produto
         Product product = new Product();
-        product.setNome("Produto Teste");
+        product.setName("Produto Teste");
         product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(BigDecimal.valueOf(99.99));
-        product.setEstoque(10);
-        product.setDiscountPercentage(15.0);
+        product.setPrice(BigDecimal.valueOf(99.99));
+        product.setStock(10);
+        product.setDiscountPercentage(new BigDecimal("15.00"));
         product.setDiscountedPrice(BigDecimal.valueOf(84.99));
 
         // Salva o produto
@@ -42,20 +42,20 @@ class ProductRepositoryTest {
         // Verifica se o produto foi salvo corretamente
         Optional<Product> foundProduct = productRepository.findById(savedProduct.getId());
         assertTrue(foundProduct.isPresent());
-        assertEquals("Produto Teste", foundProduct.get().getNome());
+        assertEquals("Produto Teste", foundProduct.get().getName());
         assertEquals("Descrição do Produto Teste", foundProduct.get().getDescricao());
-        assertEquals(BigDecimal.valueOf(99.99), foundProduct.get().getPreco());
+        assertEquals(BigDecimal.valueOf(99.99), foundProduct.get().getPrice());
     }
 
     @Test
     void testDeleteProduct() {
         // Cria e salva um novo produto
         Product product = new Product();
-        product.setNome("Produto Teste");
+        product.setName("Produto Teste");
         product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(BigDecimal.valueOf(99.99));
-        product.setEstoque(10);
-        product.setDiscountPercentage(15.0);
+        product.setPrice(BigDecimal.valueOf(99.99));
+        product.setStock(10);
+        product.setDiscountPercentage(new BigDecimal("15.00"));
         product.setDiscountedPrice(BigDecimal.valueOf(84.99));
         Product savedProduct = productRepository.save(product);
 

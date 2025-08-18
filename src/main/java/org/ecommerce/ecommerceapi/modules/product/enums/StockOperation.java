@@ -1,6 +1,7 @@
 package org.ecommerce.ecommerceapi.modules.product.enums;
 
-public enum OperacaoEstoque {
+public enum StockOperation {
     AUMENTAR,
     REDUZIR
 }
+

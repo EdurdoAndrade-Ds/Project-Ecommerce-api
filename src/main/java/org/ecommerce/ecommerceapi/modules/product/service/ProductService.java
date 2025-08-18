@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.product.service;
 
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
@@ -8,10 +9,8 @@ import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestD
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.repository.ProductRepository;
-import org.ecommerce.ecommerceapi.modules.product.enums.OperacaoEstoque;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +30,7 @@ public class ProductService {
     private static final String MSG_PRODUTO_NAO_ENCONTRADO = "Produto não encontrado";
     private static final String MSG_QUANTIDADE_MAIOR_ZERO = "A quantidade deve ser maior que zero.";
     private static final String MSG_ESTOQUE_INSUFICIENTE = "Estoque insuficiente para redução.";
-    private static final String MSG_OPERACAO_INVALIDA = "Operação de estoque inválida.";
+    private static final String MSG_OPERACAO_INVALIDA = "Operação de stock inválida.";
     private static final String MSG_ESTOQUE_NAO_DEFINIDO = "Estoque do produto não está definido.";
 
     public Product buscarPorId(Long id) {
@@ -47,10 +46,10 @@ public class ProductService {
         validarProduto(dto);
 
         Product product = new Product();
-        product.setNome(dto.getNome());
+        product.setName(dto.getNome());
         product.setDescricao(dto.getDescricao());
-        product.setPreco(dto.getPreco());
-        product.setEstoque(dto.getEstoque());
+        product.setPrice(dto.getPreco());
+        product.setStock(dto.getEstoque());
 
         Product saved = repository.save(product);
         return mapToDTO(saved);
@@ -86,9 +85,9 @@ public class ProductService {
 
         Product existente = buscarPorId(id);
 
-        existente.setNome(dto.getNome());
+        existente.setName(dto.getNome());
         existente.setDescricao(dto.getDescricao());
-        existente.setPreco(dto.getPreco());
+        existente.setPrice(dto.getPreco());
 
         Product atualizado = repository.save(existente);
         return mapToDTO(atualizado);
@@ -97,10 +96,10 @@ public class ProductService {
     private ProductResponseDTO mapToDTO(Product product) {
         ProductResponseDTO dto = new ProductResponseDTO();
         dto.setId(product.getId());
-        dto.setNome(product.getNome());
+        dto.setNome(product.getName());
         dto.setDescricao(product.getDescricao());
-        dto.setPreco(product.getPreco());
-        dto.setEstoque(product.getEstoque());
+        dto.setPreco(product.getPrice());
+        dto.setEstoque(product.getStock());
         return dto;
     }
 
@@ -122,7 +121,7 @@ public class ProductService {
 
     public void atualizarEstoque(Long id, ProductStockUpdateRequestDTO dto) {
         if(dto == null) {
-            throw new IllegalArgumentException("Dados de atualização de estoque não podem ser nulos.");
+            throw new IllegalArgumentException("Dados de atualização de stock não podem ser nulos.");
         }
         if (dto.getQuantidade() == null || dto.getQuantidade() <= 0) {
             throw new IllegalArgumentException(MSG_QUANTIDADE_MAIOR_ZERO);
@@ -130,7 +129,7 @@ public class ProductService {
 
         Product produto = buscarPorId(id);
 
-        Integer estoqueAtual = produto.getEstoque();
+        Integer estoqueAtual = produto.getStock();
         if (estoqueAtual == null) {
             throw new IllegalStateException(MSG_ESTOQUE_NAO_DEFINIDO);
         }
@@ -150,7 +149,7 @@ public class ProductService {
                 throw new IllegalArgumentException(MSG_OPERACAO_INVALIDA);
         }
 
-        produto.setEstoque(novaQuantidade);
+        produto.setStock(novaQuantidade);
         repository.save(produto);
     }
 
@@ -171,37 +170,43 @@ public class ProductService {
         return other instanceof ProductService;
     }
 
-    public ProductResponseDTO aplicarDesconto(Long id, Double discountPercentage) {
-        if (discountPercentage == null || discountPercentage < 0.0 || discountPercentage > 100.0) {
+    @Transactional
+    public ProductResponseDTO aplicarDesconto(Long id, Double pct) {
+        if (pct == null) throw new IllegalArgumentException("Porcentagem de desconto é obrigatória");
+        // Converte com segurança
+        BigDecimal discount = BigDecimal.valueOf(pct);
+
+        // (opcional) normalize para 2 casas
+        // discount = discount.setScale(2, RoundingMode.HALF_UP);
+
+        if (discount.compareTo(BigDecimal.ZERO) < 0 ||
+                discount.compareTo(BigDecimal.valueOf(100)) > 0) {
             throw new IllegalArgumentException("Porcentagem de desconto inválida");
         }
 
-        Product product = buscarPorId(id); // Busca o produto ou lança exceção se não encontrar
-        product.setDiscountPercentage(discountPercentage); // Atualiza o campo de desconto
-        Product updatedProduct = repository.save(product); // Salva no banco
+        Product product = buscarPorId(id);
+        product.setDiscountPercentage(discount);   // <<< agora passa BigDecimal
+        product = repository.save(product);
 
-        return mapToDTOWithDiscount(updatedProduct); // Retorna DTO com desconto aplicado
+        return mapToDTOWithDiscount(product);
     }
 
     // Método auxiliar que mapeia product para ProductResponseDTO incluindo campos de desconto
     private ProductResponseDTO mapToDTOWithDiscount(Product product) {
         ProductResponseDTO dto = new ProductResponseDTO();
         dto.setId(product.getId());
-        dto.setNome(product.getNome());
+        dto.setNome(product.getName());
         dto.setDescricao(product.getDescricao());
-        dto.setPreco(product.getPreco());
-        dto.setEstoque(product.getEstoque());
+        dto.setPreco(product.getPrice());
+        dto.setEstoque(product.getStock());
 
-        double discountPercentage = product.getDiscountPercentage() != null ? product.getDiscountPercentage() : 0.0;
-        dto.setDiscountPercentage(discountPercentage);
+        // Evita BigDecimal vs double no ternário
+        dto.setDiscountPercentage(
+                product.getDiscountPercentage() == null ? 0.0 : product.getDiscountPercentage().doubleValue()
+        );
 
-        if (discountPercentage > 0) {
-            BigDecimal discountedPrice = product.getPreco()
-                    .multiply(BigDecimal.valueOf(1 - discountPercentage / 100.0));
-            dto.setDiscountedPrice(discountedPrice);
-        } else {
-            dto.setDiscountedPrice(product.getPreco());
-        }
+        // Preço com desconto: deixe a entidade calcular
+        dto.setDiscountedPrice(product.getDiscountedPrice());
 
         return dto;
     }

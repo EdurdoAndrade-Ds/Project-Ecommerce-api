@@ -45,7 +45,7 @@ class ProductUpdateDTOTest {
         product.setDescricao("Descrição do Produto Teste");
         product.setPreco(BigDecimal.valueOf(99.99));
 
-        String expectedString = "ProductUpdateDTO{nome='Produto Teste', descricao='Descrição do Produto Teste', preco=99.99}";
+        String expectedString = "ProductUpdateDTO{name='Produto Teste', descricao='Descrição do Produto Teste', price=99.99}";
         assertEquals(expectedString, product.toString());
     }
 

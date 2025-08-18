@@ -87,10 +87,10 @@ public class ProductResponseDTO {
     public String toString() {
         return "ProductResponseDTO{" +
                "id=" + id +
-               ", nome='" + nome + '\'' +
+               ", name='" + nome + '\'' +
                ", descricao='" + descricao + '\'' +
-               ", preco=" + preco +
-               ", estoque=" + estoque +
+               ", price=" + preco +
+               ", stock=" + estoque +
                '}';
     }
 

@@ -5,7 +5,7 @@ import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
-import org.ecommerce.ecommerceapi.modules.product.enums.OperacaoEstoque;
+import org.ecommerce.ecommerceapi.modules.product.enums.StockOperation;
 import org.ecommerce.ecommerceapi.modules.product.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,10 +44,10 @@ class ProductServiceTest {
 
         Product product = new Product();
         product.setId(1L);
-        product.setNome(requestDTO.getNome());
+        product.setName(requestDTO.getNome());
         product.setDescricao(requestDTO.getDescricao());
-        product.setPreco(requestDTO.getPreco());
-        product.setEstoque(requestDTO.getEstoque());
+        product.setPrice(requestDTO.getPreco());
+        product.setStock(requestDTO.getEstoque());
 
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
@@ -109,16 +109,16 @@ class ProductServiceTest {
     void testBuscarPorId() {
         Product product = new Product();
         product.setId(1L);
-        product.setNome("Produto Teste");
+        product.setName("Produto Teste");
         product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(BigDecimal.valueOf(99.99));
-        product.setEstoque(10);
+        product.setPrice(BigDecimal.valueOf(99.99));
+        product.setStock(10);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         Product foundProduct = productService.buscarPorId(1L);
         assertNotNull(foundProduct);
-        assertEquals("Produto Teste", foundProduct.getNome());
+        assertEquals("Produto Teste", foundProduct.getName());
     }
 
     @Test
@@ -136,10 +136,10 @@ class ProductServiceTest {
     void testBuscarPorIdDTO() {
         Product product = new Product();
         product.setId(1L);
-        product.setNome("Produto Teste");
+        product.setName("Produto Teste");
         product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(BigDecimal.valueOf(99.99));
-        product.setEstoque(10);
+        product.setPrice(BigDecimal.valueOf(99.99));
+        product.setStock(10);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
@@ -166,17 +166,17 @@ class ProductServiceTest {
     void testListarProdutos() {
         Product product1 = new Product();
         product1.setId(1L);
-        product1.setNome("Produto 1");
+        product1.setName("Produto 1");
         product1.setDescricao("Descrição do Produto 1");
-        product1.setPreco(BigDecimal.valueOf(50.00));
-        product1.setEstoque(5);
+        product1.setPrice(BigDecimal.valueOf(50.00));
+        product1.setStock(5);
 
         Product product2 = new Product();
         product2.setId(2L);
-        product2.setNome("Produto 2");
+        product2.setName("Produto 2");
         product2.setDescricao("Descrição do Produto 2");
-        product2.setPreco(BigDecimal.valueOf(100.00));
-        product2.setEstoque(10);
+        product2.setPrice(BigDecimal.valueOf(100.00));
+        product2.setStock(10);
 
         when(productRepository.findAll()).thenReturn(List.of(product1, product2));
 
@@ -197,10 +197,10 @@ class ProductServiceTest {
 
         Product existingProduct = new Product();
         existingProduct.setId(1L);
-        existingProduct.setNome("Produto Teste");
+        existingProduct.setName("Produto Teste");
         existingProduct.setDescricao("Descrição do Produto Teste");
-        existingProduct.setPreco(BigDecimal.valueOf(99.99));
-        existingProduct.setEstoque(10);
+        existingProduct.setPrice(BigDecimal.valueOf(99.99));
+        existingProduct.setStock(10);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(existingProduct));
         when(productRepository.save(any(Product.class))).thenReturn(existingProduct);
@@ -253,43 +253,43 @@ class ProductServiceTest {
     @Test
     void testAtualizarEstoqueAumentar() {
         ProductStockUpdateRequestDTO stockUpdateDTO = new ProductStockUpdateRequestDTO();
-        stockUpdateDTO.setOperacao(OperacaoEstoque.AUMENTAR);
+        stockUpdateDTO.setOperacao(StockOperation.AUMENTAR);
         stockUpdateDTO.setQuantidade(5);
 
         Product product = new Product();
         product.setId(1L);
-        product.setNome("Produto Teste");
+        product.setName("Produto Teste");
         product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(BigDecimal.valueOf(99.99));
-        product.setEstoque(10);
+        product.setPrice(BigDecimal.valueOf(99.99));
+        product.setStock(10);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
         productService.atualizarEstoque(1L, stockUpdateDTO);
 
-        assertEquals(15, product.getEstoque());
+        assertEquals(15, product.getStock());
     }
 
     @Test
     void testAtualizarEstoqueReduzir() {
         ProductStockUpdateRequestDTO stockUpdateDTO = new ProductStockUpdateRequestDTO();
-        stockUpdateDTO.setOperacao(OperacaoEstoque.REDUZIR);
+        stockUpdateDTO.setOperacao(StockOperation.REDUZIR);
         stockUpdateDTO.setQuantidade(5);
 
         Product product = new Product();
         product.setId(1L);
-        product.setNome("Produto Teste");
+        product.setName("Produto Teste");
         product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(BigDecimal.valueOf(99.99));
-        product.setEstoque(10);
+        product.setPrice(BigDecimal.valueOf(99.99));
+        product.setStock(10);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(productRepository.save(any(Product.class))).thenReturn(product);
 
         productService.atualizarEstoque(1L, stockUpdateDTO);
 
-        assertEquals(5, product.getEstoque());
+        assertEquals(5, product.getStock());
     }
 
     @Test
@@ -298,13 +298,13 @@ class ProductServiceTest {
             productService.atualizarEstoque(1L, null);
         });
 
-        assertEquals("Dados de atualização de estoque não podem ser nulos.", exception.getMessage());
+        assertEquals("Dados de atualização de stock não podem ser nulos.", exception.getMessage());
     }
 
     @Test
     void testAtualizarEstoqueQuantidadeNaoPositiva() {
         ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.AUMENTAR);
+        dto.setOperacao(StockOperation.AUMENTAR);
         dto.setQuantidade(0);
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -317,15 +317,15 @@ class ProductServiceTest {
     @Test
     void testAtualizarEstoqueReduzirEstoqueInsuficiente() {
         ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.REDUZIR);
+        dto.setOperacao(StockOperation.REDUZIR);
         dto.setQuantidade(10);
 
         Product product = new Product();
         product.setId(1L);
-        product.setNome("Produto Teste");
+        product.setName("Produto Teste");
         product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(BigDecimal.valueOf(99.99));
-        product.setEstoque(5);
+        product.setPrice(BigDecimal.valueOf(99.99));
+        product.setStock(5);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
@@ -339,15 +339,15 @@ class ProductServiceTest {
     @Test
     void testAtualizarEstoqueComEstoqueNaoDefinido() {
         ProductStockUpdateRequestDTO dto = new ProductStockUpdateRequestDTO();
-        dto.setOperacao(OperacaoEstoque.AUMENTAR);
+        dto.setOperacao(StockOperation.AUMENTAR);
         dto.setQuantidade(5);
 
         Product product = new Product();
         product.setId(1L);
-        product.setNome("Produto Teste");
+        product.setName("Produto Teste");
         product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(BigDecimal.valueOf(99.99));
-        product.setEstoque(null);
+        product.setPrice(BigDecimal.valueOf(99.99));
+        product.setStock(null);
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
@@ -393,8 +393,8 @@ class ProductServiceTest {
     void testAplicarDesconto() {
         Product product = new Product();
         product.setId(1L);
-        product.setPreco(BigDecimal.valueOf(100.00));
-        product.setDiscountPercentage(10.0);
+        product.setPrice(BigDecimal.valueOf(100.00));
+        product.setDiscountPercentage(new BigDecimal("15.00"));
 
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(productRepository.save(any(Product.class))).thenReturn(product);

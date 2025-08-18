@@ -4,7 +4,7 @@ import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.order.dto.OrderRequestDTO;
 import org.ecommerce.ecommerceapi.modules.order.dto.OrderResponseDTO;
-import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
+import org.ecommerce.ecommerceapi.modules.order.entity.Order;
 import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
@@ -52,43 +52,43 @@ class OrderServiceTest {
 
         produto = new Product();
         produto.setId(1L);
-        produto.setNome("Produto Teste");
-        produto.setPreco(BigDecimal.valueOf(10.00));
+        produto.setName("Produto Teste");
+        produto.setPrice(BigDecimal.valueOf(10.00));
     }
 
     @Test
     void testListarPorCliente() {
-        Pedido pedido = new Pedido();
-        pedido.setId(100L);
-        pedido.setCliente(cliente);
-        pedido.setTotal(BigDecimal.valueOf(150.00));
-        pedido.setItens(new ArrayList<>());
-        when(orderRepository.findByClienteId(cliente.getId())).thenReturn(List.of(pedido));
-        List<OrderResponseDTO> responseList = orderService.listarPorCliente(cliente.getId());
+        Order order = new Order();
+        order.setId(100L);
+        order.setCliente(cliente);
+        order.setTotal(BigDecimal.valueOf(150.00));
+        order.setItens(new ArrayList<>());
+        when(orderRepository.findByClienteId(cliente.getId())).thenReturn(List.of(order));
+        List<OrderResponseDTO> responseList = orderService.listByClient(cliente.getId());
         assertNotNull(responseList);
         assertEquals(1, responseList.size());
         OrderResponseDTO dto = responseList.get(0);
-        assertEquals(pedido.getId(), dto.getId());
+        assertEquals(order.getId(), dto.getId());
         assertEquals(cliente.getId(), dto.getClienteId());
-        assertEquals(pedido.getTotal(), dto.getTotal());
+        assertEquals(order.getTotal(), dto.getTotal());
     }
 
     @Test
     void testHistorico() {
-        Pedido pedidoCancelado = new Pedido();
-        pedidoCancelado.setId(200L);
-        pedidoCancelado.setCliente(cliente);
-        pedidoCancelado.setTotal(BigDecimal.valueOf(200.00));
-        pedidoCancelado.setCancelado(true);
-        pedidoCancelado.setItens(new ArrayList<>());
-        when(orderRepository.findByClienteIdAndCanceladoTrue(cliente.getId())).thenReturn(List.of(pedidoCancelado));
+        Order orderCancelado = new Order();
+        orderCancelado.setId(200L);
+        orderCancelado.setCliente(cliente);
+        orderCancelado.setTotal(BigDecimal.valueOf(200.00));
+        orderCancelado.setCancelado(true);
+        orderCancelado.setItens(new ArrayList<>());
+        when(orderRepository.findByClienteIdAndCanceladoTrue(cliente.getId())).thenReturn(List.of(orderCancelado));
         List<OrderResponseDTO> historicoList = orderService.history(cliente.getId());
         assertNotNull(historicoList);
         assertEquals(1, historicoList.size());
         OrderResponseDTO dto = historicoList.get(0);
-        assertEquals(pedidoCancelado.getId(), dto.getId());
+        assertEquals(orderCancelado.getId(), dto.getId());
         assertEquals(cliente.getId(), dto.getClienteId());
-        assertEquals(pedidoCancelado.getTotal(), dto.getTotal());
+        assertEquals(orderCancelado.getTotal(), dto.getTotal());
     }
 
     
@@ -103,14 +103,14 @@ class OrderServiceTest {
 
         @Test
     void testBuscarPorIdDTO_Sucesso() {
-        Pedido pedido = new Pedido();
-        pedido.setId(123L);
-        pedido.setCliente(cliente);
-        pedido.setTotal(BigDecimal.valueOf(100));
-        pedido.setDateCreate(LocalDateTime.now());
-        pedido.setItens(new ArrayList<>());
+        Order order = new Order();
+        order.setId(123L);
+        order.setCliente(cliente);
+        order.setTotal(BigDecimal.valueOf(100));
+        order.setDateCreate(LocalDateTime.now());
+        order.setItens(new ArrayList<>());
 
-        when(orderRepository.findByIdAndClienteId(123L, 1L)).thenReturn(Optional.of(pedido));
+        when(orderRepository.findByIdAndClienteId(123L, 1L)).thenReturn(Optional.of(order));
 
         OrderResponseDTO dto = orderService.searchById(123L, 1L);
 
@@ -170,32 +170,32 @@ class OrderServiceTest {
 
     @Test
     void testBuscarPorId() {
-        Pedido pedido = new Pedido();
-        pedido.setId(1L);
-        pedido.setCliente(cliente);
-        pedido.setTotal(BigDecimal.valueOf(10.00));
-        pedido.setItens(new ArrayList<>());
+        Order order = new Order();
+        order.setId(1L);
+        order.setCliente(cliente);
+        order.setTotal(BigDecimal.valueOf(10.00));
+        order.setItens(new ArrayList<>());
 
-        when(orderRepository.findByIdAndClienteId(pedido.getId(), cliente.getId())).thenReturn(Optional.of(pedido));
+        when(orderRepository.findByIdAndClienteId(order.getId(), cliente.getId())).thenReturn(Optional.of(order));
 
-        OrderResponseDTO dto = orderService.searchById(pedido.getId(), cliente.getId());
+        OrderResponseDTO dto = orderService.searchById(order.getId(), cliente.getId());
 
         assertEquals(cliente.getId(), dto.getClienteId());
     }
 
     @Test
     void testCancelar() {
-        Pedido pedido = new Pedido();
-        pedido.setId(1L);
-        pedido.setCliente(cliente);
-        pedido.setItens(new ArrayList<>());
+        Order order = new Order();
+        order.setId(1L);
+        order.setCliente(cliente);
+        order.setItens(new ArrayList<>());
 
-        when(orderRepository.findByIdAndClienteId(pedido.getId(), cliente.getId())).thenReturn(Optional.of(pedido));
+        when(orderRepository.findByIdAndClienteId(order.getId(), cliente.getId())).thenReturn(Optional.of(order));
 
-        orderService.cancel(pedido.getId(), cliente.getId());
+        orderService.cancel(order.getId(), cliente.getId());
 
-        assertTrue(pedido.isCancelado());
-        verify(orderRepository).save(pedido);
+        assertTrue(order.isCancelado());
+        verify(orderRepository).save(order);
     }
     @Test
     void testSetPedidoRepository() {

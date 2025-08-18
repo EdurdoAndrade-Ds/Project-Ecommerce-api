@@ -1,102 +1,59 @@
 package org.ecommerce.ecommerceapi.modules.product.entity;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
+import lombok.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
-@Table(name = "products")
+@Table(name = "tb_product")
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    @Column(name = "name", nullable = false)
+    private String name;
 
+    @Column(name = "descricao")
     private String descricao;
 
-    private BigDecimal preco;
+    @Column(name = "price", nullable = false, precision = 12, scale = 2)
+    private BigDecimal price;
 
-    private Integer estoque;
+    @Column(name = "stock", nullable = false)
+    private Integer stock;
 
-    @Column(nullable = false)
-    private Double discountPercentage = 0.0;
+    // Porcentagem de desconto 0–100, precisa ser BigDecimal
+    @Column(name = "discount_percentage", nullable = false, precision = 5, scale = 2)
+    private BigDecimal discountPercentage = BigDecimal.ZERO;
 
+
+    @Transient
     private BigDecimal discountedPrice; // Preço com desconto, calculado dinamicamente
 
     // O campo discountedPrice pode ser removido, pois será calculado dinamicamente
     // private BigDecimal discountedPrice;
 
-    // Getters e Setters
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public BigDecimal getPreco() {
-        return preco;
-    }
-
-    public void setPreco(BigDecimal preco) {
-        this.preco = preco;
-    }
-
-    public Integer getEstoque() {
-        return estoque;
-    }
-
-    public void setEstoque(Integer estoque) {
-        this.estoque = estoque;
-    }
-
-    public Double getDiscountPercentage() {
-        return discountPercentage;
-    }
-
-    public void setDiscountPercentage(Double discountPercentage) {
-        this.discountPercentage = discountPercentage;
-    }
-
-    public BigDecimal getDiscountedPrice() {
-
-        return calculateDiscountedPrice();
-
-
-    }
-    public void setDiscountedPrice(BigDecimal discountedPrice) {
-        this.discountedPrice = discountedPrice;
-    }
 
     // Método para calcular o preço com desconto
 
 
-    public BigDecimal calculateDiscountedPrice() {
-
-
-        if (discountPercentage != null && discountPercentage > 0) {
-            BigDecimal discount = preco.multiply(BigDecimal.valueOf(discountPercentage / 100));
-            return preco.subtract(discount);
+    public BigDecimal getDiscountedPrice() {
+        if (price == null) return null;
+        // se desconto for nulo ou zero -> retorna o MESMO BigDecimal (mantém escala, ex.: 100.0)
+        if (discountPercentage == null || BigDecimal.valueOf(discountPercentage).signum() == 0) {
+            return price;
         }
-        return preco; // Se não houver desconto, retorna o preço original
+        BigDecimal pct = BigDecimal.valueOf(discountPercentage);
+        BigDecimal discount = price.multiply(pct).divide(BigDecimal.valueOf(100));
+        return price.subtract(discount);
     }
 }

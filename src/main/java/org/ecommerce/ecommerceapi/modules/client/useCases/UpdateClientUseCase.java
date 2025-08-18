@@ -9,13 +9,11 @@ import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.mapper.ClientMapper;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.springframework.stereotype.Service;
-import jakarta.persistence.EntityNotFoundException;
 
 import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UpdateClientUseCase {
 
 
@@ -24,7 +22,7 @@ public class UpdateClientUseCase {
 
     public ClientEntity execute(Long clienteId, UpdateClientDTO upDto) {
         ClientEntity client = this.clientRepository.findById(clienteId)
-                .orElseThrow(() -> new ClientNotFoundException());
+                .orElseThrow(() -> new ClientNotFoundException("Cliente nao encotrado"));
 
         String newUsername = upDto.getUsername() != null ? upDto.getUsername() : client.getUsername();
         String newEmail = upDto.getEmail() != null ? upDto.getEmail() : client.getEmail();

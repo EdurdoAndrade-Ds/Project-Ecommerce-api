@@ -1,11 +1,13 @@
 package org.ecommerce.ecommerceapi.modules.order.dto;
 
-import lombok.Data;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+@Getter @Setter @ToString
+@NoArgsConstructor @AllArgsConstructor @Builder
 @Data
 public class OrderResponseDTO {
     private Long id;                // ID do pedido

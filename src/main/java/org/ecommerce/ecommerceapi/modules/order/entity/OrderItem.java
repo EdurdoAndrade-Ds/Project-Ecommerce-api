@@ -8,12 +8,12 @@ import java.util.Objects;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 
 @Entity
-@Data
-@Getter
-@Setter
+@Getter @Setter
+@ToString(of = {"id","nameProduct","quantity","unitPrice","discountPrice","pricePad"})
 public class OrderItem {
 
     @Id
@@ -25,14 +25,14 @@ public class OrderItem {
     private Integer quantity;
     private BigDecimal unitPrice; // Preço unitário (pode ser com ou sem desconto)
 
-    @Column(name = "discount_price") // nome opcional para a coluna
+    @Column(name = "discount_price") // name opcional para a coluna
     private BigDecimal discountPrice; // Preço com desconto
 
     private BigDecimal pricePad; // Preço total pago (quantidade * preço unitário com desconto)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id")
-    private Pedido pedido;
+    private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "produto_id")
@@ -42,11 +42,11 @@ public class OrderItem {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         OrderItem orderItem = (OrderItem) o;
-        return Objects.equals(getId(), orderItem.getId()) && Objects.equals(getNameProduct(), orderItem.getNameProduct()) && Objects.equals(getQuantity(), orderItem.getQuantity()) && Objects.equals(getUnitPrice(), orderItem.getUnitPrice()) && Objects.equals(getDiscountPrice(), orderItem.getDiscountPrice()) && Objects.equals(getPricePad(), orderItem.getPricePad()) && Objects.equals(getPedido(), orderItem.getPedido()) && Objects.equals(getProduct(), orderItem.getProduct());
+        return Objects.equals(getId(), orderItem.getId()) && Objects.equals(getNameProduct(), orderItem.getNameProduct()) && Objects.equals(getQuantity(), orderItem.getQuantity()) && Objects.equals(getUnitPrice(), orderItem.getUnitPrice()) && Objects.equals(getDiscountPrice(), orderItem.getDiscountPrice()) && Objects.equals(getPricePad(), orderItem.getPricePad()) && Objects.equals(getOrder(), orderItem.getOrder()) && Objects.equals(getProduct(), orderItem.getProduct());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNameProduct(), getQuantity(), getUnitPrice(), getDiscountPrice(), getPricePad(), getPedido(), getProduct());
+        return Objects.hash(getId(), getNameProduct(), getQuantity(), getUnitPrice(), getDiscountPrice(), getPricePad(), getOrder(), getProduct());
     }
 }

@@ -72,7 +72,7 @@ class ProfileClientResponseDTOTest {
         String s = dto.toString();
 
         assertTrue(s.startsWith("ProfileClienteResponseDTO("), "toStrinf nao comecou como esperado: " + s);
-        assertTrue(s.contains("nome=Eduardo"), s);
+        assertTrue(s.contains("name=Eduardo"), s);
         assertTrue(s.contains("username=edu"), s);
         assertTrue(s.contains("email=edu@e.com"), s);
         assertTrue(s.contains("telefone=11987654321"), s);
@@ -119,7 +119,7 @@ class ProfileClientResponseDTOTest {
                 .toString();
 
         assertTrue(s.contains("ProfileClienteResponseDTOBuilder"), s);
-        assertTrue(s.contains("nome=X"), s);
+        assertTrue(s.contains("name=X"), s);
         assertTrue(s.contains("username=y"), s);
         assertTrue(s.contains("email=z@z.com"), s);
     }

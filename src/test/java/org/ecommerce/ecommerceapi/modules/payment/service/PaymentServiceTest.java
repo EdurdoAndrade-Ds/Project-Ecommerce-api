@@ -6,11 +6,11 @@ package org.ecommerce.ecommerceapi.modules.payment.service;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 
 
+import org.ecommerce.ecommerceapi.modules.order.entity.Order;
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentRequestDTO;
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentResponseDTO;
 import org.ecommerce.ecommerceapi.modules.payment.entity.Payment;
 import org.ecommerce.ecommerceapi.modules.payment.repository.PaymentRepository;
-import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
 import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
 
 
@@ -39,7 +39,7 @@ class PaymentServiceTest {
     @InjectMocks
     private PaymentService paymentService;
 
-    private Pedido pedido;
+    private Order order;
     private PaymentRequestDTO requestDTO;
     private ClientEntity cliente;
 
@@ -52,11 +52,11 @@ class PaymentServiceTest {
         cliente.setEmail("teste@email.com");
         // preencha outros campos obrigatórios se necessário
 
-        pedido = new Pedido();
+        order = new Order();
 
-        pedido.setId(1L);
-        pedido.setCliente(cliente);
-        pedido.setTotal(BigDecimal.valueOf(100));
+        order.setId(1L);
+        order.setCliente(cliente);
+        order.setTotal(BigDecimal.valueOf(100));
 
         requestDTO = new PaymentRequestDTO();
         requestDTO.setPedidoId(1L);
@@ -69,10 +69,10 @@ class PaymentServiceTest {
         dto.setPedidoId(2L);
         dto.setPrice(BigDecimal.valueOf(100));
 
-        when(orderRepository.findById(2L)).thenReturn(Optional.of(pedido));
+        when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
         Payment saved = new Payment();
         saved.setId(10L);
-        saved.setPedido(pedido);
+        saved.setOrder(order);
         saved.setPrice(dto.getPrice());
         saved.setDatePayment(LocalDateTime.now());
         when(paymentRepository.save(any(Payment.class))).thenReturn(saved);
@@ -91,7 +91,7 @@ class PaymentServiceTest {
         dto.setPedidoId(2L);
         dto.setPrice(BigDecimal.valueOf(50));
 
-        when(orderRepository.findById(2L)).thenReturn(Optional.of(pedido));
+        when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
 
         RuntimeException ex = assertThrows(RuntimeException.class,
                 () -> paymentService.pay(dto, 1L));
@@ -100,10 +100,10 @@ class PaymentServiceTest {
         verify(paymentRepository, never()).save(any());
 
 
-        pedido.setId(1L);
-        pedido.setCliente(cliente);
-        pedido.setTotal(BigDecimal.TEN);
-        pedido.setCancelado(false);
+        order.setId(1L);
+        order.setCliente(cliente);
+        order.setTotal(BigDecimal.TEN);
+        order.setCancelado(false);
 
         requestDTO = new PaymentRequestDTO();
         requestDTO.setPedidoId(1L);
@@ -114,11 +114,11 @@ class PaymentServiceTest {
     void testPagarSucesso() {
         Payment payment = new Payment();
         payment.setId(2L);
-        payment.setPedido(pedido);
+        payment.setOrder(order);
         payment.setPrice(BigDecimal.TEN);
         payment.setDatePayment(LocalDateTime.now());
 
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(pedido));
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
         when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
 
         PaymentResponseDTO response = paymentService.pay(requestDTO, 1L);
@@ -139,16 +139,16 @@ class PaymentServiceTest {
     void testPagarClienteInvalido() {
         ClientEntity outro = new ClientEntity();
         outro.setId(2L);
-        pedido.setCliente(outro);
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(pedido));
+        order.setCliente(outro);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 
         assertThrows(RuntimeException.class, () -> paymentService.pay(requestDTO, 1L));
     }
 
     @Test
     void testPagarPedidoCancelado() {
-        pedido.setCancelado(true);
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(pedido));
+        order.setCancelado(true);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 
         assertThrows(RuntimeException.class, () -> paymentService.pay(requestDTO, 1L));
     }
@@ -156,7 +156,7 @@ class PaymentServiceTest {
     @Test
     void testPagarValorInvalido() {
         requestDTO.setPrice(BigDecimal.ONE);
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(pedido));
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 
         assertThrows(RuntimeException.class, () -> paymentService.pay(requestDTO, 1L));
 

@@ -68,10 +68,10 @@ class ProductResponseDTOTest {
 
         String expectedString = "ProductResponseDTO{" +
                 "id=1, " +
-                "nome='Produto Teste', " +
+                "name='Produto Teste', " +
                 "descricao='Descrição do Produto Teste', " +
-                "preco=99.99, " +
-                "estoque=10" +
+                "price=99.99, " +
+                "stock=10" +
                 '}';
         assertEquals(expectedString, productResponse.toString());
     }

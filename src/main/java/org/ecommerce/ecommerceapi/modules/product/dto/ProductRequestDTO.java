@@ -61,10 +61,10 @@ public class ProductRequestDTO {
     @Override
     public String toString() {
         return "ProductRequestDTO{" +
-               "nome='" + nome + '\'' +
+               "name='" + nome + '\'' +
                ", descricao='" + descricao + '\'' +
-               ", preco=" + preco +
-               ", estoque=" + estoque +
+               ", price=" + preco +
+               ", stock=" + estoque +
                '}';
     }
 

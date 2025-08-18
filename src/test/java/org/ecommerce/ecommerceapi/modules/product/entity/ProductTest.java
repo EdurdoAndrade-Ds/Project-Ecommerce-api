@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,35 +16,39 @@ class ProductTest {
     void setUp() {
         product = new Product();
         product.setId(1L);
-        product.setNome("Produto Teste");
+        product.setName("Produto Teste");
         product.setDescricao("Descrição do Produto Teste");
-        product.setPreco(BigDecimal.valueOf(100.00));
-        product.setEstoque(10);
+        product.setPrice(BigDecimal.valueOf(100.00));
+        product.setStock(10);
     }
 
     @Test
     void testCalcularDiscountedPriceSemDesconto() {
         // Arrange
-        product.setDiscountPercentage(0.0);
+        product.setDiscountPercentage(new BigDecimal("0.00"));
 
         // Act
         BigDecimal discountedPrice = product.getDiscountedPrice();
 
-        // Assert
-        assertEquals(product.getPreco(), discountedPrice);
+        // Assert (alinhe escala para evitar falha por 100 != 100.00)
+        BigDecimal expected = product.getPrice().setScale(2, RoundingMode.HALF_UP);
+        assertEquals(expected, discountedPrice);
     }
 
     @Test
     void testCalcularDiscountedPriceComDesconto() {
         // Arrange
-        product.setDiscountPercentage(20.0); // 20% de desconto
+        product.setDiscountPercentage(new BigDecimal("20.00")); // 20%
 
         // Act
         BigDecimal discountedPrice = product.getDiscountedPrice();
 
-        // Assert
-        BigDecimal expectedPrice = product.getPreco().multiply(BigDecimal.valueOf(0.80)); // 100.00 - 20%
-        assertEquals(expectedPrice, discountedPrice);
+        // Assert (100.00 * 0.80 = 80.00)
+        BigDecimal expected = product.getPrice()
+                .multiply(new BigDecimal("0.80"))
+                .setScale(2, RoundingMode.HALF_UP);
+
+        assertEquals(expected, discountedPrice);
     }
 
     @Test
@@ -55,22 +60,22 @@ class ProductTest {
         BigDecimal discountedPrice = product.getDiscountedPrice();
 
         // Assert
-        assertEquals(product.getPreco(), discountedPrice);
+        assertEquals(product.getPrice(), discountedPrice);
     }
 
     @Test
     void testSettersAndGetters() {
         // Testando os getters e setters
-        product.setNome("Novo Nome");
-        assertEquals("Novo Nome", product.getNome());
+        product.setName("Novo Nome");
+        assertEquals("Novo Nome", product.getName());
 
         product.setDescricao("Nova Descrição");
         assertEquals("Nova Descrição", product.getDescricao());
 
-        product.setPreco(BigDecimal.valueOf(150.00));
-        assertEquals(BigDecimal.valueOf(150.00), product.getPreco());
+        product.setPrice(BigDecimal.valueOf(150.00));
+        assertEquals(BigDecimal.valueOf(150.00), product.getPrice());
 
-        product.setEstoque(20);
-        assertEquals(20, product.getEstoque());
+        product.setStock(20);
+        assertEquals(20, product.getStock());
     }
 }

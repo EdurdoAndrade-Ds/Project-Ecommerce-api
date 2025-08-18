@@ -1,6 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.payment.entity;
 
-import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
+import org.ecommerce.ecommerceapi.modules.order.entity.Order;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,17 +12,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class PaymentTest {
 
     private Payment payment;
-    private Pedido pedido;
+    private Order order;
     private LocalDateTime now;
 
     @BeforeEach
     void setUp() {
-        pedido = new Pedido();
-        pedido.setId(1L);
+        order = new Order();
+        order.setId(1L);
 
         payment = new Payment();
         payment.setId(1L);
-        payment.setPedido(pedido);
+        payment.setOrder(order);
         payment.setPrice(BigDecimal.TEN);
         now = LocalDateTime.now();
         payment.setDatePayment(now);
@@ -31,7 +31,7 @@ class PaymentTest {
     @Test
     void testGettersAndSetters() {
         assertEquals(1L, payment.getId());
-        assertEquals(pedido, payment.getPedido());
+        assertEquals(order, payment.getOrder());
         assertEquals(BigDecimal.TEN, payment.getPrice());
         assertEquals(now, payment.getDatePayment());
     }
@@ -40,7 +40,7 @@ class PaymentTest {
     void testEqualsAndHashCode() {
         Payment other = new Payment();
         other.setId(1L);
-        other.setPedido(pedido);
+        other.setOrder(order);
         other.setPrice(BigDecimal.TEN);
         other.setDatePayment(now);
 

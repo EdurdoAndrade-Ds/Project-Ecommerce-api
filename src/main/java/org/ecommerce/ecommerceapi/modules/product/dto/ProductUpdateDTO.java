@@ -53,9 +53,9 @@ public class ProductUpdateDTO {
     @Override
     public String toString() {
         return "ProductUpdateDTO{" +
-               "nome='" + nome + '\'' +
+               "name='" + nome + '\'' +
                ", descricao='" + descricao + '\'' +
-               ", preco=" + preco +
+               ", price=" + preco +
                '}';
     }
 

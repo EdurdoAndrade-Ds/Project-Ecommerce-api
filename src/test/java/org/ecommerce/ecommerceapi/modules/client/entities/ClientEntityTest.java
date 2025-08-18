@@ -81,7 +81,7 @@ class ClientEntityTest {
 
         assertTrue(s.contains("ClienteEntity"));
         assertTrue(s.contains("id=1"));
-        assertTrue(s.contains("nome=Lucas"));
+        assertTrue(s.contains("name=Lucas"));
         assertTrue(s.contains("email=lucas@email.com"));
     }
 
@@ -109,7 +109,7 @@ class ClientEntityTest {
 
         String str = entity.toString();
         assertTrue(str.contains("id=1"));
-        assertTrue(str.contains("nome=Lucas"));
+        assertTrue(str.contains("name=Lucas"));
         assertTrue(str.contains("username=lucas123"));
         assertTrue(str.contains("email=lucas@email.com"));
         assertTrue(str.contains("senha=senhaSegura"));
