@@ -38,7 +38,7 @@ class PaymentControllerTest {
         MockitoAnnotations.openMocks(this);
         requestDTO = new PaymentRequestDTO();
         requestDTO.setPedidoId(1L);
-        requestDTO.setValor(BigDecimal.TEN);
+        requestDTO.setPrice(BigDecimal.TEN);
 
         responseDTO = new PaymentResponseDTO();
         responseDTO.setId(1L);
@@ -49,27 +49,27 @@ class PaymentControllerTest {
     @Test
     void testPagar() {
         when(authentication.getName()).thenReturn("1");
-        when(paymentService.pagar(any(PaymentRequestDTO.class), eq(1L))).thenReturn(responseDTO);
+        when(paymentService.pay(any(PaymentRequestDTO.class), eq(1L))).thenReturn(responseDTO);
 
-        ResponseEntity<PaymentResponseDTO> response = paymentController.pagar(requestDTO, authentication);
+        ResponseEntity<PaymentResponseDTO> response = paymentController.pay(requestDTO, authentication);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals(responseDTO, response.getBody());
 
         ArgumentCaptor<PaymentRequestDTO> captor = ArgumentCaptor.forClass(PaymentRequestDTO.class);
-        verify(paymentService, times(1)).pagar(captor.capture(), eq(1L));
+        verify(paymentService, times(1)).pay(captor.capture(), eq(1L));
         assertEquals(requestDTO.getPedidoId(), captor.getValue().getPedidoId());
-        assertEquals(requestDTO.getValor(), captor.getValue().getValor());
+        assertEquals(requestDTO.getPrice(), captor.getValue().getPrice());
     }
 
     @Test
     void testPagar_ValorCorreto() {
         when(authentication.getName()).thenReturn("1");
-        when(paymentService.pagar(any(PaymentRequestDTO.class), eq(1L))).thenReturn(responseDTO);
+        when(paymentService.pay(any(PaymentRequestDTO.class), eq(1L))).thenReturn(responseDTO);
 
-        ResponseEntity<PaymentResponseDTO> response = paymentController.pagar(requestDTO, authentication);
+        ResponseEntity<PaymentResponseDTO> response = paymentController.pay(requestDTO, authentication);
 
-        BigDecimal valorEsperado = requestDTO.getValor();
+        BigDecimal valorEsperado = requestDTO.getPrice();
         BigDecimal valorRetornado = response.getBody().getValor();
 
         assertEquals(0, valorEsperado.compareTo(valorRetornado));

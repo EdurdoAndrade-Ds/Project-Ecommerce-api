@@ -11,6 +11,6 @@ public class VersionController {
 
     @GetMapping
     public ResponseEntity<String> versionApi() {
-        return ResponseEntity.ok().body("Versao da API: 2.0.2");
+        return ResponseEntity.ok().body("Versao da API: 2.0.3");
     }
 }

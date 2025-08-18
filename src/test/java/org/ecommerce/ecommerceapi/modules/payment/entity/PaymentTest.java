@@ -23,17 +23,17 @@ class PaymentTest {
         payment = new Payment();
         payment.setId(1L);
         payment.setPedido(pedido);
-        payment.setValor(BigDecimal.TEN);
+        payment.setPrice(BigDecimal.TEN);
         now = LocalDateTime.now();
-        payment.setDataPagamento(now);
+        payment.setDatePayment(now);
     }
 
     @Test
     void testGettersAndSetters() {
         assertEquals(1L, payment.getId());
         assertEquals(pedido, payment.getPedido());
-        assertEquals(BigDecimal.TEN, payment.getValor());
-        assertEquals(now, payment.getDataPagamento());
+        assertEquals(BigDecimal.TEN, payment.getPrice());
+        assertEquals(now, payment.getDatePayment());
     }
 
     @Test
@@ -41,13 +41,13 @@ class PaymentTest {
         Payment other = new Payment();
         other.setId(1L);
         other.setPedido(pedido);
-        other.setValor(BigDecimal.TEN);
-        other.setDataPagamento(now);
+        other.setPrice(BigDecimal.TEN);
+        other.setDatePayment(now);
 
         assertEquals(payment, other);
         assertEquals(payment.hashCode(), other.hashCode());
 
-        other.setValor(BigDecimal.ONE);
+        other.setPrice(BigDecimal.ONE);
         assertNotEquals(payment, other);
     }
 

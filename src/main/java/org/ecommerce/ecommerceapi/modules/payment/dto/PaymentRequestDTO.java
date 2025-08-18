@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class PaymentRequestDTO {
     private Long pedidoId;
-    private BigDecimal valor;
+    private BigDecimal price;
 
     public Long getPedidoId() {
         return pedidoId;
@@ -14,12 +14,12 @@ public class PaymentRequestDTO {
         this.pedidoId = pedidoId;
     }
 
-    public BigDecimal getValor() {
-        return valor;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
+    public void setPrice(BigDecimal valor) {
+        this.price = price;
     }
 }
 

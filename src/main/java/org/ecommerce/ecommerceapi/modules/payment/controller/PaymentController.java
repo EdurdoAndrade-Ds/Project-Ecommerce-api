@@ -34,8 +34,8 @@ public class PaymentController {
             @ApiResponse(responseCode = "400", description = "Dados inválidos"),
             @ApiResponse(responseCode = "401", description = "Não autorizado")
     })
-    public ResponseEntity<PaymentResponseDTO> pagar(@RequestBody PaymentRequestDTO dto, Authentication authentication) {
+    public ResponseEntity<PaymentResponseDTO> pay(@RequestBody PaymentRequestDTO dto, Authentication authentication) {
         Long clienteId = Long.parseLong(authentication.getName());
-        return new ResponseEntity<>(paymentService.pagar(dto, clienteId), HttpStatus.CREATED);
+        return new ResponseEntity<>(paymentService.pay(dto, clienteId), HttpStatus.CREATED);
     }
 }

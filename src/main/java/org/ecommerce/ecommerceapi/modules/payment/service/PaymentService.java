@@ -19,7 +19,7 @@ public class PaymentService {
     @Autowired
     private OrderRepository orderRepository;
 
-    public PaymentResponseDTO pagar(PaymentRequestDTO dto, Long clienteId) {
+    public PaymentResponseDTO pay(PaymentRequestDTO dto, Long clienteId) {
         Pedido pedido = orderRepository.findById(dto.getPedidoId())
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
@@ -29,14 +29,14 @@ public class PaymentService {
         if (pedido.isCancelado()) {
             throw new RuntimeException("Pedido cancelado");
         }
-        if (dto.getValor() == null || dto.getValor().compareTo(pedido.getTotal()) != 0) {
+        if (dto.getPrice() == null || dto.getPrice().compareTo(pedido.getTotal()) != 0) {
             throw new RuntimeException("Valor do pagamento inválido");
         }
 
         Payment payment = new Payment();
         payment.setPedido(pedido);
-        payment.setValor(dto.getValor());
-        payment.setDataPagamento(LocalDateTime.now());
+        payment.setPrice(dto.getPrice());
+        payment.setDatePayment(LocalDateTime.now());
 
         Payment saved = paymentRepository.save(payment);
         return mapToDTO(saved, pedido);
@@ -46,8 +46,8 @@ public class PaymentService {
         PaymentResponseDTO dto = new PaymentResponseDTO();
         dto.setId(payment.getId());
         dto.setPedidoId(payment.getPedido().getId());
-        dto.setValor(payment.getValor());
-        dto.setDataPagamento(payment.getDataPagamento());
+        dto.setValor(payment.getPrice());
+        dto.setDataPagamento(payment.getDatePayment());
         dto.setClienteId(pedido.getCliente().getId());
         return dto;
     }

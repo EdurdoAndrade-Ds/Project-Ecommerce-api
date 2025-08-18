@@ -12,9 +12,9 @@ class PaymentRequestDTOTest {
     void testGettersAndSetters() {
         PaymentRequestDTO dto = new PaymentRequestDTO();
         dto.setPedidoId(1L);
-        dto.setValor(BigDecimal.TEN);
+        dto.setPrice(BigDecimal.TEN);
 
         assertEquals(1L, dto.getPedidoId());
-        assertEquals(BigDecimal.TEN, dto.getValor());
+        assertEquals(BigDecimal.TEN, dto.getPrice());
     }
 }

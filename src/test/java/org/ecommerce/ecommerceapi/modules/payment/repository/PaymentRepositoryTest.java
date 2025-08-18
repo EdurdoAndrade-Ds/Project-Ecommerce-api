@@ -54,12 +54,12 @@ class PaymentRepositoryTest {
 
         Payment payment = new Payment();
         payment.setPedido(pedido);
-        payment.setValor(BigDecimal.valueOf(100));
-        payment.setDataPagamento(LocalDateTime.now());
+        payment.setPrice(BigDecimal.valueOf(100));
+        payment.setDatePayment(LocalDateTime.now());
         paymentRepository.save(payment);
 
-        List<Payment> list = paymentRepository.findByPedidoId(pedido.getId());
+        List<Payment> list = paymentRepository.findByOrderId(pedido.getId());
         assertEquals(1, list.size());
-        assertEquals(BigDecimal.valueOf(100), list.get(0).getValor());
+        assertEquals(BigDecimal.valueOf(100), list.get(0).getPrice());
     }
 }
