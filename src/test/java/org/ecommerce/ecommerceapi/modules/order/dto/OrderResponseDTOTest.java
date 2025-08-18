@@ -1,4 +1,4 @@
-package org.ecommerce.ecommerceapi.modules.pedido.dto;
+package org.ecommerce.ecommerceapi.modules.order.dto;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,13 +8,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PedidoResponseDTOTest {
+class OrderResponseDTOTest {
 
     @Test
     void testGettersAndSetters() {
-        PedidoResponseDTO dto = new PedidoResponseDTO();
+        OrderResponseDTO dto = new OrderResponseDTO();
 
-        PedidoResponseDTO.ItemDTO item = new PedidoResponseDTO.ItemDTO();
+        OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO();
         item.setProdutoId(10L);
         item.setNomeProduto("Produto X");
         item.setQuantidade(3);
@@ -22,7 +22,7 @@ class PedidoResponseDTOTest {
         item.setDiscountPrice(BigDecimal.valueOf(25.00));
         item.setPrecoPago(BigDecimal.valueOf(89.97));
 
-        List<PedidoResponseDTO.ItemDTO> itens = new ArrayList<>();
+        List<OrderResponseDTO.ItemDTO> itens = new ArrayList<>();
         itens.add(item);
 
         dto.setId(1L);
@@ -36,7 +36,7 @@ class PedidoResponseDTOTest {
         assertNotNull(dto.getItens());
         assertEquals(1, dto.getItens().size());
 
-        PedidoResponseDTO.ItemDTO retrievedItem = dto.getItens().get(0);
+        OrderResponseDTO.ItemDTO retrievedItem = dto.getItens().get(0);
         assertEquals(10L, retrievedItem.getProdutoId());
         assertEquals("Produto X", retrievedItem.getNomeProduto());
         assertEquals(3, retrievedItem.getQuantidade());
@@ -47,10 +47,10 @@ class PedidoResponseDTOTest {
 
     @Test
     void testEqualsAndHashCode() {
-        PedidoResponseDTO dto1 = new PedidoResponseDTO();
-        PedidoResponseDTO dto2 = new PedidoResponseDTO();
+        OrderResponseDTO dto1 = new OrderResponseDTO();
+        OrderResponseDTO dto2 = new OrderResponseDTO();
 
-        PedidoResponseDTO.ItemDTO item1 = new PedidoResponseDTO.ItemDTO();
+        OrderResponseDTO.ItemDTO item1 = new OrderResponseDTO.ItemDTO();
         item1.setProdutoId(1L);
         item1.setNomeProduto("Produto A");
         item1.setQuantidade(2);
@@ -63,7 +63,7 @@ class PedidoResponseDTOTest {
         dto1.setTotal(BigDecimal.valueOf(31.00));
         dto1.setItens(List.of(item1));
 
-        PedidoResponseDTO.ItemDTO item2 = new PedidoResponseDTO.ItemDTO();
+        OrderResponseDTO.ItemDTO item2 = new OrderResponseDTO.ItemDTO();
         item2.setProdutoId(1L);
         item2.setNomeProduto("Produto A");
         item2.setQuantidade(2);
@@ -83,13 +83,13 @@ class PedidoResponseDTOTest {
 
     @Test
     void testToString() {
-        PedidoResponseDTO dto = new PedidoResponseDTO();
+        OrderResponseDTO dto = new OrderResponseDTO();
 
         dto.setId(1L);
         dto.setClienteId(100L);
         dto.setTotal(BigDecimal.valueOf(89.97));
 
-        PedidoResponseDTO.ItemDTO item = new PedidoResponseDTO.ItemDTO();
+        OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO();
         item.setProdutoId(10L);
         item.setNomeProduto("Produto X");
         item.setQuantidade(3);
@@ -97,7 +97,7 @@ class PedidoResponseDTOTest {
         item.setDiscountPrice(BigDecimal.valueOf(25.00));
         item.setPrecoPago(BigDecimal.valueOf(89.97));
 
-        List<PedidoResponseDTO.ItemDTO> itens = new ArrayList<>();
+        List<OrderResponseDTO.ItemDTO> itens = new ArrayList<>();
         itens.add(item);
         dto.setItens(itens);
 

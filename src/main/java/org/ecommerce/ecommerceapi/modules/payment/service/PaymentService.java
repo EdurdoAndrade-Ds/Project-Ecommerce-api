@@ -4,8 +4,8 @@ import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentRequestDTO;
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentResponseDTO;
 import org.ecommerce.ecommerceapi.modules.payment.entity.Payment;
 import org.ecommerce.ecommerceapi.modules.payment.repository.PaymentRepository;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
-import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
+import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
+import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +17,10 @@ public class PaymentService {
     private PaymentRepository paymentRepository;
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private OrderRepository orderRepository;
 
     public PaymentResponseDTO pagar(PaymentRequestDTO dto, Long clienteId) {
-        Pedido pedido = pedidoRepository.findById(dto.getPedidoId())
+        Pedido pedido = orderRepository.findById(dto.getPedidoId())
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
         if (!pedido.getCliente().getId().equals(clienteId)) {

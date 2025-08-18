@@ -1,11 +1,11 @@
-package org.ecommerce.ecommerceapi.modules.pedido.service;
+package org.ecommerce.ecommerceapi.modules.order.service;
 
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
-import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoRequestDTO;
-import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoResponseDTO;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
-import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
+import org.ecommerce.ecommerceapi.modules.order.dto.OrderRequestDTO;
+import org.ecommerce.ecommerceapi.modules.order.dto.OrderResponseDTO;
+import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
+import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,13 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 
-class PedidoServiceTest {
+class OrderServiceTest {
 
     @InjectMocks
-    private PedidoService pedidoService;
+    private OrderService orderService;
 
     @Mock
-    private PedidoRepository pedidoRepository;
+    private OrderRepository orderRepository;
 
     @Mock
     private ProductService productService;
@@ -63,11 +63,11 @@ class PedidoServiceTest {
         pedido.setCliente(cliente);
         pedido.setTotal(BigDecimal.valueOf(150.00));
         pedido.setItens(new ArrayList<>());
-        when(pedidoRepository.findByClienteId(cliente.getId())).thenReturn(List.of(pedido));
-        List<PedidoResponseDTO> responseList = pedidoService.listarPorCliente(cliente.getId());
+        when(orderRepository.findByClienteId(cliente.getId())).thenReturn(List.of(pedido));
+        List<OrderResponseDTO> responseList = orderService.listarPorCliente(cliente.getId());
         assertNotNull(responseList);
         assertEquals(1, responseList.size());
-        PedidoResponseDTO dto = responseList.get(0);
+        OrderResponseDTO dto = responseList.get(0);
         assertEquals(pedido.getId(), dto.getId());
         assertEquals(cliente.getId(), dto.getClienteId());
         assertEquals(pedido.getTotal(), dto.getTotal());
@@ -81,11 +81,11 @@ class PedidoServiceTest {
         pedidoCancelado.setTotal(BigDecimal.valueOf(200.00));
         pedidoCancelado.setCancelado(true);
         pedidoCancelado.setItens(new ArrayList<>());
-        when(pedidoRepository.findByClienteIdAndCanceladoTrue(cliente.getId())).thenReturn(List.of(pedidoCancelado));
-        List<PedidoResponseDTO> historicoList = pedidoService.historico(cliente.getId());
+        when(orderRepository.findByClienteIdAndCanceladoTrue(cliente.getId())).thenReturn(List.of(pedidoCancelado));
+        List<OrderResponseDTO> historicoList = orderService.history(cliente.getId());
         assertNotNull(historicoList);
         assertEquals(1, historicoList.size());
-        PedidoResponseDTO dto = historicoList.get(0);
+        OrderResponseDTO dto = historicoList.get(0);
         assertEquals(pedidoCancelado.getId(), dto.getId());
         assertEquals(cliente.getId(), dto.getClienteId());
         assertEquals(pedidoCancelado.getTotal(), dto.getTotal());
@@ -94,8 +94,8 @@ class PedidoServiceTest {
     
     @Test
     void testEqualsAndHashCode() {
-        PedidoService service1 = new PedidoService(pedidoRepository, productService, clientRepository);
-        PedidoService service2 = new PedidoService(pedidoRepository, productService, clientRepository);
+        OrderService service1 = new OrderService(orderRepository, productService, clientRepository);
+        OrderService service2 = new OrderService(orderRepository, productService, clientRepository);
 
         assertEquals(service1, service2);
         assertEquals(service1.hashCode(), service2.hashCode());
@@ -110,9 +110,9 @@ class PedidoServiceTest {
         pedido.setDateCreate(LocalDateTime.now());
         pedido.setItens(new ArrayList<>());
 
-        when(pedidoRepository.findByIdAndClienteId(123L, 1L)).thenReturn(Optional.of(pedido));
+        when(orderRepository.findByIdAndClienteId(123L, 1L)).thenReturn(Optional.of(pedido));
 
-        PedidoResponseDTO dto = pedidoService.buscarPorId(123L, 1L);
+        OrderResponseDTO dto = orderService.searchById(123L, 1L);
 
         assertNotNull(dto);
         assertEquals(123L, dto.getId());
@@ -122,10 +122,10 @@ class PedidoServiceTest {
 
     @Test
     void testBuscarPorIdDTO_PedidoNaoEncontrado() {
-        when(pedidoRepository.findByIdAndClienteId(999L, 1L)).thenReturn(Optional.empty());
+        when(orderRepository.findByIdAndClienteId(999L, 1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            pedidoService.buscarPorId(999L, 1L);
+            orderService.searchById(999L, 1L);
         });
 
         assertEquals("Pedido não encontrado ou acesso negado", exception.getMessage());
@@ -135,7 +135,7 @@ class PedidoServiceTest {
     
     @Test
     void testToString() {
-        PedidoService service = new PedidoService(pedidoRepository, productService, clientRepository);
+        OrderService service = new OrderService(orderRepository, productService, clientRepository);
         String str = service.toString();
         assertNotNull(str);
         assertTrue(str.contains("pedidoRepository"));
@@ -147,9 +147,9 @@ class PedidoServiceTest {
 
     @Test
     void testCriar() {
-        PedidoRequestDTO request = new PedidoRequestDTO();
-        List<PedidoRequestDTO.ItemDTO> itens = new ArrayList<>();
-        PedidoRequestDTO.ItemDTO itemDTO = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO request = new OrderRequestDTO();
+        List<OrderRequestDTO.ItemDTO> itens = new ArrayList<>();
+        OrderRequestDTO.ItemDTO itemDTO = new OrderRequestDTO.ItemDTO();
         itemDTO.setProdutoId(produto.getId());
         itemDTO.setQuantidade(3);
         itens.add(itemDTO);
@@ -157,9 +157,9 @@ class PedidoServiceTest {
 
         when(clientRepository.findById(cliente.getId())).thenReturn(Optional.of(cliente));
         when(productService.buscarPorId(produto.getId())).thenReturn(produto);
-        when(pedidoRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+        when(orderRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-        PedidoResponseDTO response = pedidoService.criar(request, cliente.getId());
+        OrderResponseDTO response = orderService.create(request, cliente.getId());
 
         assertNotNull(response);
         assertEquals(cliente.getId(), response.getClienteId());
@@ -176,9 +176,9 @@ class PedidoServiceTest {
         pedido.setTotal(BigDecimal.valueOf(10.00));
         pedido.setItens(new ArrayList<>());
 
-        when(pedidoRepository.findByIdAndClienteId(pedido.getId(), cliente.getId())).thenReturn(Optional.of(pedido));
+        when(orderRepository.findByIdAndClienteId(pedido.getId(), cliente.getId())).thenReturn(Optional.of(pedido));
 
-        PedidoResponseDTO dto = pedidoService.buscarPorId(pedido.getId(), cliente.getId());
+        OrderResponseDTO dto = orderService.searchById(pedido.getId(), cliente.getId());
 
         assertEquals(cliente.getId(), dto.getClienteId());
     }
@@ -190,48 +190,48 @@ class PedidoServiceTest {
         pedido.setCliente(cliente);
         pedido.setItens(new ArrayList<>());
 
-        when(pedidoRepository.findByIdAndClienteId(pedido.getId(), cliente.getId())).thenReturn(Optional.of(pedido));
+        when(orderRepository.findByIdAndClienteId(pedido.getId(), cliente.getId())).thenReturn(Optional.of(pedido));
 
-        pedidoService.cancelar(pedido.getId(), cliente.getId());
+        orderService.cancel(pedido.getId(), cliente.getId());
 
         assertTrue(pedido.isCancelado());
-        verify(pedidoRepository).save(pedido);
+        verify(orderRepository).save(pedido);
     }
     @Test
     void testSetPedidoRepository() {
-        PedidoRepository newRepository = mock(PedidoRepository.class);
-        pedidoService.setPedidoRepository(newRepository);
-        assertEquals(newRepository, pedidoService.getPedidoRepository());
+        OrderRepository newRepository = mock(OrderRepository.class);
+        orderService.setOrderRepository(newRepository);
+        assertEquals(newRepository, orderService.getOrderRepository());
     }
 
     @Test
     void testSetProductService() {
         ProductService newService = mock(ProductService.class);
-        pedidoService.setProductService(newService);
-        assertEquals(newService, pedidoService.getProductService());
+        orderService.setProductService(newService);
+        assertEquals(newService, orderService.getProductService());
     }
 
     @Test
     void testSetClienteRepository() {
         ClientRepository newRepository = mock(ClientRepository.class);
-        pedidoService.setClientRepository(newRepository);
-        assertEquals(newRepository, pedidoService.getClientRepository());
+        orderService.setClientRepository(newRepository);
+        assertEquals(newRepository, orderService.getClientRepository());
     }
 
     @Test
     void testCanEqual() {
-        PedidoService service = new PedidoService(pedidoRepository, productService, clientRepository);
-        assertTrue(service.canEqual(new PedidoService(pedidoRepository, productService, clientRepository)));
+        OrderService service = new OrderService(orderRepository, productService, clientRepository);
+        assertTrue(service.canEqual(new OrderService(orderRepository, productService, clientRepository)));
         assertFalse(service.canEqual(new Object()));
     }
     public boolean canEqual(Object other) {
-        return other instanceof PedidoService;
+        return other instanceof OrderService;
     }
     @Test
     void testCriar_ClienteNaoEncontrado() {
-        PedidoRequestDTO request = new PedidoRequestDTO();
-        List<PedidoRequestDTO.ItemDTO> itens = new ArrayList<>();
-        PedidoRequestDTO.ItemDTO itemDTO = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO request = new OrderRequestDTO();
+        List<OrderRequestDTO.ItemDTO> itens = new ArrayList<>();
+        OrderRequestDTO.ItemDTO itemDTO = new OrderRequestDTO.ItemDTO();
         itemDTO.setProdutoId(produto.getId());
         itemDTO.setQuantidade(3);
         itens.add(itemDTO);
@@ -241,7 +241,7 @@ class PedidoServiceTest {
         when(clientRepository.findById(cliente.getId())).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            pedidoService.criar(request, cliente.getId());
+            orderService.create(request, cliente.getId());
         });
 
         assertEquals("Cliente não encontrado", exception.getMessage());
@@ -250,10 +250,10 @@ class PedidoServiceTest {
     @Test
     void testBuscarPorId_PedidoNaoEncontrado() {
         // Simula que o pedido não foi encontrado
-        when(pedidoRepository.findByIdAndClienteId(999L, cliente.getId())).thenReturn(Optional.empty());
+        when(orderRepository.findByIdAndClienteId(999L, cliente.getId())).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            pedidoService.buscarPorId(999L, cliente.getId());
+            orderService.searchById(999L, cliente.getId());
         });
 
         assertEquals("Pedido não encontrado ou acesso negado", exception.getMessage());

@@ -1,8 +1,8 @@
-package org.ecommerce.ecommerceapi.modules.pedido.repository;
+package org.ecommerce.ecommerceapi.modules.order.repository;
 
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
+import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class PedidoRepositoryTest {
+class OrderRepositoryTest {
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -60,47 +60,47 @@ class PedidoRepositoryTest {
         pedido1Cliente1.setCancelado(false);
         pedido1Cliente1.setDateCreate(LocalDateTime.now().minusDays(1));
         pedido1Cliente1.setTotal(BigDecimal.valueOf(150.0));
-        pedido1Cliente1 = pedidoRepository.save(pedido1Cliente1);
+        pedido1Cliente1 = orderRepository.save(pedido1Cliente1);
 
         pedido2Cliente1 = new Pedido();
         pedido2Cliente1.setCliente(cliente1);
         pedido2Cliente1.setCancelado(true);
         pedido2Cliente1.setDateCreate(LocalDateTime.now());
         pedido2Cliente1.setTotal(BigDecimal.valueOf(300.0));
-        pedido2Cliente1 = pedidoRepository.save(pedido2Cliente1);
+        pedido2Cliente1 = orderRepository.save(pedido2Cliente1);
 
         pedidoCliente2 = new Pedido();
         pedidoCliente2.setCliente(cliente2);
         pedidoCliente2.setCancelado(false);
         pedidoCliente2.setDateCreate(LocalDateTime.now());
         pedidoCliente2.setTotal(BigDecimal.valueOf(200.0));
-        pedidoCliente2 = pedidoRepository.save(pedidoCliente2);
+        pedidoCliente2 = orderRepository.save(pedidoCliente2);
     }
 
     @Test
     void testFindByClienteId() {
-        List<Pedido> pedidosCliente1 = pedidoRepository.findByClienteId(cliente1.getId());
+        List<Pedido> pedidosCliente1 = orderRepository.findByClienteId(cliente1.getId());
         assertEquals(2, pedidosCliente1.size(), "Deve haver 2 pedidos para o Cliente 1");
 
-        List<Pedido> pedidosCliente2 = pedidoRepository.findByClienteId(cliente2.getId());
+        List<Pedido> pedidosCliente2 = orderRepository.findByClienteId(cliente2.getId());
         assertEquals(1, pedidosCliente2.size(), "Deve haver 1 pedido para o Cliente 2");
     }
 
     @Test
     void testFindByIdAndClienteId() {
-        Optional<Pedido> pedidoOpt = pedidoRepository.findByIdAndClienteId(pedido1Cliente1.getId(), cliente1.getId());
+        Optional<Pedido> pedidoOpt = orderRepository.findByIdAndClienteId(pedido1Cliente1.getId(), cliente1.getId());
         assertTrue(pedidoOpt.isPresent(), "O pedido deve ser encontrado para o Cliente 1");
 
-        pedidoOpt = pedidoRepository.findByIdAndClienteId(pedidoCliente2.getId(), cliente1.getId());
+        pedidoOpt = orderRepository.findByIdAndClienteId(pedidoCliente2.getId(), cliente1.getId());
         assertTrue(pedidoOpt.isEmpty(), "O pedido não deve ser encontrado para o Cliente 1");
     }
 
     @Test
     void testFindByClienteIdAndCanceladoTrue() {
-        List<Pedido> canceladosCliente1 = pedidoRepository.findByClienteIdAndCanceladoTrue(cliente1.getId());
+        List<Pedido> canceladosCliente1 = orderRepository.findByClienteIdAndCanceladoTrue(cliente1.getId());
         assertEquals(1, canceladosCliente1.size(), "Deve haver 1 pedido cancelado para o Cliente 1");
 
-        List<Pedido> canceladosCliente2 = pedidoRepository.findByClienteIdAndCanceladoTrue(cliente2.getId());
+        List<Pedido> canceladosCliente2 = orderRepository.findByClienteIdAndCanceladoTrue(cliente2.getId());
         assertTrue(canceladosCliente2.isEmpty(), "Não deve haver pedidos cancelados para o Cliente 2");
     }
 }

@@ -3,8 +3,8 @@ package org.ecommerce.ecommerceapi.modules.payment.repository;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.payment.entity.Payment;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
-import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
+import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
+import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ class PaymentRepositoryTest {
     private PaymentRepository paymentRepository;
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
     private ClientRepository clientRepository;
@@ -31,7 +31,7 @@ class PaymentRepositoryTest {
     @BeforeEach
     void setUp() {
         paymentRepository.deleteAll();
-        pedidoRepository.deleteAll();
+        orderRepository.deleteAll();
         clientRepository.deleteAll();
     }
 
@@ -50,7 +50,7 @@ class PaymentRepositoryTest {
         pedido.setCancelado(false);
         pedido.setTotal(BigDecimal.valueOf(100));
         pedido.setDateCreate(LocalDateTime.now());
-        pedido = pedidoRepository.save(pedido);
+        pedido = orderRepository.save(pedido);
 
         Payment payment = new Payment();
         payment.setPedido(pedido);

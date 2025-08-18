@@ -1,4 +1,4 @@
-package org.ecommerce.ecommerceapi.modules.pedido.entity;
+package org.ecommerce.ecommerceapi.modules.order.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Data
-@Table(name = "pedido")
+@Table(name = "tb_pedido")
 public class Pedido {
 
     @Id
@@ -32,7 +32,7 @@ public class Pedido {
     private ClientEntity cliente;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ItemPedido> itens;
+    private List<OrderItem> itens;
 
     // Implementação do equals
     @Override
@@ -71,7 +71,7 @@ public class Pedido {
         this.dateCreate = now;
     }
 
-    public void setItens(List<ItemPedido> itens) {
+    public void setItens(List<OrderItem> itens) {
         this.itens = itens;
     }
 

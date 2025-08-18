@@ -1,4 +1,4 @@
-package org.ecommerce.ecommerceapi.modules.pedido.dto;
+package org.ecommerce.ecommerceapi.modules.order.dto;
 
 import org.junit.jupiter.api.Test;
 
@@ -6,19 +6,19 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PedidoRequestDTOTest {
+class OrderRequestDTOTest {
 
     @Test
     void testPedidoRequestDTOEqualsAndCanEqual() {
-        PedidoRequestDTO pedido1 = new PedidoRequestDTO();
-        PedidoRequestDTO pedido2 = new PedidoRequestDTO();
+        OrderRequestDTO pedido1 = new OrderRequestDTO();
+        OrderRequestDTO pedido2 = new OrderRequestDTO();
 
         // Inicializa itens iguais
-        PedidoRequestDTO.ItemDTO item1 = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO.ItemDTO item1 = new OrderRequestDTO.ItemDTO();
         item1.setProdutoId(1L);
         item1.setQuantidade(2);
 
-        PedidoRequestDTO.ItemDTO item2 = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO.ItemDTO item2 = new OrderRequestDTO.ItemDTO();
         item2.setProdutoId(1L);
         item2.setQuantidade(2);
 
@@ -39,8 +39,8 @@ class PedidoRequestDTOTest {
 
     @Test
     void testItemDTOEqualsAndCanEqual() {
-        PedidoRequestDTO.ItemDTO item1 = new PedidoRequestDTO.ItemDTO();
-        PedidoRequestDTO.ItemDTO item2 = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO.ItemDTO item1 = new OrderRequestDTO.ItemDTO();
+        OrderRequestDTO.ItemDTO item2 = new OrderRequestDTO.ItemDTO();
 
         item1.setProdutoId(1L);
         item1.setQuantidade(2);
@@ -62,15 +62,15 @@ class PedidoRequestDTOTest {
 
     @Test
     void testPedidoRequestDTOHashCode() {
-        PedidoRequestDTO pedido1 = new PedidoRequestDTO();
-        PedidoRequestDTO pedido2 = new PedidoRequestDTO();
+        OrderRequestDTO pedido1 = new OrderRequestDTO();
+        OrderRequestDTO pedido2 = new OrderRequestDTO();
 
         // Inicializa itens iguais
-        PedidoRequestDTO.ItemDTO item1 = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO.ItemDTO item1 = new OrderRequestDTO.ItemDTO();
         item1.setProdutoId(1L);
         item1.setQuantidade(2);
 
-        PedidoRequestDTO.ItemDTO item2 = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO.ItemDTO item2 = new OrderRequestDTO.ItemDTO();
         item2.setProdutoId(1L);
         item2.setQuantidade(2);
 
@@ -90,8 +90,8 @@ class PedidoRequestDTOTest {
 
     @Test
     void testItemDTOHashCode() {
-        PedidoRequestDTO.ItemDTO item1 = new PedidoRequestDTO.ItemDTO();
-        PedidoRequestDTO.ItemDTO item2 = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO.ItemDTO item1 = new OrderRequestDTO.ItemDTO();
+        OrderRequestDTO.ItemDTO item2 = new OrderRequestDTO.ItemDTO();
 
         item1.setProdutoId(1L);
         item1.setQuantidade(2);
@@ -111,8 +111,8 @@ class PedidoRequestDTOTest {
 
     @Test
     void testPedidoRequestDTOToString() {
-        PedidoRequestDTO pedido = new PedidoRequestDTO();
-        PedidoRequestDTO.ItemDTO item = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO pedido = new OrderRequestDTO();
+        OrderRequestDTO.ItemDTO item = new OrderRequestDTO.ItemDTO();
         item.setProdutoId(1L);
         item.setQuantidade(2);
 
@@ -124,7 +124,7 @@ class PedidoRequestDTOTest {
 
     @Test
     void testItemDTOToString() {
-        PedidoRequestDTO.ItemDTO item = new PedidoRequestDTO.ItemDTO();
+        OrderRequestDTO.ItemDTO item = new OrderRequestDTO.ItemDTO();
         item.setProdutoId(1L);
         item.setQuantidade(2);
 

@@ -1,4 +1,4 @@
-package org.ecommerce.ecommerceapi.modules.pedido.entity;
+package org.ecommerce.ecommerceapi.modules.order.entity;
 
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,55 +8,55 @@ import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ItemPedidoTest {
+class OrderItemTest {
 
-    private ItemPedido itemPedido;
+    private OrderItem orderItem;
     private Product product;
     private Pedido pedido;
 
     @BeforeEach
     void setUp() {
-        itemPedido = new ItemPedido();
+        orderItem = new OrderItem();
         product = new Product();
         product.setId(1L);
         product.setNome("Produto A");
         pedido = new Pedido();
         pedido.setId(10L);
-        itemPedido.setId(1L);
-        itemPedido.setNomeProduto("Produto A");
-        itemPedido.setQuantidade(2);
-        itemPedido.setPrecoUnitario(BigDecimal.valueOf(50.00));
-        itemPedido.setDiscountPrice(BigDecimal.valueOf(45.00));
-        itemPedido.setPrecoPago(BigDecimal.valueOf(90.00));
-        itemPedido.setProduto(product);
-        itemPedido.setPedido(pedido);
+        orderItem.setId(1L);
+        orderItem.setNomeProduto("Produto A");
+        orderItem.setQuantidade(2);
+        orderItem.setPrecoUnitario(BigDecimal.valueOf(50.00));
+        orderItem.setDiscountPrice(BigDecimal.valueOf(45.00));
+        orderItem.setPrecoPago(BigDecimal.valueOf(90.00));
+        orderItem.setProduto(product);
+        orderItem.setPedido(pedido);
     }
 
     @Test
     void testGettersAndSetters() {
-        ItemPedido itemPedido = new ItemPedido();
-        itemPedido.setId(1L);
-        itemPedido.setNomeProduto("Produto A");
-        itemPedido.setQuantidade(2);
-        itemPedido.setPrecoUnitario(BigDecimal.valueOf(50.00));
-        itemPedido.setDiscountPrice(BigDecimal.valueOf(45.00));
-        itemPedido.setPrecoPago(BigDecimal.valueOf(90.00));
+        OrderItem orderItem = new OrderItem();
+        orderItem.setId(1L);
+        orderItem.setNomeProduto("Produto A");
+        orderItem.setQuantidade(2);
+        orderItem.setPrecoUnitario(BigDecimal.valueOf(50.00));
+        orderItem.setDiscountPrice(BigDecimal.valueOf(45.00));
+        orderItem.setPrecoPago(BigDecimal.valueOf(90.00));
 
-        assertEquals(1L, itemPedido.getId());
-        assertEquals("Produto A", itemPedido.getNomeProduto());
-        assertEquals(2, itemPedido.getQuantidade());
-        assertEquals(BigDecimal.valueOf(50.00), itemPedido.getPrecoUnitario());
-        assertEquals(BigDecimal.valueOf(45.00), itemPedido.getDiscountPrice());
-        assertEquals(BigDecimal.valueOf(90.00), itemPedido.getPrecoPago());
+        assertEquals(1L, orderItem.getId());
+        assertEquals("Produto A", orderItem.getNomeProduto());
+        assertEquals(2, orderItem.getQuantidade());
+        assertEquals(BigDecimal.valueOf(50.00), orderItem.getPrecoUnitario());
+        assertEquals(BigDecimal.valueOf(45.00), orderItem.getDiscountPrice());
+        assertEquals(BigDecimal.valueOf(90.00), orderItem.getPrecoPago());
     }
     @Test
     void testGetPedido() {
-        assertEquals(pedido, itemPedido.getPedido());
+        assertEquals(pedido, orderItem.getPedido());
     }
 
     @Test
     void testToStringContainsFields() {
-        String toString = itemPedido.toString();
+        String toString = orderItem.toString();
         assertNotNull(toString);
         assertTrue(toString.contains("id=1"));
         assertTrue(toString.contains("nomeProduto=Produto A"));
@@ -68,7 +68,7 @@ class ItemPedidoTest {
     
     @Test
     void testEqualsAndHashCode() {
-        ItemPedido item1 = new ItemPedido();
+        OrderItem item1 = new OrderItem();
         item1.setId(1L);
         item1.setNomeProduto("Produto A");
         item1.setQuantidade(2);
@@ -76,7 +76,7 @@ class ItemPedidoTest {
         item1.setDiscountPrice(BigDecimal.valueOf(45.00));
         item1.setPrecoPago(BigDecimal.valueOf(90.00));
 
-        ItemPedido item2 = new ItemPedido();
+        OrderItem item2 = new OrderItem();
         item2.setId(1L);
         item2.setNomeProduto("Produto A");
         item2.setQuantidade(2);
@@ -93,11 +93,11 @@ class ItemPedidoTest {
 
     @Test
     void testEqualsWithDifferentObjects() {
-        ItemPedido item1 = new ItemPedido();
+        OrderItem item1 = new OrderItem();
         item1.setId(1L);
         item1.setNomeProduto("Produto A");
 
-        ItemPedido item2 = new ItemPedido();
+        OrderItem item2 = new OrderItem();
         item2.setId(2L);
         item2.setNomeProduto("Produto B");
 
@@ -106,7 +106,7 @@ class ItemPedidoTest {
 
     @Test
     void testEqualsWithNull() {
-        ItemPedido item = new ItemPedido();
+        OrderItem item = new OrderItem();
         item.setId(1L);
         item.setNomeProduto("Produto A");
 
@@ -115,7 +115,7 @@ class ItemPedidoTest {
 
     @Test
     void testEqualsWithDifferentClass() {
-        ItemPedido item = new ItemPedido();
+        OrderItem item = new OrderItem();
         item.setId(1L);
         item.setNomeProduto("Produto A");
 

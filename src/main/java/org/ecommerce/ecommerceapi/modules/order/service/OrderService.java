@@ -1,13 +1,13 @@
-package org.ecommerce.ecommerceapi.modules.pedido.service;
+package org.ecommerce.ecommerceapi.modules.order.service;
 
 import lombok.Data;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
-import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoRequestDTO;
-import org.ecommerce.ecommerceapi.modules.pedido.dto.PedidoResponseDTO;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.ItemPedido;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
-import org.ecommerce.ecommerceapi.modules.pedido.repository.PedidoRepository;
+import org.ecommerce.ecommerceapi.modules.order.dto.OrderRequestDTO;
+import org.ecommerce.ecommerceapi.modules.order.dto.OrderResponseDTO;
+import org.ecommerce.ecommerceapi.modules.order.entity.OrderItem;
+import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
+import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
 
 @Data
 @Service
-public class PedidoService {
+public class OrderService {
 
     @Autowired
-    private PedidoRepository pedidoRepository;
+    private OrderRepository orderRepository;
 
     @Autowired
     private ProductService productService;
@@ -32,15 +32,15 @@ public class PedidoService {
     @Autowired
     private ClientRepository clientRepository;
 
-    public PedidoService(PedidoRepository pedidoRepository,
-                         ProductService productService,
-                         ClientRepository clientRepository) {
-        this.pedidoRepository = pedidoRepository;
+    public OrderService(OrderRepository orderRepository,
+                        ProductService productService,
+                        ClientRepository clientRepository) {
+        this.orderRepository = orderRepository;
         this.productService = productService;
         this.clientRepository = clientRepository;
     }
 
-    public PedidoResponseDTO criar(PedidoRequestDTO dto, Long clienteId) {
+    public OrderResponseDTO create(OrderRequestDTO dto, Long clienteId) {
         Pedido pedido = new Pedido();
 
         ClientEntity cliente = clientRepository.findById(clienteId)
@@ -49,26 +49,26 @@ public class PedidoService {
         pedido.setCliente(cliente);
         pedido.setDateCreate(LocalDateTime.now());
 
-        List<ItemPedido> itens = dto.getItens().stream().map(itemDTO -> {
+        List<OrderItem> itens = dto.getItens().stream().map(itemDTO -> {
             Product product = productService.buscarPorId(itemDTO.getProdutoId());
-            ItemPedido item = new ItemPedido();
-            item.setProduto(product);
-            item.setNomeProduto(product.getNome());
-            item.setQuantidade(itemDTO.getQuantidade());
+            OrderItem item = new OrderItem();
+            item.setProduct(product);
+            item.setNameProduct(product.getNome());
+            item.setQuantity(itemDTO.getQuantidade());
 
 
-            item.setPrecoUnitario(product.getPreco());
+            item.setUnitPrice(product.getPreco());
             item.setDiscountPrice(product.getDiscountedPrice());
 
             BigDecimal valorPago = item.getDiscountPrice()
-    .multiply(BigDecimal.valueOf(item.getQuantidade()))
+    .multiply(BigDecimal.valueOf(item.getQuantity()))
     .setScale(2, RoundingMode.HALF_UP);
 
-item.setPrecoPago(valorPago);
+item.setPricePad(valorPago);
 
 
-            BigDecimal precoPago = item.getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantidade()));
-            item.setPrecoPago(precoPago);
+            BigDecimal precoPago = item.getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
+            item.setPricePad(precoPago);
 
 
 
@@ -80,58 +80,58 @@ item.setPrecoPago(valorPago);
         
         // Calcular o total do pedido
         BigDecimal total = itens.stream()
-    .map(ItemPedido::getPrecoPago)
+    .map(OrderItem::getPricePad)
     .reduce(BigDecimal.ZERO, BigDecimal::add)
     .setScale(2, RoundingMode.HALF_UP);
 
 pedido.setTotal(total);
 
-        Pedido salvo = pedidoRepository.save(pedido);
+        Pedido salvo = orderRepository.save(pedido);
         return mapToResponseDTO(salvo);
     }
 
 
 
-    public List<PedidoResponseDTO> listarPorCliente(Long clienteId) {
-        return pedidoRepository.findByClienteId(clienteId).stream()
+    public List<OrderResponseDTO> listByClient(Long clienteId) {
+        return orderRepository.findByClienteId(clienteId).stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public PedidoResponseDTO buscarPorId(Long id, Long clienteId) {
-        Pedido pedido = pedidoRepository.findByIdAndClienteId(id, clienteId)
+        public OrderResponseDTO searchById(Long id, Long clienteId) {
+        Pedido pedido = orderRepository.findByIdAndClienteId(id, clienteId)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado ou acesso negado"));
         return mapToResponseDTO(pedido);
     }
 
-    public void cancelar(Long id, Long clienteId) {
-        Pedido pedido = pedidoRepository.findByIdAndClienteId(id, clienteId)
+    public void cancel(Long id, Long clienteId) {
+        Pedido pedido = orderRepository.findByIdAndClienteId(id, clienteId)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado ou acesso negado"));
         pedido.setCancelado(true);
-        pedidoRepository.save(pedido);
+        orderRepository.save(pedido);
     }
 
-    public List<PedidoResponseDTO> historico(Long clienteId) {
-        return pedidoRepository.findByClienteIdAndCanceladoTrue(clienteId).stream()
+    public List<OrderResponseDTO> history(Long clienteId) {
+        return orderRepository.findByClienteIdAndCanceladoTrue(clienteId).stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    private PedidoResponseDTO mapToResponseDTO(Pedido pedido) {
-        PedidoResponseDTO response = new PedidoResponseDTO();
+    private OrderResponseDTO mapToResponseDTO(Pedido pedido) {
+        OrderResponseDTO response = new OrderResponseDTO();
         response.setId(pedido.getId());
         response.setClienteId(pedido.getCliente().getId());
         response.setTotal(pedido.getTotal());
         response.setItens(pedido.getItens().stream().map(i -> {
-            PedidoResponseDTO.ItemDTO itemDto = new PedidoResponseDTO.ItemDTO();
-            itemDto.setProdutoId(i.getProduto().getId());
-            itemDto.setNomeProduto(i.getNomeProduto());
-            itemDto.setQuantidade(i.getQuantidade());
-            itemDto.setPrecoUnitario(i.getPrecoUnitario());
+            OrderResponseDTO.ItemDTO itemDto = new OrderResponseDTO.ItemDTO();
+            itemDto.setProdutoId(i.getProduct().getId());
+            itemDto.setNomeProduto(i.getNameProduct());
+            itemDto.setQuantidade(i.getQuantity());
+            itemDto.setPrecoUnitario(i.getUnitPrice());
             itemDto.setDiscountPrice(i.getDiscountPrice()); // Preço com desconto
 
-            itemDto.setPrecoPago(i.getPrecoPago()); // Total pago por este item
-            itemDto.setPrecoPago(i.getPrecoPago()); // Preço total pago pelo item
+            itemDto.setPrecoPago(i.getPricePad()); // Total pago por este item
+            itemDto.setPrecoPago(i.getPricePad()); // Preço total pago pelo item
 
             return itemDto;
         }).collect(Collectors.toList()));

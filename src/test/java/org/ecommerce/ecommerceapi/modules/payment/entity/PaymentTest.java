@@ -1,6 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.payment.entity;
 
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
+import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

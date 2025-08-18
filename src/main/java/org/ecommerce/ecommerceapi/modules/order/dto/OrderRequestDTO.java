@@ -1,9 +1,9 @@
-package org.ecommerce.ecommerceapi.modules.pedido.dto;
+package org.ecommerce.ecommerceapi.modules.order.dto;
 
 import java.util.List;
 import java.util.Objects;
 
-public class PedidoRequestDTO {
+public class OrderRequestDTO {
     private List<ItemDTO> itens;
 
     // Getter e Setter
@@ -19,8 +19,8 @@ public class PedidoRequestDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PedidoRequestDTO)) return false;
-        PedidoRequestDTO that = (PedidoRequestDTO) o;
+        if (!(o instanceof OrderRequestDTO)) return false;
+        OrderRequestDTO that = (OrderRequestDTO) o;
         return Objects.equals(itens, that.itens);
     }
 
@@ -37,7 +37,7 @@ public class PedidoRequestDTO {
     }
 
     protected boolean canEqual(Object other) {
-        return other instanceof PedidoRequestDTO;
+        return other instanceof OrderRequestDTO;
     }
 
     // Classe interna ItemDTO

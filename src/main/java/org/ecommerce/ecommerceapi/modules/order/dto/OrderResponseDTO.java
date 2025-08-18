@@ -1,4 +1,4 @@
-package org.ecommerce.ecommerceapi.modules.pedido.dto;
+package org.ecommerce.ecommerceapi.modules.order.dto;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Data
-public class PedidoResponseDTO {
+public class OrderResponseDTO {
     private Long id;                // ID do pedido
     private Long clienteId;         // ID do cliente que fez o pedido
     private BigDecimal total;        // Total do pedido
@@ -16,8 +16,8 @@ public class PedidoResponseDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PedidoResponseDTO)) return false;
-        PedidoResponseDTO that = (PedidoResponseDTO) o;
+        if (!(o instanceof OrderResponseDTO)) return false;
+        OrderResponseDTO that = (OrderResponseDTO) o;
         return Objects.equals(id, that.id) &&
                Objects.equals(clienteId, that.clienteId) &&
                Objects.equals(total, that.total) &&

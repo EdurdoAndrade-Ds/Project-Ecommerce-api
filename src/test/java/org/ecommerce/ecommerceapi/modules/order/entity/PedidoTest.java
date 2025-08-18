@@ -1,4 +1,4 @@
-package org.ecommerce.ecommerceapi.modules.pedido.entity;
+package org.ecommerce.ecommerceapi.modules.order.entity;
 
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.junit.jupiter.api.BeforeEach;

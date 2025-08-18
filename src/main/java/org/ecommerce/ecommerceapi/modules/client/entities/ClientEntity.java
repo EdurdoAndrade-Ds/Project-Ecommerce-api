@@ -17,7 +17,7 @@ import jakarta.validation.constraints.Pattern;
 
 
 @Entity
-@Table(name = "client")
+@Table(name = "tb_client")
 @Getter
 @Setter
 @Builder

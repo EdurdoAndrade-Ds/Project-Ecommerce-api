@@ -2,7 +2,7 @@ package org.ecommerce.ecommerceapi.modules.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.ecommerce.ecommerceapi.modules.pedido.entity.Pedido;
+import org.ecommerce.ecommerceapi.modules.order.entity.Pedido;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
