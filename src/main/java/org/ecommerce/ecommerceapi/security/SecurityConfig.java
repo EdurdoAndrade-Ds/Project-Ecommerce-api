@@ -36,6 +36,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // === PÚBLICOS ===
                         .requestMatchers(HttpMethod.POST, "/client", "/client/").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/version").permitAll()
                         .requestMatchers("/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
                         // === PROTEGIDOS ===
