@@ -198,15 +198,10 @@ public class ClientController {
             @Valid @RequestBody UpdateClientDTO updateClientDTO,
             Authentication authentication
     ) {
-        try {
-            var clienteId = Long.parseLong(authentication.getName());
-            var updatedCliente = this.updateClientUseCase.execute(clienteId, updateClientDTO);
-            return ResponseEntity.ok().body(updatedCliente);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        Long clienteId = Long.parseLong(authentication.getName());
+
+        var updatedClient = updateClientUseCase.execute(clienteId, updateClientDTO);
+        return ResponseEntity.ok(updatedClient);
     }
 }
 

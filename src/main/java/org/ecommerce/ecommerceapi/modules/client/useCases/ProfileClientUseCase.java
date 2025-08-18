@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.client.useCases;
 
+import org.ecommerce.ecommerceapi.exceptions.ClientUnauthorizedException;
 import org.ecommerce.ecommerceapi.modules.client.dto.ProfileClientResponseDTO;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,9 @@ public class ProfileClientUseCase {
 
     public ProfileClientResponseDTO execute(Long clienteId) {
         var client = this.clientRepository.findById(clienteId)
-                .orElseThrow(() -> {
-                    throw new RuntimeException("Cliente não encontrado");
-                });
+                .orElseThrow(() -> new ClientUnauthorizedException("Cliente nao encontrado"));
 
-        var clienteDTO = ProfileClientResponseDTO.builder()
+        return ProfileClientResponseDTO.builder()
                 .name(client.getName())
                 .username(client.getUsername())
                 .email(client.getEmail())
@@ -27,8 +26,6 @@ public class ProfileClientUseCase {
                 .state(client.getState())
                 .cep(client.getCep())
                 .build();
-
-        return clienteDTO;
     }
 }
 
