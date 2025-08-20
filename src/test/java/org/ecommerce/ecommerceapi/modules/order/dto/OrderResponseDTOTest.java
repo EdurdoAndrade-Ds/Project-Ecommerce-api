@@ -11,6 +11,119 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrderResponseDTOTest {
 
     @Test
+    void testEqualsAndHashCode_sameValues_shouldBeEqual() {
+        OrderResponseDTO.ItemDTO item1 = OrderResponseDTO.ItemDTO.builder()
+                .produtoId(1L)
+                .nomeProduto("Produto X")
+                .quantidade(2)
+                .precoUnitario(BigDecimal.valueOf(10.0))
+                .discountPrice(BigDecimal.valueOf(2.0))
+                .precoPago(BigDecimal.valueOf(18.0))
+                .build();
+
+        OrderResponseDTO.ItemDTO item2 = OrderResponseDTO.ItemDTO.builder()
+                .produtoId(1L)
+                .nomeProduto("Produto X")
+                .quantidade(2)
+                .precoUnitario(BigDecimal.valueOf(10.0))
+                .discountPrice(BigDecimal.valueOf(2.0))
+                .precoPago(BigDecimal.valueOf(18.0))
+                .build();
+
+        assertEquals(item1, item2);
+        assertEquals(item1.hashCode(), item2.hashCode());
+    }
+
+    @Test
+    void testEquals_differentValues_shouldNotBeEqual() {
+        OrderResponseDTO.ItemDTO item1 = new OrderResponseDTO.ItemDTO(1L, "Produto X", 2,
+                BigDecimal.TEN, BigDecimal.ONE, BigDecimal.valueOf(9));
+
+        OrderResponseDTO.ItemDTO item2 = new OrderResponseDTO.ItemDTO(2L, "Produto Y", 3,
+                BigDecimal.ONE, BigDecimal.ZERO, BigDecimal.ONE);
+
+        assertNotEquals(item1, item2);
+    }
+
+    @Test
+    void testEquals_withNullAndDifferentClass() {
+        OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO(1L, "Produto X", 2,
+                BigDecimal.TEN, BigDecimal.ONE, BigDecimal.valueOf(9));
+
+        assertNotEquals(item, null);
+        assertNotEquals(item, "String qualquer");
+    }
+
+    @Test
+    void testBuilderAndGetters() {
+        OrderResponseDTO.ItemDTO item = OrderResponseDTO.ItemDTO.builder()
+                .produtoId(5L)
+                .nomeProduto("Produto Builder")
+                .quantidade(10)
+                .precoUnitario(BigDecimal.valueOf(50))
+                .discountPrice(BigDecimal.valueOf(5))
+                .precoPago(BigDecimal.valueOf(45))
+                .build();
+
+        assertEquals(5L, item.getProdutoId());
+        assertEquals("Produto Builder", item.getNomeProduto());
+        assertEquals(10, item.getQuantidade());
+        assertEquals(BigDecimal.valueOf(50), item.getPrecoUnitario());
+        assertEquals(BigDecimal.valueOf(5), item.getDiscountPrice());
+        assertEquals(BigDecimal.valueOf(45), item.getPrecoPago());
+    }
+
+    @Test
+    void testToString_containsFieldValues() {
+        OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO(1L, "Produto Teste", 3,
+                BigDecimal.TEN, BigDecimal.ONE, BigDecimal.valueOf(29));
+
+        String toString = item.toString();
+
+        assertTrue(toString.contains("Produto Teste"));
+        assertTrue(toString.contains("1"));
+        assertTrue(toString.contains("3"));
+    }
+
+    @Test
+    void testEquals_sameReference_shouldBeTrue() {
+        OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO(1L, "Produto", 2,
+                BigDecimal.TEN, BigDecimal.ONE, BigDecimal.valueOf(9));
+
+        assertEquals(item, item); // o == this
+    }
+
+    @Test
+    void testEquals_differentClass_shouldBeFalseDueToCanEqual() {
+        class FakeItemDTO extends OrderResponseDTO.ItemDTO {}
+        OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO(1L, "Produto", 2,
+                BigDecimal.TEN, BigDecimal.ONE, BigDecimal.valueOf(9));
+
+        FakeItemDTO fake = new FakeItemDTO();
+        fake.setProdutoId(1L);
+        fake.setNomeProduto("Produto");
+        fake.setQuantidade(2);
+        fake.setPrecoUnitario(BigDecimal.TEN);
+        fake.setDiscountPrice(BigDecimal.ONE);
+        fake.setPrecoPago(BigDecimal.valueOf(9));
+
+        assertNotEquals(item, fake); // força branch do canEqual()
+    }
+
+    @Test
+    void testEquals_oneFieldDifferent_shouldBeFalse() {
+        OrderResponseDTO.ItemDTO item1 = new OrderResponseDTO.ItemDTO(1L, "Produto", 2,
+                BigDecimal.TEN, BigDecimal.ONE, BigDecimal.valueOf(9));
+
+        OrderResponseDTO.ItemDTO item2 = new OrderResponseDTO.ItemDTO(1L, "Produto", 2,
+                BigDecimal.TEN, BigDecimal.ONE, BigDecimal.valueOf(99)); // só precoPago difere
+
+        assertNotEquals(item1, item2);
+    }
+
+
+
+    @Test
     void testGettersAndSetters() {
         OrderResponseDTO dto = new OrderResponseDTO();
 
@@ -57,6 +170,23 @@ class OrderResponseDTOTest {
         assertEquals(dto1.hashCode(), dto2.hashCode());
         assertTrue(dto1.toString().contains("clienteId"));
         assertTrue(dto1.toString().contains("itens"));
+    }
+
+    @Test
+    void testCanEqual_withNull() {
+        OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO();
+        assertFalse(item.canEqual(null)); // cobre branch restante
+    }
+
+    @Test
+    void testEquals_withNullFieldDifference() {
+        OrderResponseDTO.ItemDTO item1 = new OrderResponseDTO.ItemDTO(1L, null, 2,
+                BigDecimal.TEN, BigDecimal.ONE, BigDecimal.valueOf(9));
+
+        OrderResponseDTO.ItemDTO item2 = new OrderResponseDTO.ItemDTO(1L, "Produto", 2,
+                BigDecimal.TEN, BigDecimal.ONE, BigDecimal.valueOf(9));
+
+        assertNotEquals(item1, item2); // força branch quando nomeProduto é null em um e não no outro
     }
 
     @Test

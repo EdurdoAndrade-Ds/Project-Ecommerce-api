@@ -28,6 +28,29 @@ public class OrderResponseDTO {
         private BigDecimal precoUnitario;
         private BigDecimal discountPrice;
         private BigDecimal precoPago;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ItemDTO itemDTO = (ItemDTO) o;
+            return Objects.equals(produtoId, itemDTO.produtoId)
+                    && Objects.equals(nomeProduto, itemDTO.nomeProduto)
+                    && Objects.equals(quantidade, itemDTO.quantidade)
+                    && Objects.equals(precoUnitario, itemDTO.precoUnitario)
+                    && Objects.equals(discountPrice, itemDTO.discountPrice)
+                    && Objects.equals(precoPago, itemDTO.precoPago)
+                    && itemDTO.canEqual(this);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(produtoId, nomeProduto, quantidade, precoUnitario, discountPrice, precoPago);
+        }
+
+        public boolean canEqual(Object other) {
+            return other instanceof ItemDTO && other.getClass() == ItemDTO.class;
+        }
     }
 
 
