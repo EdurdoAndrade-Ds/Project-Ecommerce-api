@@ -22,7 +22,8 @@ public class UpdateClientUseCase {
 
     public ClientEntity execute(Long clienteId, UpdateClientDTO upDto) {
         ClientEntity client = this.clientRepository.findById(clienteId)
-                .orElseThrow(() -> new ClientNotFoundException("Cliente nao encotrado"));
+                .orElseThrow(() -> new ClientNotFoundException("Cliente nao encontrado"));
+
 
         String newUsername = upDto.getUsername() != null ? upDto.getUsername() : client.getUsername();
         String newEmail = upDto.getEmail() != null ? upDto.getEmail() : client.getEmail();

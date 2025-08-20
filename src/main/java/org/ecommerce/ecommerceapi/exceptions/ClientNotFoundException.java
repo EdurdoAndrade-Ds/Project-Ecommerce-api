@@ -5,6 +5,6 @@ public class ClientNotFoundException extends RuntimeException {
         super(message);
     }
     public ClientNotFoundException() {
-        super("Cliente não encontrado");
+        super("Cliente nao encontrado");
     }
 }

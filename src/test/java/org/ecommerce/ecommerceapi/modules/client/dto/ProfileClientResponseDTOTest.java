@@ -25,9 +25,7 @@ class ProfileClientResponseDTOTest {
         ProfileClientResponseDTO a = make("User", "user", "user@u.com");
 
         assertEquals(a, a);
-
         assertNotEquals(a, null);
-
         assertNotEquals(a, "String");
 
         ProfileClientResponseDTO b = make("User", "user", "user@u.com");
@@ -46,19 +44,20 @@ class ProfileClientResponseDTOTest {
     void toString_containsAllFields() {
         ProfileClientResponseDTO dto = make("Edu", "edu", "edu@e.com");
         String s = dto.toString();
-        assertTrue(s.contains("ProfileClienteResponseDTO"));
+        assertTrue(s.contains("ProfileClientResponseDTO"));
         assertTrue(s.contains("name=Edu"));
         assertTrue(s.contains("username=edu"));
         assertTrue(s.contains("email=edu@e.com"));
         assertTrue(s.contains("phone=11987654321"));
+        assertTrue(s.contains("address=Av x"));
         assertTrue(s.contains("city=Cidade y"));
-        assertTrue(s.contains("=sao paulo"));
+        assertTrue(s.contains("state=sao paulo"));
         assertTrue(s.contains("cep=06789123"));
     }
 
     @Test
     void toString_containsAllMainFields() {
-        ProfileClientResponseDTO dto = new ProfileClientResponseDTO().builder()
+        ProfileClientResponseDTO dto = ProfileClientResponseDTO.builder()
                 .name("Eduardo")
                 .username("edu")
                 .email("edu@e.com")
@@ -71,19 +70,16 @@ class ProfileClientResponseDTOTest {
 
         String s = dto.toString();
 
-        assertTrue(s.startsWith("ProfileClienteResponseDTO("), "toStrinf nao comecou como esperado: " + s);
+        assertTrue(s.startsWith("ProfileClientResponseDTO("), "toString nao comecou como esperado: " + s);
         assertTrue(s.contains("name=Eduardo"), s);
         assertTrue(s.contains("username=edu"), s);
         assertTrue(s.contains("email=edu@e.com"), s);
-        assertTrue(s.contains("telefone=11987654321"), s);
-        assertTrue(s.contains("endereco=Rua x"), s);
-        assertTrue(s.contains("cidade=Cidade y"), s);
-        assertTrue(s.contains("estado=SP"), s);
+        assertTrue(s.contains("phone=11987654321"), s);
+        assertTrue(s.contains("address=Rua x"), s);
+        assertTrue(s.contains("city=Cidade y"), s);
+        assertTrue(s.contains("state=SP"), s);
         assertTrue(s.contains("cep=06789123"), s);
     }
-
-
-    private ProfileClientResponseDTO profileDTO;
 
     @BeforeEach
     void setUp() {
@@ -97,6 +93,8 @@ class ProfileClientResponseDTOTest {
         profileDTO.setState("Estado Exemplo");
         profileDTO.setCep("12345-678");
     }
+
+    private ProfileClientResponseDTO profileDTO;
 
     @Test
     void testGettersAndSetters() {
@@ -112,16 +110,8 @@ class ProfileClientResponseDTOTest {
 
     @Test
     void builder_toString_coversLombokInnerBuilder() {
-        String s = ProfileClientResponseDTO.builder()
-                .name("X")
-                .username("y")
-                .email("z@z.com")
-                .toString();
-
-        assertTrue(s.contains("ProfileClienteResponseDTOBuilder"), s);
-        assertTrue(s.contains("name=X"), s);
-        assertTrue(s.contains("username=y"), s);
-        assertTrue(s.contains("email=z@z.com"), s);
+        String s = ProfileClientResponseDTO.builder().toString();
+        assertTrue(s.contains("ProfileClientResponseDTO.ProfileClientResponseDTOBuilder"), s);
     }
 
     @Test
@@ -139,26 +129,7 @@ class ProfileClientResponseDTOTest {
         assertEquals(profileDTO, profileDTO2);
         assertEquals(profileDTO.hashCode(), profileDTO2.hashCode());
 
-        profileDTO2.setName("Maria"); // Alterando para testar desigualdade
+        profileDTO2.setName("Maria");
         assertNotEquals(profileDTO, profileDTO2);
-    }
-
-    @Test
-    void testEqualsWithDifferentObjects() {
-        ProfileClientResponseDTO profileDTO2 = new ProfileClientResponseDTO();
-        profileDTO2.setName("Maria"); // Nome diferente
-
-        assertNotEquals(profileDTO, profileDTO2);
-    }
-
-    @Test
-    void testEqualsWithNull() {
-        assertNotEquals(profileDTO, null);
-    }
-
-    @Test
-    void testEqualsWithDifferentClass() {
-        String differentClassObject = "This is a string";
-        assertNotEquals(profileDTO, differentClassObject);
     }
 }

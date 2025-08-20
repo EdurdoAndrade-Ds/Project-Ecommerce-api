@@ -15,13 +15,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
-@Builder(toBuilder = true)
-@ToString
 @Entity
 @Table(name = "client")
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class ClientEntity {
 
     @Id

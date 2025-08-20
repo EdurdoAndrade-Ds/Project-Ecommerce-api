@@ -2,11 +2,10 @@ package org.ecommerce.ecommerceapi.modules.client.dto;
 
 import lombok.*;
 
-@Getter @Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor @AllArgsConstructor
+@Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AuthClientDTO {
 
 

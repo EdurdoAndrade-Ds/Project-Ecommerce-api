@@ -6,13 +6,12 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-@Getter @Setter
+@Entity
+@Table(name = "tb_product")
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-@Table(name = "tb_product")
 public class Product {
 
     @Id
@@ -36,24 +35,22 @@ public class Product {
     private BigDecimal discountPercentage = BigDecimal.ZERO;
 
 
+
     @Transient
-    private BigDecimal discountedPrice; // Preço com desconto, calculado dinamicamente
-
-    // O campo discountedPrice pode ser removido, pois será calculado dinamicamente
-    // private BigDecimal discountedPrice;
-
-
-    // Método para calcular o preço com desconto
-
+    private BigDecimal discountedPrice;
 
     public BigDecimal getDiscountedPrice() {
-        if (price == null) return null;
-        // se desconto for nulo ou zero -> retorna o MESMO BigDecimal (mantém escala, ex.: 100.0)
-        if (discountPercentage == null || BigDecimal.valueOf(discountPercentage).signum() == 0) {
-            return price;
+        if (discountedPrice != null) {
+            return discountedPrice.setScale(2, RoundingMode.HALF_UP);
         }
-        BigDecimal pct = BigDecimal.valueOf(discountPercentage);
-        BigDecimal discount = price.multiply(pct).divide(BigDecimal.valueOf(100));
-        return price.subtract(discount);
+        if (price == null) {
+            return null;
+        }
+        if (discountPercentage == null || discountPercentage.compareTo(BigDecimal.ZERO) == 0) {
+            return price.setScale(2, RoundingMode.HALF_UP);
+        }
+        BigDecimal desconto = price.multiply(discountPercentage)
+                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+        return price.subtract(desconto).setScale(2, RoundingMode.HALF_UP);
     }
 }

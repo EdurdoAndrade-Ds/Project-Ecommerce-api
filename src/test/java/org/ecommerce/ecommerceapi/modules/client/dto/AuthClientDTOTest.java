@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AuthClientDTOTest {
 
-    private AuthClientDTO make(String username, String senha) {
+    private AuthClientDTO make(String username, String password) {
         AuthClientDTO dto = new AuthClientDTO();
         dto.setUsername(username);
-        dto.setPassword(senha);
+        dto.setPassword(password);
         return dto;
     }
 
@@ -29,8 +29,8 @@ class AuthClientDTOTest {
         AuthClientDTO diffUsername = make("user2", "123");
         assertNotEquals(base, diffUsername);
 
-        AuthClientDTO diffSenha = make("user", "999");
-        assertNotEquals(base, diffSenha);
+        AuthClientDTO diffPassword = make("user", "999");
+        assertNotEquals(base, diffPassword);
 
         assertNotEquals(make(null, "123"), make("user", "123"));
         assertNotEquals(make("user", null), make("user", "123"));
@@ -40,7 +40,7 @@ class AuthClientDTOTest {
 
         assertTrue(base.canEqual(igual));
         assertFalse(base.canEqual("string"));
-        assertTrue(base.toString().contains("AuthClienteDTO"));
+        assertTrue(base.toString().contains("AuthClientDTO"));
 
         AuthClientDTO viaBuilder = AuthClientDTO.builder()
                 .username("user")
@@ -58,18 +58,18 @@ class AuthClientDTOTest {
         AuthClientDTO usernameNull = make(null, "123");
         usernameNull.hashCode();
 
-        AuthClientDTO senhaNull = make("user", null);
-        senhaNull.hashCode();
+        AuthClientDTO PasswordNull  = make("user", null);
+        PasswordNull.hashCode();
     }
 
     @Test
     void testGettersAndSetters() {
         AuthClientDTO dto = new AuthClientDTO();
         dto.setUsername("usuario");
-        dto.setPassword("senha123");
+        dto.setPassword("password123");
 
         assertEquals("usuario", dto.getUsername());
-        assertEquals("senha123", dto.getPassword());
+        assertEquals("password123", dto.getPassword());
 
         // Testando setters com null
         dto.setUsername(null);
@@ -92,7 +92,7 @@ class AuthClientDTOTest {
 
         AuthClientDTO dto3 = AuthClientDTO.builder()
                 .username("other")
-                .password("otherpass")
+                .password("otherpassword")
                 .build();
 
         assertEquals(dto1, dto2);
@@ -116,12 +116,12 @@ class AuthClientDTOTest {
     void testToString() {
         AuthClientDTO dto = AuthClientDTO.builder()
                 .username("usuario")
-                .password("senha")
+                .password("password")
                 .build();
 
         String str = dto.toString();
         assertTrue(str.contains("username=usuario"));
-        assertTrue(str.contains("senha=senha"));
+        assertTrue(str.contains("password=password"));
     }
 
     @Test
@@ -134,10 +134,10 @@ class AuthClientDTOTest {
         assertNull(dto.getPassword());
 
         AuthClientDTO dto2 = AuthClientDTO.builder()
-                .password("onlySenha")
+                .password("onlyPassword")
                 .build();
 
         assertNull(dto2.getUsername());
-        assertEquals("onlySenha", dto2.getPassword());
+        assertEquals("onlyPassword", dto2.getPassword());
     }
 }

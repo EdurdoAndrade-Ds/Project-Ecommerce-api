@@ -1,14 +1,11 @@
 package org.ecommerce.ecommerceapi.modules.client.dto;
 
-import java.util.Objects;
-
 import lombok.*;
 
-@Getter @Setter
-@ToString
-@EqualsAndHashCode
-@NoArgsConstructor @AllArgsConstructor
+@Data
 @Builder(toBuilder = true)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfileClientResponseDTO {
     private String name;
     private String username;

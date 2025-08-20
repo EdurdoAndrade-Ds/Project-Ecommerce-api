@@ -1,10 +1,15 @@
 package org.ecommerce.ecommerceapi.modules.payment.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PaymentResponseDTO {
     private Long id;
     private Long pedidoId;
@@ -12,15 +17,5 @@ public class PaymentResponseDTO {
     private LocalDateTime dataPagamento;
     private Long clienteId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
-    public Long getClienteId() {
-        return clienteId;
-    }
-
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
-    }
 }

@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.client.controllers;
 
+import org.ecommerce.ecommerceapi.exceptions.ClientNotFoundException;
 import org.ecommerce.ecommerceapi.modules.client.dto.CreateClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.dto.DeleteClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.dto.UpdateClientDTO;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -202,5 +204,9 @@ public class ClientController {
         var updatedClient = updateClienteUseCase.execute(clienteId, updateClientDTO);
         return ResponseEntity.ok(updatedClient);
     }
-}
 
+    @ExceptionHandler(ClientNotFoundException.class)
+    public ResponseEntity<Object> handleClientNotFound(ClientNotFoundException ex) {
+        return ResponseEntity.status(404).body(ex.getMessage());
+    }
+}

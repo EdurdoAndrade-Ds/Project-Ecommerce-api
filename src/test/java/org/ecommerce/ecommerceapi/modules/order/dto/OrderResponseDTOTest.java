@@ -16,9 +16,9 @@ class OrderResponseDTOTest {
 
         OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO();
         item.setProdutoId(10L);
-        item.setNomeProduto("Produto X");
+        item.setNomeProduto("Product X");
         item.setQuantidade(3);
-        item.setPrecoUnitario(BigDecimal.valueOf(29.99)); // Valor fracionado
+        item.setPrecoUnitario(BigDecimal.valueOf(29.99));
         item.setDiscountPrice(BigDecimal.valueOf(25.00));
         item.setPrecoPago(BigDecimal.valueOf(89.97));
 
@@ -27,57 +27,35 @@ class OrderResponseDTOTest {
 
         dto.setId(1L);
         dto.setClienteId(100L);
-        dto.setTotal(BigDecimal.valueOf(89.97)); // Valor fracionado
+        dto.setTotal(BigDecimal.valueOf(89.97));
         dto.setItens(itens);
 
         assertEquals(1L, dto.getId());
         assertEquals(100L, dto.getClienteId());
-        assertTrue(dto.getTotal().compareTo(BigDecimal.valueOf(89.97)) == 0);
+        assertEquals(0, dto.getTotal().compareTo(BigDecimal.valueOf(89.97)));
         assertNotNull(dto.getItens());
         assertEquals(1, dto.getItens().size());
 
-        OrderResponseDTO.ItemDTO retrievedItem = dto.getItens().get(0);
-        assertEquals(10L, retrievedItem.getProdutoId());
-        assertEquals("Produto X", retrievedItem.getNomeProduto());
-        assertEquals(3, retrievedItem.getQuantidade());
-        assertTrue(retrievedItem.getPrecoUnitario().compareTo(BigDecimal.valueOf(29.99)) == 0);
-        assertTrue(retrievedItem.getDiscountPrice().compareTo(BigDecimal.valueOf(25.00)) == 0);
-        assertTrue(retrievedItem.getPrecoPago().compareTo(BigDecimal.valueOf(89.97)) == 0);
+        OrderResponseDTO.ItemDTO retrieved = dto.getItens().get(0);
+        assertEquals(10L, retrieved.getProdutoId());
+        assertEquals("Product X", retrieved.getNomeProduto());
+        assertEquals(3, retrieved.getQuantidade());
+        assertEquals(0, retrieved.getPrecoUnitario().compareTo(BigDecimal.valueOf(29.99)));
+        assertEquals(0, retrieved.getDiscountPrice().compareTo(BigDecimal.valueOf(25.00)));
+        assertEquals(0, retrieved.getPrecoPago().compareTo(BigDecimal.valueOf(89.97)));
     }
 
     @Test
     void testEqualsAndHashCode() {
-        OrderResponseDTO dto1 = new OrderResponseDTO();
-        OrderResponseDTO dto2 = new OrderResponseDTO();
+        OrderResponseDTO.ItemDTO item1 = new OrderResponseDTO.ItemDTO(1L, "Product A", 2,
+                BigDecimal.valueOf(15.50), BigDecimal.valueOf(14.50), BigDecimal.valueOf(31.00));
 
-        OrderResponseDTO.ItemDTO item1 = new OrderResponseDTO.ItemDTO();
-        item1.setProdutoId(1L);
-        item1.setNomeProduto("Produto A");
-        item1.setQuantidade(2);
-        item1.setPrecoUnitario(BigDecimal.valueOf(15.50));
-        item1.setDiscountPrice(BigDecimal.valueOf(14.50));
-        item1.setPrecoPago(BigDecimal.valueOf(31.00));
-
-        dto1.setId(1L);
-        dto1.setClienteId(50L);
-        dto1.setTotal(BigDecimal.valueOf(31.00));
-        dto1.setItens(List.of(item1));
-
-        OrderResponseDTO.ItemDTO item2 = new OrderResponseDTO.ItemDTO();
-        item2.setProdutoId(1L);
-        item2.setNomeProduto("Produto A");
-        item2.setQuantidade(2);
-        item2.setPrecoUnitario(BigDecimal.valueOf(15.50));
-        item2.setDiscountPrice(BigDecimal.valueOf(14.50));
-        item2.setPrecoPago(BigDecimal.valueOf(31.00));
-
-        dto2.setId(1L);
-        dto2.setClienteId(50L);
-        dto2.setTotal(BigDecimal.valueOf(31.00));
-        dto2.setItens(List.of(item2));
+        OrderResponseDTO dto1 = new OrderResponseDTO(1L, 50L, BigDecimal.valueOf(31.00), List.of(item1));
+        OrderResponseDTO dto2 = new OrderResponseDTO(1L, 50L, BigDecimal.valueOf(31.00), List.of(item1));
 
         assertEquals(dto1, dto2);
         assertEquals(dto1.hashCode(), dto2.hashCode());
+        assertTrue(dto1.toString().contains("clienteId"));
         assertTrue(dto1.toString().contains("itens"));
     }
 
@@ -91,7 +69,34 @@ class OrderResponseDTOTest {
 
         OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO();
         item.setProdutoId(10L);
-        item.setNomeProduto("Produto X");
+        item.setNomeProduto("Product X");
+        item.setQuantidade(3);
+        item.setPrecoUnitario(BigDecimal.valueOf(29.99));
+        item.setDiscountPrice(BigDecimal.valueOf(25.00));
+        item.setPrecoPago(BigDecimal.valueOf(89.97));
+
+        dto.setItens(List.of(item));
+
+        String s = dto.toString();
+
+        assertNotNull(s);
+        assertTrue(s.contains("clienteId=100"));
+        assertTrue(s.contains("produtoId=10"));
+        assertTrue(s.contains("nomeProduto=Product X"));
+        assertTrue(s.contains("quantidade=3"));
+        assertTrue(s.contains("precoUnitario=29.99"));
+        assertTrue(s.contains("discountPrice=25.00") || s.contains("discountPrice=25.0"));
+        assertTrue(s.contains("precoPago=89.97"));
+    }{
+        OrderResponseDTO dto = new OrderResponseDTO();
+
+        dto.setId(1L);
+        dto.setClienteId(100L);
+        dto.setTotal(BigDecimal.valueOf(89.97));
+
+        OrderResponseDTO.ItemDTO item = new OrderResponseDTO.ItemDTO();
+        item.setProdutoId(10L);
+        item.setNomeProduto("Product X");
         item.setQuantidade(3);
         item.setPrecoUnitario(BigDecimal.valueOf(29.99));
         item.setDiscountPrice(BigDecimal.valueOf(25.00));
@@ -104,14 +109,14 @@ class OrderResponseDTOTest {
         String toStringResult = dto.toString();
 
         assertNotNull(toStringResult);
-        assertTrue(toStringResult.contains("id=1"));
         assertTrue(toStringResult.contains("clienteId=100"));
-        assertTrue(toStringResult.contains("total=89.97"));
-        assertTrue(toStringResult.contains("itens=[PedidoResponseDTO.ItemDTO"));
+        assertTrue(toStringResult.contains("itens=[OrderResponseDTO.ItemDTO"));
         assertTrue(toStringResult.contains("produtoId=10"));
-        assertTrue(toStringResult.contains("nomeProduto=Produto X"));
+        assertTrue(toStringResult.contains("nomeProduto=Product X"));
         assertTrue(toStringResult.contains("quantidade=3"));
         assertTrue(toStringResult.contains("precoUnitario=29.99"));
+        assertTrue(toStringResult.contains("discountPrice=25.00") || toStringResult.contains("discountPrice=25.0"));
+        assertTrue(toStringResult.contains("precoPago=89.97"));
         // aceita as duas possíveis formatacoes em BigDecimal
         assertTrue(toStringResult.contains("discountPrice=25.00") || toStringResult.contains("discountPrice=25.0"));
         assertTrue(toStringResult.contains("precoPago=89.97"));

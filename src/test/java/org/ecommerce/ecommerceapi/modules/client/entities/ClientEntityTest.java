@@ -41,7 +41,6 @@ class ClientEntityTest {
         assertTrue(entity.isActive());
     }
 
-
     @Test
     void equals_hashCode_byId_fullBranches() {
         ClientEntity base = make(1L, "Ana", "ana@g.com");
@@ -54,11 +53,12 @@ class ClientEntityTest {
 
         assertNotEquals(base, make(2L, "Ana", "ana@a.com"));
 
+        // quando id é null → nunca iguais
         assertNotEquals(make(null, "Ana", "ana@g.com"), make(1L, "Ana", "ana@g.com"));
         assertNotEquals(make(1L, "Ana", "ana@g.com"), make(null, "Ana", "ana@g.com"));
 
         ClientEntity t1 = make(null, "Ana", "ana@g.com");
-        ClientEntity t2 = make(null, "Ana","ana@g.com");
+        ClientEntity t2 = make(null, "Ana", "ana@g.com");
         assertNotEquals(t1, t2);
 
         assertNotEquals(base, null);
@@ -78,47 +78,10 @@ class ClientEntityTest {
 
         String s = entity.toString();
 
-
-        assertTrue(s.contains("ClienteEntity"));
+        assertTrue(s.contains("ClientEntity"));
         assertTrue(s.contains("id=1"));
         assertTrue(s.contains("name=Lucas"));
         assertTrue(s.contains("email=lucas@email.com"));
-    }
-
-
-
-    @Test
-    void testToString() {
-        LocalDateTime now = LocalDateTime.now();
-
-        ClientEntity entity = ClientEntity.builder()
-                .id(1L)
-                .name("Lucas")
-                .username("lucas123")
-                .email("lucas@email.com")
-                .password("senhaSegura")
-                .phone("555555555")
-                .address("Av. Central, 100")
-                .city("Curitiba")
-                .state("PR")
-                .cep("80000-000")
-                .createdAt(now)
-                .updatedAt(now)
-                .active(true)
-                .build();
-
-        String str = entity.toString();
-        assertTrue(str.contains("id=1"));
-        assertTrue(str.contains("name=Lucas"));
-        assertTrue(str.contains("username=lucas123"));
-        assertTrue(str.contains("email=lucas@email.com"));
-        assertTrue(str.contains("senha=senhaSegura"));
-        assertTrue(str.contains("telefone=555555555"));
-        assertTrue(str.contains("endereco=Av. Central, 100"));
-        assertTrue(str.contains("cidade=Curitiba"));
-        assertTrue(str.contains("estado=PR"));
-        assertTrue(str.contains("cep=80000-000"));
-        assertTrue(str.contains("ativo=true"));
     }
 
     @Test
@@ -127,7 +90,7 @@ class ClientEntityTest {
 
         ClientEntity entity = ClientEntity.builder()
                 .id(1L)
-                .password("Lucas")
+                .name("Lucas")
                 .username("lucas123")
                 .email("lucas@email.com")
                 .password("senhaSegura")

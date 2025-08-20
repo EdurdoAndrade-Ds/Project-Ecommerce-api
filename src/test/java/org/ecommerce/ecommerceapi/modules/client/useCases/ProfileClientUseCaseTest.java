@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.client.useCases;
 
+import org.ecommerce.ecommerceapi.exceptions.ClientUnauthorizedException;
 import org.ecommerce.ecommerceapi.modules.client.dto.ProfileClientResponseDTO;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
@@ -57,14 +58,13 @@ class ProfileClientUseCaseTest {
     @Test
     void execute_deveLancarExcecao_quandoClienteNaoExistir() {
         Long clienteId = 2L;
-
         when(clientRepository.findById(clienteId)).thenReturn(Optional.empty());
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        ClientUnauthorizedException exception = assertThrows(ClientUnauthorizedException.class, () -> {
             profileClientUseCase.execute(clienteId);
         });
 
-        assertEquals("Cliente não encontrado", exception.getMessage());
+        assertEquals("Cliente nao encontrado", exception.getMessage());
 
         verify(clientRepository, times(1)).findById(clienteId);
     }

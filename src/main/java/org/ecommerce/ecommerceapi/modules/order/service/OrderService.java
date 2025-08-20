@@ -1,7 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.order.service;
 
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.order.dto.OrderRequestDTO;
@@ -21,26 +20,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ToString
+@EqualsAndHashCode
 @Service
+@RequiredArgsConstructor
 public class OrderService {
 
-    @Autowired
-    private OrderRepository orderRepository;
 
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
-    private ClientRepository clientRepository;
-
-    public OrderService(OrderRepository orderRepository,
-                        ProductService productService,
-                        ClientRepository clientRepository) {
-        this.orderRepository = orderRepository;
-        this.productService = productService;
-        this.clientRepository = clientRepository;
-    }
+    private final OrderRepository orderRepository;
+    private final ProductService productService;
+    private final ClientRepository clientRepository;
 
     public OrderResponseDTO create(OrderRequestDTO dto, Long clienteId) {
         Order order = new Order();
@@ -53,28 +41,21 @@ public class OrderService {
 
         List<OrderItem> itens = dto.getItens().stream().map(itemDTO -> {
             Product product = productService.buscarPorId(itemDTO.getProdutoId());
+
             OrderItem item = new OrderItem();
             item.setProduct(product);
             item.setNameProduct(product.getName());
             item.setQuantity(itemDTO.getQuantidade());
-
-
             item.setUnitPrice(product.getPrice());
             item.setDiscountPrice(product.getDiscountedPrice());
 
             BigDecimal valorPago = item.getDiscountPrice()
-    .multiply(BigDecimal.valueOf(item.getQuantity()))
-    .setScale(2, RoundingMode.HALF_UP);
+                .multiply(BigDecimal.valueOf(item.getQuantity()))
+                .setScale(2, RoundingMode.HALF_UP);
 
-item.setPricePad(valorPago);
-
-
-            BigDecimal precoPago = item.getDiscountPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
-            item.setPricePad(precoPago);
-
-
-
+            item.setPricePad(valorPago);
             item.setOrder(order);
+
             return item;
         }).collect(Collectors.toList());
 
@@ -82,11 +63,11 @@ item.setPricePad(valorPago);
         
         // Calcular o total do pedido
         BigDecimal total = itens.stream()
-    .map(OrderItem::getPricePad)
-    .reduce(BigDecimal.ZERO, BigDecimal::add)
-    .setScale(2, RoundingMode.HALF_UP);
+            .map(OrderItem::getPricePad)
+            .reduce(BigDecimal.ZERO, BigDecimal::add)
+            .setScale(2, RoundingMode.HALF_UP);
 
-order.setTotal(total);
+        order.setTotal(total);
 
         Order salvo = orderRepository.save(order);
         return mapToResponseDTO(salvo);

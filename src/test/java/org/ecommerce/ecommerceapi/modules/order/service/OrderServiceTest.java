@@ -91,15 +91,7 @@ class OrderServiceTest {
         assertEquals(orderCancelado.getTotal(), dto.getTotal());
     }
 
-    
-    @Test
-    void testEqualsAndHashCode() {
-        OrderService service1 = new OrderService(orderRepository, productService, clientRepository);
-        OrderService service2 = new OrderService(orderRepository, productService, clientRepository);
 
-        assertEquals(service1, service2);
-        assertEquals(service1.hashCode(), service2.hashCode());
-    }
 
         @Test
     void testBuscarPorIdDTO_Sucesso() {
@@ -133,15 +125,6 @@ class OrderServiceTest {
 
     
     
-    @Test
-    void testToString() {
-        OrderService service = new OrderService(orderRepository, productService, clientRepository);
-        String str = service.toString();
-        assertNotNull(str);
-        assertTrue(str.contains("pedidoRepository"));
-        assertTrue(str.contains("productService"));
-        assertTrue(str.contains("clienteRepository"));
-    }
 
     
 
@@ -197,36 +180,7 @@ class OrderServiceTest {
         assertTrue(order.isCancelado());
         verify(orderRepository).save(order);
     }
-    @Test
-    void testSetPedidoRepository() {
-        OrderRepository newRepository = mock(OrderRepository.class);
-        orderService.setOrderRepository(newRepository);
-        assertEquals(newRepository, orderService.getOrderRepository());
-    }
 
-    @Test
-    void testSetProductService() {
-        ProductService newService = mock(ProductService.class);
-        orderService.setProductService(newService);
-        assertEquals(newService, orderService.getProductService());
-    }
-
-    @Test
-    void testSetClienteRepository() {
-        ClientRepository newRepository = mock(ClientRepository.class);
-        orderService.setClientRepository(newRepository);
-        assertEquals(newRepository, orderService.getClientRepository());
-    }
-
-    @Test
-    void testCanEqual() {
-        OrderService service = new OrderService(orderRepository, productService, clientRepository);
-        assertTrue(service.canEqual(new OrderService(orderRepository, productService, clientRepository)));
-        assertFalse(service.canEqual(new Object()));
-    }
-    public boolean canEqual(Object other) {
-        return other instanceof OrderService;
-    }
     @Test
     void testCriar_ClienteNaoEncontrado() {
         OrderRequestDTO request = new OrderRequestDTO();

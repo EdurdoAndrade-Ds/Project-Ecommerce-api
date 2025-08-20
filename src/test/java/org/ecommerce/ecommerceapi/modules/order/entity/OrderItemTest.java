@@ -19,11 +19,11 @@ class OrderItemTest {
         orderItem = new OrderItem();
         product = new Product();
         product.setId(1L);
-        product.setName("Produto A");
+        product.setName("Product A");
         order = new Order();
         order.setId(10L);
         orderItem.setId(1L);
-        orderItem.setNameProduct("Produto A");
+        orderItem.setNameProduct("Product A");
         orderItem.setQuantity(2);
         orderItem.setUnitPrice(BigDecimal.valueOf(50.00));
         orderItem.setDiscountPrice(BigDecimal.valueOf(45.00));
@@ -36,14 +36,14 @@ class OrderItemTest {
     void testGettersAndSetters() {
         OrderItem orderItem = new OrderItem();
         orderItem.setId(1L);
-        orderItem.setNameProduct("Produto A");
+        orderItem.setNameProduct("Product A");
         orderItem.setQuantity(2);
         orderItem.setUnitPrice(BigDecimal.valueOf(50.00));
         orderItem.setDiscountPrice(BigDecimal.valueOf(45.00));
         orderItem.setPricePad(BigDecimal.valueOf(90.00));
 
         assertEquals(1L, orderItem.getId());
-        assertEquals("Produto A", orderItem.getNameProduct());
+        assertEquals("Product A", orderItem.getNameProduct());
         assertEquals(2, orderItem.getQuantity());
         assertEquals(BigDecimal.valueOf(50.00), orderItem.getUnitPrice());
         assertEquals(BigDecimal.valueOf(45.00), orderItem.getDiscountPrice());
@@ -59,18 +59,18 @@ class OrderItemTest {
         String toString = orderItem.toString();
         assertNotNull(toString);
         assertTrue(toString.contains("id=1"));
-        assertTrue(toString.contains("nomeProduto=Produto A"));
-        assertTrue(toString.contains("quantidade=2"));
-        assertTrue(toString.contains("precoUnitario=50.00") || toString.contains("precoUnitario=50.0"));
+        assertTrue(toString.contains("nameProduct=Product A"));
+        assertTrue(toString.contains("quantity=2"));
+        assertTrue(toString.contains("unitPrice=50.00") || toString.contains("unitPrice=50.0"));
         assertTrue(toString.contains("discountPrice=45.00") || toString.contains("discountPrice=45.0"));
-        assertTrue(toString.contains("precoPago=90.00") || toString.contains("precoPago=90.0"));
+        assertTrue(toString.contains("pricePad=90.00") || toString.contains("pricePad=90.0"));
     }
     
     @Test
     void testEqualsAndHashCode() {
         OrderItem item1 = new OrderItem();
         item1.setId(1L);
-        item1.setNameProduct("Produto A");
+        item1.setNameProduct("Product A");
         item1.setQuantity(2);
         item1.setUnitPrice(BigDecimal.valueOf(50.00));
         item1.setDiscountPrice(BigDecimal.valueOf(45.00));
@@ -78,7 +78,7 @@ class OrderItemTest {
 
         OrderItem item2 = new OrderItem();
         item2.setId(1L);
-        item2.setNameProduct("Produto A");
+        item2.setNameProduct("Product A");
         item2.setQuantity(2);
         item2.setUnitPrice(BigDecimal.valueOf(50.00));
         item2.setDiscountPrice(BigDecimal.valueOf(45.00));
@@ -95,11 +95,11 @@ class OrderItemTest {
     void testEqualsWithDifferentObjects() {
         OrderItem item1 = new OrderItem();
         item1.setId(1L);
-        item1.setNameProduct("Produto A");
+        item1.setNameProduct("Product A");
 
         OrderItem item2 = new OrderItem();
         item2.setId(2L);
-        item2.setNameProduct("Produto B");
+        item2.setNameProduct("Product B");
 
         assertNotEquals(item1, item2);
     }
@@ -108,7 +108,7 @@ class OrderItemTest {
     void testEqualsWithNull() {
         OrderItem item = new OrderItem();
         item.setId(1L);
-        item.setNameProduct("Produto A");
+        item.setNameProduct("Product A");
 
         assertNotEquals(item, null);
     }
@@ -117,7 +117,7 @@ class OrderItemTest {
     void testEqualsWithDifferentClass() {
         OrderItem item = new OrderItem();
         item.setId(1L);
-        item.setNameProduct("Produto A");
+        item.setNameProduct("Product A");
 
         String differentClassObject = "This is a string";
         assertNotEquals(item, differentClassObject);

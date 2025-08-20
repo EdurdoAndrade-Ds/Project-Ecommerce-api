@@ -1,6 +1,7 @@
 package org.ecommerce.ecommerceapi.modules.client.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.ecommerce.ecommerceapi.exceptions.ClientUnauthorizedException;
 import org.ecommerce.ecommerceapi.modules.client.dto.ProfileClientResponseDTO;
 import org.ecommerce.ecommerceapi.modules.client.useCases.ProfileClientUseCase;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,11 +50,14 @@ class ProfileClientControllerTest {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getAttribute("cliente_id")).thenReturn(null);
 
-        // Act
-        ResponseEntity<Object> response = controller.profile(request);
-
-        // Assert
-        assertEquals(401, response.getStatusCodeValue());
-        assertTrue(response.getBody() instanceof String);
+        // Act & Assert
+        try {
+            controller.profile(request);
+            fail("Deveria lançar ClientUnauthorizedException");
+        } catch (ClientUnauthorizedException ex) {
+            ResponseEntity<Object> response = controller.handleClientUnauthorized(ex);
+            assertEquals(401, response.getStatusCodeValue());
+            assertTrue(response.getBody() instanceof String);
+        }
     }
 }

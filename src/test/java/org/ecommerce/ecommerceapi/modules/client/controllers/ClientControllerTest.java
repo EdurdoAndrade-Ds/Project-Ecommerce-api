@@ -1,5 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.client.controllers;
 
+import org.ecommerce.ecommerceapi.exceptions.ClientNotFoundException;
 import org.ecommerce.ecommerceapi.modules.client.dto.CreateClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.dto.DeleteClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.dto.UpdateClientDTO;
@@ -143,10 +144,15 @@ class ClientControllerTest {
 
         when(authentication.getName()).thenReturn("1");
         when(updateUseCase.execute(eq(1L), eq(dto)))
-            .thenThrow(new EntityNotFoundException("Cliente não encontrado"));
+                .thenThrow(new ClientNotFoundException("Cliente nao encontrado"));
 
-        ResponseEntity<Object> response = clientController.update(dto, authentication);
-        assertEquals(404, response.getStatusCodeValue());
-        assertEquals("Cliente não encontrado", response.getBody());
+        try {
+            clientController.update(dto, authentication);
+            fail("Deveria lançar ClientNotFoundException");
+        } catch (ClientNotFoundException ex) {
+            ResponseEntity<Object> response = clientController.handleClientNotFound(ex);
+            assertEquals(404, response.getStatusCodeValue());
+            assertEquals("Cliente nao encontrado", response.getBody());
+        }
     }
-}   
+}

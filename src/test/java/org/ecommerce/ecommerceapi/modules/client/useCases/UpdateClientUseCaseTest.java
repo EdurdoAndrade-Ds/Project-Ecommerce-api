@@ -1,7 +1,10 @@
 package org.ecommerce.ecommerceapi.modules.client.useCases;
 
+import org.ecommerce.ecommerceapi.exceptions.ClientConflictException;
+import org.ecommerce.ecommerceapi.exceptions.ClientNotFoundException;
 import org.ecommerce.ecommerceapi.modules.client.dto.UpdateClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
+import org.ecommerce.ecommerceapi.modules.client.mapper.ClientMapper;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +25,9 @@ class UpdateClientUseCaseTest {
     @Mock
     private ClientRepository clientRepository;
 
+    @Mock
+    private ClientMapper clientMapper;
+
     @InjectMocks
     private UpdateClientUseCase updateClientUseCase;
 
@@ -40,106 +46,125 @@ class UpdateClientUseCaseTest {
         cliente.setCity("Cidade Antiga");
         cliente.setState("Estado Antigo");
         cliente.setCep("00000-000");
+
+        // simular o comportamento do mapper
+        doAnswer(invocation -> {
+            UpdateClientDTO dto = invocation.getArgument(0);
+            ClientEntity entity = invocation.getArgument(1);
+
+            if (dto.getPhone() != null) entity.setPhone(dto.getPhone());
+            if (dto.getAddress() != null) entity.setAddress(dto.getAddress());
+            if (dto.getCity() != null) entity.setCity(dto.getCity());
+            if (dto.getState() != null) entity.setState(dto.getState());
+            if (dto.getCep() != null) entity.setCep(dto.getCep());
+            if (dto.getUsername() != null) entity.setUsername(dto.getUsername());
+            if (dto.getEmail() != null) entity.setEmail(dto.getEmail());
+
+            return null;
+        }).when(clientMapper).updateFromDto(any(UpdateClientDTO.class), any(ClientEntity.class));
     }
 
     @Test
     void testUpdateClienteFields() {
-        // Arrange
         Long clienteId = 1L;
-        UpdateClientDTO updateClientDTO = new UpdateClientDTO();
-        updateClientDTO.setPhone("987654321");
-        updateClientDTO.setAddress("Novo Endereço");
-        updateClientDTO.setCity("Nova Cidade");
-        updateClientDTO.setState("Novo Estado");
-        updateClientDTO.setCep("11111-111");
+        UpdateClientDTO dto = new UpdateClientDTO();
+        dto.setPhone("987654321");
+        dto.setAddress("Novo Endereço");
+        dto.setCity("Nova Cidade");
+        dto.setState("Novo Estado");
+        dto.setCep("11111-111");
 
         when(clientRepository.findById(clienteId)).thenReturn(Optional.of(cliente));
         when(clientRepository.save(any(ClientEntity.class))).thenReturn(cliente);
 
-        // Act
-        ClientEntity updatedCliente = updateClientUseCase.execute(clienteId, updateClientDTO);
+        ClientEntity updated = updateClientUseCase.execute(clienteId, dto);
 
-        // Assert
-        assertEquals("987654321", updatedCliente.getPhone());
-        assertEquals("Novo Endereço", updatedCliente.getAddress());
-        assertEquals("Nova Cidade", updatedCliente.getCity());
-        assertEquals("Novo Estado", updatedCliente.getState());
-        assertEquals("11111-111", updatedCliente.getCep());
+        assertEquals("987654321", updated.getPhone());
+        assertEquals("Novo Endereço", updated.getAddress());
+        assertEquals("Nova Cidade", updated.getCity());
+        assertEquals("Novo Estado", updated.getState());
+        assertEquals("11111-111", updated.getCep());
         verify(clientRepository).save(cliente);
     }
 
     @Test
     void testUpdateClienteWithNullFields() {
-        // Arrange
         Long clienteId = 1L;
-        UpdateClientDTO updateClientDTO = new UpdateClientDTO(); // Não definindo nenhum campo para atualizar
+        UpdateClientDTO dto = new UpdateClientDTO(); // sem alterações
 
         when(clientRepository.findById(clienteId)).thenReturn(Optional.of(cliente));
         when(clientRepository.save(any(ClientEntity.class))).thenReturn(cliente);
 
-        // Act
-        ClientEntity updatedCliente = updateClientUseCase.execute(clienteId, updateClientDTO);
+        ClientEntity updated = updateClientUseCase.execute(clienteId, dto);
 
-        // Assert
-        assertEquals("123456789", updatedCliente.getPhone());
-        assertEquals("Endereço Antigo", updatedCliente.getAddress());
-        assertEquals("Cidade Antiga", updatedCliente.getCity());
-        assertEquals("Estado Antigo", updatedCliente.getState());
-        assertEquals("00000-000", updatedCliente.getCep());
+        assertEquals("123456789", updated.getPhone());
+        assertEquals("Endereço Antigo", updated.getAddress());
+        assertEquals("Cidade Antiga", updated.getCity());
+        assertEquals("Estado Antigo", updated.getState());
+        assertEquals("00000-000", updated.getCep());
         verify(clientRepository).save(cliente);
     }
 
     @Test
     void testUpdateClienteWithExistingUsernameOrEmail() {
-        // Arrange
         Long clienteId = 1L;
-        UpdateClientDTO updateClientDTO = new UpdateClientDTO();
-        updateClientDTO.setUsername("existingUsername");
-        updateClientDTO.setEmail("existing@email.com");
-
-        // Simulando que já existe um cliente com o mesmo username ou email
-        ClientEntity existingCliente = new ClientEntity();
-        existingCliente.setId(2L);
-        existingCliente.setUsername("existingUsername");
-        existingCliente.setEmail("existing@email.com");
+        UpdateClientDTO dto = new UpdateClientDTO();
+        dto.setUsername("existingUsername");
+        dto.setEmail("existing@email.com");
 
         when(clientRepository.findById(clienteId)).thenReturn(Optional.of(cliente));
-        when(clientRepository.findByUsernameOrEmail("existingUsername", "existing@email.com"))
-                .thenReturn(Optional.of(existingCliente));
+        when(clientRepository.existsByUsernameOrEmailAndIdNot("existingUsername", "existing@email.com", clienteId))
+                .thenReturn(true);
 
-        // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            updateClientUseCase.execute(clienteId, updateClientDTO);
+        assertThrows(ClientConflictException.class, () -> {
+            updateClientUseCase.execute(clienteId, dto);
         });
-
-        assertEquals("Cliente já existe", exception.getMessage());
     }
 
     @Test
     void testUpdateClienteWithNonExistingClient() {
-        // Arrange
         Long clienteId = 1L;
-        UpdateClientDTO updateClientDTO = new UpdateClientDTO();
-        updateClientDTO.setUsername("newUsername");
+        UpdateClientDTO dto = new UpdateClientDTO();
+        dto.setUsername("newUsername");
 
         when(clientRepository.findById(clienteId)).thenReturn(Optional.empty());
 
-        // Act & Assert
-        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
-            updateClientUseCase.execute(clienteId, updateClientDTO);
+        ClientNotFoundException ex = assertThrows(ClientNotFoundException.class, () -> {
+            updateClientUseCase.execute(clienteId, dto);
         });
 
-        assertEquals("Cliente não encontrado", exception.getMessage());
+        // a mensagem é exatamente como está hardcoded na classe (com typo)
+        assertEquals("Cliente nao encontrado", ex.getMessage());
     }
-    
+
     @Test
     void testUpdateClienteCep() {
-        UpdateClientDTO updateClientDTO = new UpdateClientDTO();
-        updateClientDTO.setCep("98765-432");
+        UpdateClientDTO dto = new UpdateClientDTO();
+        dto.setCep("98765-432");
+
         when(clientRepository.findById(1L)).thenReturn(Optional.of(cliente));
         when(clientRepository.save(any(ClientEntity.class))).thenReturn(cliente);
-        ClientEntity updatedCliente = updateClientUseCase.execute(1L, updateClientDTO);
-        assertEquals("98765-432", updatedCliente.getCep());
+
+        ClientEntity updated = updateClientUseCase.execute(1L, dto);
+
+        assertEquals("98765-432", updated.getCep());
         verify(clientRepository).save(cliente);
     }
+
+    @Test
+    void testMapperCalled() {
+        Long clienteId = 1L;
+        UpdateClientDTO dto = new UpdateClientDTO();
+        dto.setCity("Nova Cidade");
+
+        when(clientRepository.findById(clienteId)).thenReturn(Optional.of(cliente));
+        when(clientRepository.save(any(ClientEntity.class))).thenReturn(cliente);
+
+        updateClientUseCase.execute(clienteId, dto);
+
+        // garante que o mapper foi usado
+        verify(clientMapper, times(1)).updateFromDto(dto, cliente);
+    }
+
+
 }
