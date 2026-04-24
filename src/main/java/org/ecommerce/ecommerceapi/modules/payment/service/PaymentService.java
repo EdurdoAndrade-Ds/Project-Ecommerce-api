@@ -1,6 +1,11 @@
 package org.ecommerce.ecommerceapi.modules.payment.service;
 
+import org.ecommerce.ecommerceapi.exceptions.BusinessException;
+import org.ecommerce.ecommerceapi.exceptions.DuplicatePaymentException;
+import org.ecommerce.ecommerceapi.exceptions.ForbiddenAccessException;
+import org.ecommerce.ecommerceapi.exceptions.ResourceNotFoundException;
 import org.ecommerce.ecommerceapi.modules.order.entity.Order;
+import org.ecommerce.ecommerceapi.modules.order.repository.OrderStatus;
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentRequestDTO;
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentResponseDTO;
 import org.ecommerce.ecommerceapi.modules.payment.entity.Payment;
@@ -8,8 +13,10 @@ import org.ecommerce.ecommerceapi.modules.payment.repository.PaymentRepository;
 import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PaymentService {
@@ -19,18 +26,24 @@ public class PaymentService {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Transactional
     public PaymentResponseDTO pay(PaymentRequestDTO dto, Long clienteId) {
         Order order = orderRepository.findById(dto.getPedidoId())
-                .orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
 
         if (!order.getCliente().getId().equals(clienteId)) {
-            throw new RuntimeException("Acesso negado ao pedido");
+            throw new ForbiddenAccessException("Acesso negado ao pedido");
         }
         if (order.isCancelado()) {
-            throw new RuntimeException("Pedido cancelado");
+            throw new BusinessException("Pedido cancelado");
         }
         if (dto.getPrice() == null || dto.getPrice().compareTo(order.getTotal()) != 0) {
-            throw new RuntimeException("Valor do pagamento inválido");
+            throw new BusinessException("Valor do pagamento inválido");
+        }
+
+        List<Payment> existingPayments = paymentRepository.findByOrderId(dto.getPedidoId());
+        if (!existingPayments.isEmpty()) {
+            throw new DuplicatePaymentException("Este pedido já foi pago");
         }
 
         Payment payment = new Payment();
@@ -39,6 +52,10 @@ public class PaymentService {
         payment.setDatePayment(LocalDateTime.now());
 
         Payment saved = paymentRepository.save(payment);
+
+        order.setStatus(OrderStatus.PAGO);
+        orderRepository.save(order);
+
         return mapToDTO(saved, order);
     }
 

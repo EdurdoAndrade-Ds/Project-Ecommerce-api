@@ -1,5 +1,7 @@
 package org.ecommerce.ecommerceapi.providers;
 
+import org.ecommerce.ecommerceapi.exceptions.BusinessException;
+import org.ecommerce.ecommerceapi.exceptions.ClientUnauthorizedException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
@@ -26,7 +28,7 @@ public class JWTProvider {
                     .withExpiresAt(Instant.now().plus(Duration.ofHours(24)))
                     .sign(algorithm);
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao gerar token JWT", e);
+            throw new BusinessException("Erro ao gerar token JWT");
         }
     }
 
@@ -39,7 +41,7 @@ public class JWTProvider {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException e) {
-            throw new RuntimeException("Token JWT inválido ou expirado");
+            throw new ClientUnauthorizedException("Token JWT inválido ou expirado");
         }
     }
 
@@ -51,7 +53,7 @@ public class JWTProvider {
                     .build()
                     .verify(token);
         } catch (JWTVerificationException e) {
-            throw new RuntimeException("Token JWT inválido ou expirado");
+            throw new ClientUnauthorizedException("Token JWT inválido ou expirado");
         }
     }
 }

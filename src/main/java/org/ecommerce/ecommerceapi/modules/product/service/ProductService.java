@@ -1,8 +1,7 @@
 package org.ecommerce.ecommerceapi.modules.product.service;
 
 import jakarta.transaction.Transactional;
-import lombok.Getter;
-import lombok.Setter;
+import org.ecommerce.ecommerceapi.exceptions.ResourceNotFoundException;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
@@ -34,7 +33,7 @@ public class ProductService {
     private static final String MSG_ESTOQUE_NAO_DEFINIDO = "Estoque do produto não está definido.";
 
     public Product buscarPorId(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException(MSG_PRODUTO_NAO_ENCONTRADO));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MSG_PRODUTO_NAO_ENCONTRADO));
     }
 
     public ProductResponseDTO buscarPorIdDTO(Long id) {

@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findByClienteId(Long clienteId);
     Optional<Order> findByIdAndClienteId(Long id, Long clienteId);
-    List<Order> findByClienteIdAndCanceladoTrue(Long clienteId);
+    List<Order> findByClienteIdAndStatus(Long clienteId, OrderStatus status);
 }

@@ -2,9 +2,9 @@ package org.ecommerce.ecommerceapi.modules.order.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
+import org.ecommerce.ecommerceapi.modules.order.repository.OrderStatus;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import java.util.Objects;
 
 @Entity
 @Data
-@Getter @Setter
 @Table(name = "tb_pedido")
 public class Order {
 
@@ -21,8 +20,9 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "cancelado", nullable = false)
-    private boolean cancelado = false;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private OrderStatus status = OrderStatus.CRIADO;
 
     @Column(name = "total", nullable = false)
     private BigDecimal total;
@@ -37,24 +37,24 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> itens = new ArrayList<>();
 
-    // Implementação do equals
+    public boolean isCancelado() {
+        return this.status == OrderStatus.CANCELADO;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true; // Verifica se são o mesmo objeto
-        if (!(o instanceof Order)) return false; // Verifica se o objeto é da mesma classe
-        Order that = (Order) o; // Faz o cast
-
-        // Compara todos os campos relevantes
+        if (this == o) return true;
+        if (!(o instanceof Order)) return false;
+        Order that = (Order) o;
         return Objects.equals(id, that.id) &&
-               cancelado == that.cancelado &&
+               status == that.status &&
                Objects.equals(total, that.total) &&
                Objects.equals(dateCreate, that.dateCreate) &&
                Objects.equals(cliente, that.cliente);
     }
 
-    // Implementação do hashCode
     @Override
     public int hashCode() {
-        return Objects.hash(id, cancelado, total, dateCreate, cliente);
+        return Objects.hash(id, status, total, dateCreate, cliente);
     }
 }
