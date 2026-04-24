@@ -19,6 +19,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
+
 @EnableWebSecurity
 @EnableMethodSecurity
 @Configuration
@@ -26,6 +28,9 @@ public class SecurityConfig {
 
     @Autowired
     SecurityFilter securityFilter;
+
+    @Value("${spring.web.cors.allowed-origins}")
+    private String allowedOrigins;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -38,6 +43,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/client", "/client/").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/version").permitAll()
                         .requestMatchers("/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/produtos", "/produtos/**").permitAll()
 
                         // === PROTEGIDOS ===
                         .requestMatchers("/api/pagamentos/**").hasRole("CLIENTE")
@@ -57,7 +63,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
         configuration.setExposedHeaders(List.of("Authorization"));

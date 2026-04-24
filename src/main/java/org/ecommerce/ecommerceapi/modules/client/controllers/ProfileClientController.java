@@ -2,10 +2,8 @@ package org.ecommerce.ecommerceapi.modules.client.controllers;
 
 import org.ecommerce.ecommerceapi.exceptions.ClientUnauthorizedException;
 import org.ecommerce.ecommerceapi.modules.client.useCases.ProfileClientUseCase;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,8 +31,4 @@ public class ProfileClientController {
             return ResponseEntity.ok(profileClientUseCase.execute(clienteId));
     }
 
-    @ExceptionHandler(ClientUnauthorizedException.class)
-    public ResponseEntity<Object> handleClientUnauthorized(ClientUnauthorizedException ex) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
-    }
 }

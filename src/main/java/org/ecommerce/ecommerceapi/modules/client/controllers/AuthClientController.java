@@ -3,7 +3,6 @@ package org.ecommerce.ecommerceapi.modules.client.controllers;
 import org.ecommerce.ecommerceapi.modules.client.dto.AuthClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.useCases.AuthClientUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,12 +23,8 @@ public class AuthClientController {
 
     @PostMapping("/client")
     public ResponseEntity<Object> auth(@Valid @RequestBody AuthClientDTO authClientDTO) {
-        try {
-            var result = this.authClientUseCase.execute(authClientDTO);
-            return ResponseEntity.ok().body(result);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-        }
+        var result = this.authClientUseCase.execute(authClientDTO);
+        return ResponseEntity.ok().body(result);
     }
 
 }

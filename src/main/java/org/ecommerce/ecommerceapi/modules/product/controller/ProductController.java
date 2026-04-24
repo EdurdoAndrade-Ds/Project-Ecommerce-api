@@ -8,6 +8,7 @@ import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
+    @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ProductResponseDTO> criar(@RequestBody ProductRequestDTO dto) {
         return new ResponseEntity<>(productService.criar(dto), HttpStatus.CREATED);
     }
@@ -35,17 +37,20 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<Void> excluir(@PathVariable Long id) {
         productService.excluir(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ProductResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProductUpdateDTO dto) {
         return ResponseEntity.ok(productService.atualizar(id, dto));
     }
 
     @PutMapping("/{id}/estoque")
+    @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<Void> atualizarEstoque(@PathVariable Long id,
                                                 @RequestBody ProductStockUpdateRequestDTO dto) {
         productService.atualizarEstoque(id, dto);
@@ -53,6 +58,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}/desconto")
+    @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<ProductResponseDTO> aplicarDesconto(@PathVariable Long id, @RequestParam Double discountPercentage) {
         return ResponseEntity.ok(productService.aplicarDesconto(id, discountPercentage));
     }
