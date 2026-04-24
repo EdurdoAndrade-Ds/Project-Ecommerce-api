@@ -3,16 +3,15 @@ package org.ecommerce.ecommerceapi.modules.client.useCases;
 import org.ecommerce.ecommerceapi.exceptions.BusinessException;
 import org.ecommerce.ecommerceapi.exceptions.ClientNotFoundException;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class DeleteClientUseCase {
-    @Autowired
-    ClientRepository clientRepository;
-
-    @Autowired PasswordEncoder passwordEncoder;
+    private final ClientRepository clientRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void execute(Long clienteId, String password) {
         var client = this.clientRepository.findById(clienteId)

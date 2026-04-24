@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-
 @Entity
 @Data
 @Table(name = "tb_pedido")
@@ -46,15 +44,11 @@ public class Order {
         if (this == o) return true;
         if (!(o instanceof Order)) return false;
         Order that = (Order) o;
-        return Objects.equals(id, that.id) &&
-               status == that.status &&
-               Objects.equals(total, that.total) &&
-               Objects.equals(dateCreate, that.dateCreate) &&
-               Objects.equals(cliente, that.cliente);
+        return id != null && id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, status, total, dateCreate, cliente);
+        return (id != null) ? id.hashCode() : System.identityHashCode(this);
     }
 }

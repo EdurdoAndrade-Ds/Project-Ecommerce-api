@@ -25,7 +25,16 @@ public class Payment {
     @Column(name = "data_pagamento", nullable = false)
     private LocalDateTime datePayment;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Payment)) return false;
+        Payment that = (Payment) o;
+        return id != null && id.equals(that.id);
+    }
 
-
-    
+    @Override
+    public int hashCode() {
+        return (id != null) ? id.hashCode() : System.identityHashCode(this);
+    }
 }

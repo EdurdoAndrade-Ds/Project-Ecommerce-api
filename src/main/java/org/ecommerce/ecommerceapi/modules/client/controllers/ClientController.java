@@ -7,7 +7,7 @@ import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.useCases.CreateClientUseCase;
 import org.ecommerce.ecommerceapi.modules.client.useCases.DeleteClientUseCase;
 import org.ecommerce.ecommerceapi.modules.client.useCases.UpdateClientUseCase;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,14 +23,12 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/client")
+@RequiredArgsConstructor
 public class ClientController {
 
-    @Autowired
-    private CreateClientUseCase createClienteUseCase;
-    @Autowired
-    private DeleteClientUseCase deleteClienteUseCase;
-    @Autowired
-    private UpdateClientUseCase updateClienteUseCase;
+    private final CreateClientUseCase createClienteUseCase;
+    private final DeleteClientUseCase deleteClienteUseCase;
+    private final UpdateClientUseCase updateClienteUseCase;
 
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CreateClientDTO createClientDTO) {

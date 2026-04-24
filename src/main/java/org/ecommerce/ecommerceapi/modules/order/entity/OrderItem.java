@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.Objects;
-
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 
 @Entity
@@ -41,13 +39,13 @@ public class OrderItem {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderItem orderItem = (OrderItem) o;
-        return Objects.equals(getId(), orderItem.getId()) && Objects.equals(getNameProduct(), orderItem.getNameProduct()) && Objects.equals(getQuantity(), orderItem.getQuantity()) && Objects.equals(getUnitPrice(), orderItem.getUnitPrice()) && Objects.equals(getDiscountPrice(), orderItem.getDiscountPrice()) && Objects.equals(getPricePad(), orderItem.getPricePad()) && Objects.equals(getOrder(), orderItem.getOrder()) && Objects.equals(getProduct(), orderItem.getProduct());
+        if (!(o instanceof OrderItem)) return false;
+        OrderItem that = (OrderItem) o;
+        return id != null && id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNameProduct(), getQuantity(), getUnitPrice(), getDiscountPrice(), getPricePad(), getOrder(), getProduct());
+        return (id != null) ? id.hashCode() : System.identityHashCode(this);
     }
 }
