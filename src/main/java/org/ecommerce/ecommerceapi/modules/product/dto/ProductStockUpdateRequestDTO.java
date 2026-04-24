@@ -1,22 +1,13 @@
 package org.ecommerce.ecommerceapi.modules.product.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.ecommerce.ecommerceapi.modules.product.enums.StockOperation;
 
 import java.util.Objects;
 
 public class ProductStockUpdateRequestDTO {
 
-    @Schema(
-        description = "Operação de stock: AUMENTAR ou REDUZIR",
-        example = "AUMENTAR"
-    )
     private StockOperation operacao;
 
-    @Schema(
-        description = "Quantidade a ser aplicada na operação de stock",
-        example = "10"
-    )
     private Integer quantidade;
 
     // Getters e Setters

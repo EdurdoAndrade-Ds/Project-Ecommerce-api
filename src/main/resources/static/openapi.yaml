@@ -1,0 +1,837 @@
+openapi: 3.0.3
+info:
+  title: API de E-commerce
+  version: "1.0"
+  description: API para gerenciamento de clientes e produtos de e-commerce
+  license:
+    name: Apache 2.0
+    url: http://springdoc.org
+
+servers:
+  - url: https://project-ecommerce-api.onrender.com/api/v1
+    description: Produção
+  - url: http://localhost:8080/api/v1
+    description: Local
+
+tags:
+  - name: Cliente
+    description: Gestão de clientes
+  - name: Autenticação
+    description: Autenticação de cliente
+  - name: Perfil
+    description: Perfil do cliente
+  - name: Produto
+    description: Gestão de produtos
+  - name: Pedidos
+    description: Gerenciamento de pedidos
+  - name: Pagamentos
+    description: Processar pagamentos
+
+paths:
+  /client/:
+    post:
+      tags:
+        - Cliente
+      summary: Cadastro de cliente
+      description: Rota responsável por cadastrar um novo cliente no sistema
+      operationId: createClient
+      requestBody:
+        description: Exemplo de requisição para cadastro de cliente
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClientDTO'
+            examples:
+              ExemploCliente:
+                summary: Exemplo de cadastro
+                value:
+                  name: "User Test"
+                  username: "user"
+                  email: "user@email.com"
+                  password: "123456789"
+                  phone: "11999999999"
+                  address: "Rua Exemplo, 123"
+                  city: "São Paulo"
+                  state: "SP"
+                  cep: "01234-567"
+      responses:
+        "200":
+          description: Cliente cadastrado com sucesso
+          content:
+            application/json:
+              examples:
+                RespostaSucesso:
+                  summary: Resposta de Sucesso
+                  value:
+                    name: "User Teste"
+                    username: "user"
+                    email: "user@example.com"
+                    password: "12345678"
+                    phone: "11999999999"
+                    address: "Rua Exemplo, 123"
+                    city: "São Paulo"
+                    state: "SP"
+                    cep: "06789-123"
+        "400":
+          description: Dados inválidos fornecidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                ErroValidacao:
+                  summary: Erro de Validação
+                  value:
+                    message: "Cliente já existe"
+
+    delete:
+      tags:
+        - Cliente
+      summary: Deleção do cliente
+      description: Rota responsável por deletar/desativar o próprio cliente usando a senha
+      operationId: deleteClient
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteClientDTO'
+      responses:
+        "204":
+          description: Cliente deletado com sucesso
+        "400":
+          description: Senha incorreta
+        "401":
+          description: Não autorizado
+        "403":
+          description: Acesso negado
+
+    put:
+      tags:
+        - Cliente
+      summary: Atualização de dados do cliente
+      description: Rota responsável por atualizar os dados do próprio cliente
+      operationId: updateClient
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateClientDTO'
+      responses:
+        "200":
+          description: Cliente atualizado com sucesso
+          content:
+            application/json:
+              examples:
+                RespostaSucesso:
+                  summary: Resposta de Sucesso
+                  value:
+                    id: 1
+                    nome: "João Silva Atualizado"
+                    username: "joaosilva"
+                    email: "novo@email.com"
+                    telefone: "(11) 88888-8888"
+                    endereco: "Rua Nova, 456"
+                    cidade: "São Paulo"
+                    estado: "SP"
+                    cep: "01234-567"
+        "400":
+          description: Dados inválidos fornecidos
+        "401":
+          description: Não autorizado
+        "403":
+          description: Acesso negado
+
+  /auth/client:
+    post:
+      tags:
+        - Autenticação
+      summary: Autenticação de cliente
+      description: Rota responsável por autenticar um cliente e retornar um token JWT para acesso às rotas protegidas
+      operationId: authClient
+      requestBody:
+        description: Credenciais de autenticação do cliente
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthClientDTO'
+            examples:
+              CredenciaisCliente:
+                summary: Credenciais de Cliente
+                value:
+                  username: "user"
+                  password: "123456789"
+      responses:
+        "200":
+          description: Autenticação realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthClientResponseDTO'
+              examples:
+                RespostaSucesso:
+                  summary: Resposta de Sucesso
+                  value:
+                    token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                    id: 1
+                    username: "joaosilva"
+        "401":
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                ErroAutenticacao:
+                  summary: Erro de Autenticação
+                  value:
+                    message: "Usuário ou senha incorretos"
+
+  /cliente/profile:
+    get:
+      tags:
+        - Perfil
+      summary: Perfil do cliente
+      description: Rota responsável por retornar os dados do perfil do cliente autenticado
+      operationId: getClientProfile
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Perfil retornado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientProfileDTO'
+              examples:
+                RespostaSucesso:
+                  summary: Resposta de Sucesso
+                  value:
+                    name: "João Silva"
+                    username: "joaosilva"
+                    email: "joao@email.com"
+                    phone: "(11) 99999-9999"
+                    address: "Rua das Flores, 123"
+                    city: "São Paulo"
+                    state: "SP"
+                    cep: "01234-567"
+        "401":
+          description: Não autorizado
+        "403":
+          description: Acesso negado
+
+  /produtos:
+    post:
+      tags:
+        - Produto
+      summary: Cria um novo produto
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequestDTO'
+            examples:
+              ExemploProduto:
+                summary: Exemplo de criação de produto
+                value:
+                  nome: "Teclado Mecânico"
+                  descricao: "Teclado com switches azuis e iluminação RGB"
+                  preco: 350.00
+                  estoque: 10
+      responses:
+        "201":
+          description: Produto criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponseDTO'
+        "400":
+          description: Dados inválidos para criação do produto
+
+    get:
+      tags:
+        - Produto
+      summary: Listar todos os produtos
+      operationId: listProducts
+      responses:
+        "200":
+          description: Lista de produtos encontrada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductResponseDTO'
+
+  /produtos/{id}:
+    get:
+      tags:
+        - Produto
+      summary: Busca produto por ID
+      operationId: getProductById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Produto encontrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponseDTO'
+        "404":
+          description: Produto não encontrado
+
+    delete:
+      tags:
+        - Produto
+      summary: Exclui um produto pelo ID
+      operationId: deleteProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Produto excluído com sucesso
+        "404":
+          description: Produto não encontrado
+
+    put:
+      tags:
+        - Produto
+      summary: Atualiza um produto existente
+      operationId: updateProduct
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductUpdateDTO'
+      responses:
+        "200":
+          description: Produto atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponseDTO'
+        "404":
+          description: Produto não encontrado
+
+  /produtos/{id}/estoque:
+    put:
+      tags:
+        - Produto
+      summary: Aumentar/reduzir produto em stock
+      operationId: updateProductStock
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductStockUpdateRequestDTO'
+            examples:
+              ExemploAumentar:
+                summary: Aumentar estoque
+                value:
+                  operacao: "AUMENTAR"
+                  quantidade: 10
+              ExemploReduzir:
+                summary: Reduzir estoque
+                value:
+                  operacao: "REDUZIR"
+                  quantidade: 5
+      responses:
+        "204":
+          description: Estoque atualizado com sucesso
+        "404":
+          description: Produto não encontrado
+
+  /produtos/{id}/desconto:
+    put:
+      tags:
+        - Produto
+      summary: Aplica um desconto a um produto
+      operationId: applyDiscount
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: discountPercentage
+          in: query
+          required: true
+          schema:
+            type: number
+            format: double
+      responses:
+        "200":
+          description: Desconto aplicado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponseDTO'
+        "404":
+          description: Produto não encontrado
+        "400":
+          description: Porcentagem de desconto inválida
+
+  /api/pedidos:
+    post:
+      tags:
+        - Pedidos
+      summary: Cria um novo pedido
+      description: Cria um novo pedido para o cliente autenticado. O ID do cliente é obtido automaticamente da autenticação.
+      operationId: createOrder
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequestDTO'
+            examples:
+              ExemploPedido:
+                summary: Exemplo de criação de pedido
+                value:
+                  itens:
+                    - produtoId: 1
+                      quantidade: 2
+                    - produtoId: 3
+                      quantidade: 1
+      responses:
+        "201":
+          description: Pedido criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponseDTO'
+        "400":
+          description: Dados inválidos
+        "401":
+          description: Não autorizado
+        "403":
+          description: Acesso negado
+
+    get:
+      tags:
+        - Pedidos
+      summary: Lista todos os pedidos do cliente autenticado
+      description: Retorna todos os pedidos do cliente autenticado. O ID do cliente é obtido automaticamente da autenticação.
+      operationId: listOrders
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de pedidos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponseDTO'
+
+  /api/pedidos/{id}:
+    get:
+      tags:
+        - Pedidos
+      summary: Busca um pedido por ID
+      description: Busca um pedido específico do cliente autenticado. O ID do cliente é obtido automaticamente da autenticação.
+      operationId: getOrderById
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Pedido encontrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderResponseDTO'
+
+    delete:
+      tags:
+        - Pedidos
+      summary: Cancela um pedido
+      description: Cancela um pedido específico do cliente autenticado. O ID do cliente é obtido automaticamente da autenticação.
+      operationId: cancelOrder
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "204":
+          description: Pedido deletado com sucesso
+
+  /api/pedidos/historico:
+    get:
+      tags:
+        - Pedidos
+      summary: Histórico de pedidos cancelados
+      description: Retorna o histórico de pedidos cancelados do cliente autenticado. O ID do cliente é obtido automaticamente da autenticação.
+      operationId: orderHistory
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Histórico de pedidos retornado com sucesso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponseDTO'
+
+  /api/pagamentos:
+    post:
+      tags:
+        - Pagamentos
+      summary: Realiza um pagamento
+      operationId: createPayment
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequestDTO'
+            examples:
+              ExemploPagamento:
+                summary: Exemplo de pagamento
+                value:
+                  pedidoId: 1
+                  price: 350.00
+      responses:
+        "201":
+          description: Pagamento realizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponseDTO'
+        "400":
+          description: Dados inválidos
+        "401":
+          description: Não autorizado
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    CreateClientDTO:
+      type: object
+      required:
+        - name
+        - username
+        - email
+        - password
+      properties:
+        name:
+          type: string
+          example: "User Test"
+        username:
+          type: string
+          example: "user"
+        email:
+          type: string
+          format: email
+          example: "user@email.com"
+        password:
+          type: string
+          minLength: 8
+          maxLength: 100
+          example: "123456789"
+        phone:
+          type: string
+          example: "11999999999"
+        address:
+          type: string
+          example: "Rua Exemplo, 123"
+        city:
+          type: string
+          example: "São Paulo"
+        state:
+          type: string
+          example: "SP"
+        cep:
+          type: string
+          example: "01234-567"
+
+    UpdateClientDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        cep:
+          type: string
+
+    DeleteClientDTO:
+      type: object
+      required:
+        - password
+      properties:
+        password:
+          type: string
+
+    AuthClientDTO:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: "user"
+        password:
+          type: string
+          example: "123456789"
+
+    AuthClientResponseDTO:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        id:
+          type: integer
+          format: int64
+          example: 1
+        username:
+          type: string
+          example: "joaosilva"
+
+    ClientProfileDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "João Silva"
+        username:
+          type: string
+          example: "joaosilva"
+        email:
+          type: string
+          format: email
+          example: "joao@email.com"
+        phone:
+          type: string
+          example: "(11) 99999-9999"
+        address:
+          type: string
+          example: "Rua das Flores, 123"
+        city:
+          type: string
+          example: "São Paulo"
+        state:
+          type: string
+          example: "SP"
+        cep:
+          type: string
+          example: "01234-567"
+
+    ProductRequestDTO:
+      type: object
+      properties:
+        nome:
+          type: string
+          example: "Teclado Mecânico"
+        descricao:
+          type: string
+          example: "Teclado com switches azuis e iluminação RGB"
+        preco:
+          type: number
+          format: double
+          example: 350.00
+        estoque:
+          type: integer
+          example: 10
+
+    ProductUpdateDTO:
+      type: object
+      properties:
+        nome:
+          type: string
+        descricao:
+          type: string
+        preco:
+          type: number
+          format: double
+
+    ProductResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nome:
+          type: string
+        descricao:
+          type: string
+        preco:
+          type: number
+          format: double
+        estoque:
+          type: integer
+        discountPercentage:
+          type: number
+          format: double
+        discountedPrice:
+          type: number
+          format: double
+
+    ProductStockUpdateRequestDTO:
+      type: object
+      properties:
+        operacao:
+          type: string
+          enum:
+            - AUMENTAR
+            - REDUZIR
+          example: "AUMENTAR"
+        quantidade:
+          type: integer
+          example: 10
+
+    OrderRequestDTO:
+      type: object
+      properties:
+        itens:
+          type: array
+          items:
+            type: object
+            properties:
+              produtoId:
+                type: integer
+                format: int64
+              quantidade:
+                type: integer
+
+    OrderResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        clienteId:
+          type: integer
+          format: int64
+        total:
+          type: number
+          format: double
+        itens:
+          type: array
+          items:
+            type: object
+            properties:
+              produtoId:
+                type: integer
+                format: int64
+              nomeProduto:
+                type: string
+              quantidade:
+                type: integer
+              precoUnitario:
+                type: number
+                format: double
+              discountPrice:
+                type: number
+                format: double
+              precoPago:
+                type: number
+                format: double
+
+    PaymentRequestDTO:
+      type: object
+      properties:
+        pedidoId:
+          type: integer
+          format: int64
+        price:
+          type: number
+          format: double
+
+    PaymentResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        pedidoId:
+          type: integer
+          format: int64
+        valor:
+          type: number
+          format: double
+        dataPagamento:
+          type: string
+          format: date-time
+        clienteId:
+          type: integer
+          format: int64
+
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
