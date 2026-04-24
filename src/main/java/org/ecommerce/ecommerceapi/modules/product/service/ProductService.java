@@ -12,11 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Getter
-@Setter
 @Service
 public class ProductService {
 
@@ -150,23 +147,6 @@ public class ProductService {
 
         produto.setStock(novaQuantidade);
         repository.save(produto);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ProductService)) return false;
-        ProductService that = (ProductService) o;
-        return Objects.equals(repository, that.repository);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(repository);
-    }
-
-    protected boolean canEqual(Object other) {
-        return other instanceof ProductService;
     }
 
     @Transactional

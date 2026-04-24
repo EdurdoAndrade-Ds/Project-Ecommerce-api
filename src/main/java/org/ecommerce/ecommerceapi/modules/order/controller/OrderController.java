@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -21,7 +22,7 @@ public class OrderController {
     @PostMapping
     @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<OrderResponseDTO> create(
-            @RequestBody OrderRequestDTO dto,
+            @Valid @RequestBody OrderRequestDTO dto,
             Authentication authentication
     ) {
         Long clienteId = Long.parseLong(authentication.getName());

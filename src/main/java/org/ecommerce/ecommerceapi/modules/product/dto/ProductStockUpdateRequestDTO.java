@@ -1,56 +1,19 @@
 package org.ecommerce.ecommerceapi.modules.product.dto;
 
+import jakarta.validation.constraints.*;
+import lombok.*;
 import org.ecommerce.ecommerceapi.modules.product.enums.StockOperation;
 
-import java.util.Objects;
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductStockUpdateRequestDTO {
 
+    @NotNull(message = "Operação é obrigatória")
     private StockOperation operacao;
 
+    @NotNull(message = "Quantidade é obrigatória")
+    @Min(value = 1, message = "Quantidade deve ser pelo menos 1")
     private Integer quantidade;
-
-    // Getters e Setters
-    public StockOperation getOperacao() {
-        return operacao;
-    }
-
-    public void setOperacao(StockOperation operacao) {
-        this.operacao = operacao;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ProductStockUpdateRequestDTO)) return false;
-        ProductStockUpdateRequestDTO that = (ProductStockUpdateRequestDTO) o;
-        return operacao == that.operacao &&
-               Objects.equals(quantidade, that.quantidade);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(operacao, quantidade);
-    }
-
-    @Override
-    public String toString() {
-        return "ProductStockUpdateRequestDTO{" +
-               "operacao=" + operacao +
-               ", quantidade=" + quantidade +
-               '}';
-    }
-
-    // Método canEqual para verificar igualdade
-    protected boolean canEqual(Object other) {
-        return other instanceof ProductStockUpdateRequestDTO;
-    }
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class ProductController {
 
     @PostMapping
     @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<ProductResponseDTO> criar(@RequestBody ProductRequestDTO dto) {
+    public ResponseEntity<ProductResponseDTO> criar(@Valid @RequestBody ProductRequestDTO dto) {
         return new ResponseEntity<>(productService.criar(dto), HttpStatus.CREATED);
     }
 
@@ -45,14 +46,14 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<ProductResponseDTO> atualizar(@PathVariable Long id, @RequestBody ProductUpdateDTO dto) {
+    public ResponseEntity<ProductResponseDTO> atualizar(@PathVariable Long id, @Valid @RequestBody ProductUpdateDTO dto) {
         return ResponseEntity.ok(productService.atualizar(id, dto));
     }
 
     @PutMapping("/{id}/estoque")
     @PreAuthorize("hasRole('CLIENTE')")
     public ResponseEntity<Void> atualizarEstoque(@PathVariable Long id,
-                                                @RequestBody ProductStockUpdateRequestDTO dto) {
+                                                @Valid @RequestBody ProductStockUpdateRequestDTO dto) {
         productService.atualizarEstoque(id, dto);
         return ResponseEntity.noContent().build();
     }

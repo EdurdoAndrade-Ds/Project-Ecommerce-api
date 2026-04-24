@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/pagamentos")
@@ -19,7 +20,7 @@ public class PaymentController {
 
     @PostMapping
     @PreAuthorize("hasRole('CLIENTE')")
-    public ResponseEntity<PaymentResponseDTO> pay(@RequestBody PaymentRequestDTO dto, Authentication authentication) {
+    public ResponseEntity<PaymentResponseDTO> pay(@Valid @RequestBody PaymentRequestDTO dto, Authentication authentication) {
         Long clienteId = Long.parseLong(authentication.getName());
         return new ResponseEntity<>(paymentService.pay(dto, clienteId), HttpStatus.CREATED);
     }

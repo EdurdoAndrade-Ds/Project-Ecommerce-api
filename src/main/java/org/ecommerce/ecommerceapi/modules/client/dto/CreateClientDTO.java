@@ -2,7 +2,6 @@ package org.ecommerce.ecommerceapi.modules.client.dto;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -33,22 +32,18 @@ public class CreateClientDTO {
     @NotBlank(message = "O campo [senha] é obrigatório")
     private String password;
 
-    @Column(name = "telefone")
     @JsonProperty("phone")
     @JsonAlias({"telefone"}) // aceita payloads antigos
     private String phone;
 
-    @Column(name = "endereco")
     @JsonProperty("address")
     @JsonAlias({"endereco"})
     private String address;
 
-    @Column(name = "cidade")
     @JsonProperty("city")
     @JsonAlias({"cidade"})
     private String city;
 
-    @Column(name = "estado")
     @JsonProperty("state")
     @JsonAlias({"estado"})
     private String state;

@@ -2,8 +2,6 @@ package org.ecommerce.ecommerceapi.modules.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.ecommerce.ecommerceapi.modules.order.entity.Order;
 
 import java.math.BigDecimal;
@@ -11,8 +9,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Getter
-@Setter
 @Table(name = "payments")
 public class Payment {
     @Id

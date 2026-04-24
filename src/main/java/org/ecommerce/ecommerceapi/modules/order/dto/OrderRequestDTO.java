@@ -1,92 +1,32 @@
 package org.ecommerce.ecommerceapi.modules.order.dto;
 
-import java.util.List;
-import java.util.Objects;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import lombok.*;
 
+import java.util.List;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderRequestDTO {
+
+    @NotEmpty(message = "A lista de itens não pode ser vazia")
+    @Valid
     private List<ItemDTO> itens;
 
-    // Getter e Setter
-    public List<ItemDTO> getItens() {
-        return itens;
-    }
-
-    public void setItens(List<ItemDTO> itens) {
-        this.itens = itens;
-    }
-
-    // equals, hashCode, toString e canEqual para PedidoRequestDTO
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof OrderRequestDTO)) return false;
-        OrderRequestDTO that = (OrderRequestDTO) o;
-        return Objects.equals(itens, that.itens);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(itens);
-    }
-
-    @Override
-    public String toString() {
-        return "PedidoRequestDTO{" +
-                "itens=" + itens +
-                '}';
-    }
-
-    protected boolean canEqual(Object other) {
-        return other instanceof OrderRequestDTO;
-    }
-
-    // Classe interna ItemDTO
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ItemDTO {
+
+        @NotNull(message = "ID do produto é obrigatório")
         private Long produtoId;
+
+        @NotNull(message = "Quantidade é obrigatória")
+        @Min(value = 1, message = "Quantidade deve ser pelo menos 1")
         private Integer quantidade;
-
-        // Getters e Setters
-        public Long getProdutoId() {
-            return produtoId;
-        }
-
-        public void setProdutoId(Long produtoId) {
-            this.produtoId = produtoId;
-        }
-
-        public Integer getQuantidade() {
-            return quantidade;
-        }
-
-        public void setQuantidade(Integer quantidade) {
-            this.quantidade = quantidade;
-        }
-
-        // equals, hashCode, toString e canEqual para ItemDTO
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof ItemDTO)) return false;
-            ItemDTO itemDTO = (ItemDTO) o;
-            return Objects.equals(produtoId, itemDTO.produtoId) &&
-                    Objects.equals(quantidade, itemDTO.quantidade);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(produtoId, quantidade);
-        }
-
-        @Override
-        public String toString() {
-            return "ItemDTO{" +
-                    "produtoId=" + produtoId +
-                    ", quantidade=" + quantidade +
-                    '}';
-        }
-
-        protected boolean canEqual(Object other) {
-            return other instanceof ItemDTO;
-        }
     }
 }
