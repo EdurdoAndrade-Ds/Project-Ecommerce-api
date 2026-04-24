@@ -9,6 +9,8 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class ProductRequestDTO {
 
     @NotBlank(message = "Nome do produto é obrigatório")
