@@ -6,6 +6,7 @@ import org.ecommerce.ecommerceapi.modules.order.entity.Order;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -25,7 +26,16 @@ public class Payment {
     @Column(name = "data_pagamento", nullable = false)
     private LocalDateTime datePayment;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Payment that = (Payment) o;
+        return id != null && Objects.equals(id, that.id);
+    }
 
-
-    
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

@@ -44,17 +44,13 @@ public class Order {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Order)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Order that = (Order) o;
-        return Objects.equals(id, that.id) &&
-               status == that.status &&
-               Objects.equals(total, that.total) &&
-               Objects.equals(dateCreate, that.dateCreate) &&
-               Objects.equals(cliente, that.cliente);
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, status, total, dateCreate, cliente);
+        return getClass().hashCode();
     }
 }

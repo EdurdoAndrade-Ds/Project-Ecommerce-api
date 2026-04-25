@@ -5,20 +5,20 @@ import org.ecommerce.ecommerceapi.modules.client.dto.AuthClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.dto.AuthClientResponseDTO;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.providers.JWTProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class AuthClientUseCase {
 
-    @Autowired
-    ClientRepository clientRepository;
+    private final ClientRepository clientRepository;
 
-    @Autowired PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired JWTProvider jwtProvider;
+    private final JWTProvider jwtProvider;
 
     public AuthClientResponseDTO execute(AuthClientDTO authClientDTO) {
         var client = this.clientRepository.findByUsernameOrEmail(authClientDTO.getUsername(), authClientDTO.getUsername())

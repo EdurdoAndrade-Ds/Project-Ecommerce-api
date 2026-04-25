@@ -1,6 +1,5 @@
 package org.ecommerce.ecommerceapi.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,14 +19,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 
 @EnableWebSecurity
 @EnableMethodSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    SecurityFilter securityFilter;
+    private final SecurityFilter securityFilter;
 
     @Value("${spring.web.cors.allowed-origins}")
     private String allowedOrigins;
@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // === PÚBLICOS ===
                         .requestMatchers(HttpMethod.POST, "/client", "/client/").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/version").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/version").permitAll()
                         .requestMatchers("/auth/**", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/produtos", "/produtos/**").permitAll()
 
