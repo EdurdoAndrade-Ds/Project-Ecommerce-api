@@ -8,17 +8,17 @@ import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestD
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    private ProductRepository repository;
+    private final ProductRepository repository;
 
     private static final String MSG_NOME_OBRIGATORIO = "Nome do produto é obrigatório";
     private static final String MSG_PRECO_INVALIDO = "Preço do produto deve ser maior que zero";

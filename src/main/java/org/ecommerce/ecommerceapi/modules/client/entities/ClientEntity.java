@@ -40,7 +40,7 @@ public class ClientEntity {
 
     private String city;
 
-    private String state    ;
+    private String state;
 
     private String cep;
 
