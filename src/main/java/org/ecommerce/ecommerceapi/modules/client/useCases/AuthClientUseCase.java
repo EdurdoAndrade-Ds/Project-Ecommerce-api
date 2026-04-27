@@ -5,17 +5,19 @@ import org.ecommerce.ecommerceapi.modules.client.dto.AuthClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.dto.AuthClientResponseDTO;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.providers.JWTProvider;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class AuthClientUseCase {
 
     private final ClientRepository clientRepository;
+
     private final PasswordEncoder passwordEncoder;
+
     private final JWTProvider jwtProvider;
 
     public AuthClientResponseDTO execute(AuthClientDTO authClientDTO) {

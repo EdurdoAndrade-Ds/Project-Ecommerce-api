@@ -4,15 +4,16 @@ import org.ecommerce.ecommerceapi.exceptions.ClientConflictException;
 import org.ecommerce.ecommerceapi.modules.client.dto.ClientResponseDTO;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CreateClientUseCase {
 
     private final ClientRepository clientRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public ClientResponseDTO execute(ClientEntity clientEntity) {

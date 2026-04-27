@@ -7,9 +7,11 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode
 public class PaymentRequestDTO {
 
     @NotNull(message = "ID do pedido é obrigatório")

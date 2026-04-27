@@ -1,6 +1,5 @@
 package org.ecommerce.ecommerceapi.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 
 @EnableWebSecurity
 @EnableMethodSecurity

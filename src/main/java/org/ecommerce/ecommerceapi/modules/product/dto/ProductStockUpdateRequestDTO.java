@@ -8,6 +8,8 @@ import org.ecommerce.ecommerceapi.modules.product.enums.StockOperation;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class ProductStockUpdateRequestDTO {
 
     @NotNull(message = "Operação é obrigatória")

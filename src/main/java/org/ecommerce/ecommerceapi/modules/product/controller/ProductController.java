@@ -5,12 +5,12 @@ import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 

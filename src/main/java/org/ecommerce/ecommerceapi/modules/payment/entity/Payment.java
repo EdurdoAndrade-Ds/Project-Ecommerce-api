@@ -6,6 +6,7 @@ import org.ecommerce.ecommerceapi.modules.order.entity.Order;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -28,13 +29,13 @@ public class Payment {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Payment)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Payment that = (Payment) o;
-        return id != null && id.equals(that.id);
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return (id != null) ? id.hashCode() : System.identityHashCode(this);
+        return getClass().hashCode();
     }
 }

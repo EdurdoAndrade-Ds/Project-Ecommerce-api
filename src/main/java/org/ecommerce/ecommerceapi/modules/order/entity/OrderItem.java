@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.Objects;
+
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 
 @Entity
@@ -39,13 +41,13 @@ public class OrderItem {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof OrderItem)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         OrderItem that = (OrderItem) o;
-        return id != null && id.equals(that.id);
+        return id != null && Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return (id != null) ? id.hashCode() : System.identityHashCode(this);
+        return getClass().hashCode();
     }
 }

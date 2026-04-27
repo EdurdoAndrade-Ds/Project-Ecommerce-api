@@ -10,6 +10,8 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class OrderRequestDTO {
 
     @NotEmpty(message = "A lista de itens não pode ser vazia")
@@ -20,6 +22,8 @@ public class OrderRequestDTO {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
+    @EqualsAndHashCode
+    @ToString
     public static class ItemDTO {
 
         @NotNull(message = "ID do produto é obrigatório")

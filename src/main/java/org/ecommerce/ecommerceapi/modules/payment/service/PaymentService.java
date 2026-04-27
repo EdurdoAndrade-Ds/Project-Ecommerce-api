@@ -11,9 +11,9 @@ import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentResponseDTO;
 import org.ecommerce.ecommerceapi.modules.payment.entity.Payment;
 import org.ecommerce.ecommerceapi.modules.payment.repository.PaymentRepository;
 import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,6 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PaymentService {
     private final PaymentRepository paymentRepository;
+
     private final OrderRepository orderRepository;
 
     @Transactional
