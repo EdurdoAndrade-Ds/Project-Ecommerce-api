@@ -1,0 +1,382 @@
+{
+  "info": {
+    "name": "Ecommerce API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Collection completa dos endpoints da Project-Ecommerce-api"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Autenticar Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/client",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "client"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"user\",\n  \"password\": \"123456789\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Autentica um cliente e retorna um token JWT. Salve o token na variável {{token}} para usar nas rotas protegidas."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cliente",
+      "item": [
+        {
+          "name": "Cadastrar Cliente",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/client/",
+              "host": ["{{baseUrl}}"],
+              "path": ["client", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"User Test\",\n  \"username\": \"user\",\n  \"email\": \"user@email.com\",\n  \"password\": \"123456789\",\n  \"phone\": \"11999999999\",\n  \"address\": \"Rua Exemplo, 123\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"cep\": \"01234-567\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Cadastra um novo cliente no sistema."
+          }
+        },
+        {
+          "name": "Atualizar Cliente",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/client/",
+              "host": ["{{baseUrl}}"],
+              "path": ["client", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"User Atualizado\",\n  \"username\": \"user_novo\",\n  \"email\": \"novo@email.com\",\n  \"phone\": \"11988888888\",\n  \"address\": \"Rua Nova, 456\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"cep\": \"01234-567\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Atualiza os dados do cliente autenticado. Requer token JWT. Todos os campos são opcionais."
+          }
+        },
+        {
+          "name": "Deletar Cliente",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/client/",
+              "host": ["{{baseUrl}}"],
+              "path": ["client", ""]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"123456789\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Deleta/desativa o próprio cliente. Requer token JWT e confirmação da senha."
+          }
+        },
+        {
+          "name": "Perfil do Cliente",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/cliente/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["cliente", "profile"]
+            },
+            "description": "Retorna os dados do perfil do cliente autenticado. Requer token JWT."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produtos",
+      "item": [
+        {
+          "name": "Criar Produto",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/produtos",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Produto Exemplo\",\n  \"descricao\": \"Descrição do produto\",\n  \"preco\": 99.90,\n  \"estoque\": 50\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Cria um novo produto no sistema."
+          }
+        },
+        {
+          "name": "Listar Produtos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/produtos",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos"]
+            },
+            "description": "Lista todos os produtos cadastrados."
+          }
+        },
+        {
+          "name": "Buscar Produto por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/produtos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos", "1"]
+            },
+            "description": "Busca um produto específico pelo ID. Substitua '1' pelo ID do produto desejado."
+          }
+        },
+        {
+          "name": "Atualizar Produto",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/produtos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos", "1"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Produto Atualizado\",\n  \"descricao\": \"Nova descrição\",\n  \"preco\": 89.90\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Atualiza os dados de um produto existente. Substitua '1' pelo ID do produto."
+          }
+        },
+        {
+          "name": "Excluir Produto",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/produtos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos", "1"]
+            },
+            "description": "Exclui um produto pelo ID. Substitua '1' pelo ID do produto."
+          }
+        },
+        {
+          "name": "Atualizar Estoque",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/produtos/1/estoque",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos", "1", "estoque"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"operacao\": \"AUMENTAR\",\n  \"quantidade\": 10\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Aumenta ou reduz o estoque de um produto. 'operacao' pode ser AUMENTAR ou REDUZIR. Substitua '1' pelo ID do produto."
+          }
+        },
+        {
+          "name": "Aplicar Desconto",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/produtos/1/desconto?discountPercentage=10",
+              "host": ["{{baseUrl}}"],
+              "path": ["produtos", "1", "desconto"],
+              "query": [
+                {
+                  "key": "discountPercentage",
+                  "value": "10",
+                  "description": "Porcentagem de desconto a aplicar (ex: 10 = 10%)"
+                }
+              ]
+            },
+            "description": "Aplica um desconto percentual a um produto. Substitua '1' pelo ID do produto e ajuste o valor do parâmetro discountPercentage."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "Criar Pedido",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itens\": [\n    {\n      \"produtoId\": 1,\n      \"quantidade\": 2\n    },\n    {\n      \"produtoId\": 3,\n      \"quantidade\": 1\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Cria um novo pedido para o cliente autenticado. Requer token JWT. O ID do cliente é extraído automaticamente do token."
+          }
+        },
+        {
+          "name": "Listar Pedidos do Cliente",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos"]
+            },
+            "description": "Lista todos os pedidos do cliente autenticado. Requer token JWT."
+          }
+        },
+        {
+          "name": "Buscar Pedido por ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "1"]
+            },
+            "description": "Busca um pedido específico do cliente autenticado pelo ID. Requer token JWT. Substitua '1' pelo ID do pedido."
+          }
+        },
+        {
+          "name": "Cancelar Pedido",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "1"]
+            },
+            "description": "Cancela um pedido do cliente autenticado. Requer token JWT. Substitua '1' pelo ID do pedido."
+          }
+        },
+        {
+          "name": "Histórico de Pedidos Cancelados",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pedidos/historico",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pedidos", "historico"]
+            },
+            "description": "Retorna o histórico de pedidos cancelados do cliente autenticado. Requer token JWT."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pagamentos",
+      "item": [
+        {
+          "name": "Realizar Pagamento",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/pagamentos",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pagamentos"]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pedidoId\": 1,\n  \"price\": 199.80\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "description": "Processa o pagamento de um pedido. Requer token JWT. O ID do cliente é extraído automaticamente do token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Versão",
+      "item": [
+        {
+          "name": "Versão da API",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/v1/version",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "v1", "version"]
+            },
+            "description": "Retorna a versão atual da API."
+          }
+        }
+      ]
+    }
+  ]
+}
