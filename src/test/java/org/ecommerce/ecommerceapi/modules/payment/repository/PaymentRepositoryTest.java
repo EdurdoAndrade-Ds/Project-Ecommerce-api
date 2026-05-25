@@ -5,6 +5,7 @@ import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.order.entity.Order;
 import org.ecommerce.ecommerceapi.modules.payment.entity.Payment;
 import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
+import org.ecommerce.ecommerceapi.modules.order.repository.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ class PaymentRepositoryTest {
 
         Order order = new Order();
         order.setCliente(cliente);
-        order.setCancelado(false);
+        order.setStatus(OrderStatus.CRIADO);
         order.setTotal(BigDecimal.valueOf(100));
         order.setDateCreate(LocalDateTime.now());
         order = orderRepository.save(order);

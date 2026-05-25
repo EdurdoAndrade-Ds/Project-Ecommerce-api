@@ -28,10 +28,7 @@ class AuthClientUseCaseTest {
         passwordEncoder = mock(PasswordEncoder.class);
         jwtProvider = mock(JWTProvider.class);
 
-        authClientUseCase = new AuthClientUseCase();
-        authClientUseCase.clientRepository = clientRepository;
-        authClientUseCase.passwordEncoder = passwordEncoder;
-        authClientUseCase.jwtProvider = jwtProvider;
+        authClientUseCase = new AuthClientUseCase(clientRepository, passwordEncoder, jwtProvider);
     }
 
     @Test

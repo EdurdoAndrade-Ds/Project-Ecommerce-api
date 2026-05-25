@@ -416,13 +416,9 @@ class ProductServiceTest {
 
     @Test
     void testEquals() {
-        ProductService anotherProductService = new ProductService();
-        assertNotEquals(productService, anotherProductService); // Diferentes, pois têm repositórios diferentes
-
-        productService.setRepository(productRepository); // Define o mesmo repositório
-        anotherProductService.setRepository(productRepository); // Define o mesmo repositório
-
-        assertEquals(productService, anotherProductService); // Agora devem ser iguais
+        ProductService anotherProductService = new ProductService(productRepository);
+        assertEquals(productService, productService);
+        assertNotEquals(productService, anotherProductService);
     }
 
     @Test

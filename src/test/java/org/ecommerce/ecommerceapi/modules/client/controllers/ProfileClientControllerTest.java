@@ -51,13 +51,10 @@ class ProfileClientControllerTest {
         when(request.getAttribute("cliente_id")).thenReturn(null);
 
         // Act & Assert
-        try {
-            controller.profile(request);
-            fail("Deveria lançar ClientUnauthorizedException");
-        } catch (ClientUnauthorizedException ex) {
-            ResponseEntity<Object> response = controller.handleClientUnauthorized(ex);
-            assertEquals(401, response.getStatusCodeValue());
-            assertTrue(response.getBody() instanceof String);
-        }
+        ClientUnauthorizedException ex = assertThrows(
+                ClientUnauthorizedException.class,
+                () -> controller.profile(request)
+        );
+        assertEquals("Token invalido ou ausente", ex.getMessage());
     }
 }

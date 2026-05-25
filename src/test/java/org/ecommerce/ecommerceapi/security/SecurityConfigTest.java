@@ -1,6 +1,6 @@
 package org.ecommerce.ecommerceapi.security;
 
-import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
+import org.ecommerce.ecommerceapi.modules.client.dto.ClientResponseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -51,7 +51,7 @@ class SecurityConfigTest {
     // Remover os mocks de PasswordEncoder e CorsConfigurationSource
     @BeforeEach
     void setup() {
-        ClientEntity mockClient = new ClientEntity();
+        ClientResponseDTO mockClient = new ClientResponseDTO();
         mockClient.setName("Teste");
         mockClient.setUsername("teste");
         mockClient.setEmail("teste@teste.com");
