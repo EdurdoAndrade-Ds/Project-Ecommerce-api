@@ -204,6 +204,21 @@ Para rodar todos os testes automatizados e gerar o relatório de cobertura:
 ./mvnw clean verify
 ```
 
+## 🔒 Proteção de branches
+
+O repositório versiona o arquivo `/.github/CODEOWNERS` para exigir revisão do usuário `@EdurdoAndrade-Ds` em qualquer alteração quando a opção **Require review from Code Owners** estiver ativa nas branches protegidas.
+
+Para fazer com que apenas a sua aprovação permita merge em `main` e `develop`, ainda é necessário configurar no GitHub:
+
+1. **Settings → Branches** ou **Rulesets**.
+2. Criar uma regra para `main` e outra para `develop`.
+3. Ativar **Require a pull request before merging**.
+4. Exigir pelo menos **1 approval**.
+5. Ativar **Require review from Code Owners**.
+6. Opcional: desativar bypass para admins/maintainers, caso ninguém deva mesclar sem sua aprovação.
+
+Depois de aplicar a mesma regra nas duas branches, qualquer PR aberto para `main` ou `develop` dependerá da sua revisão.
+
 ### Execução offline
 
 Se o ambiente não possuir acesso à internet, certifique-se de ter o cache local do Maven previamente populado e utilize o modo offline:
@@ -260,4 +275,3 @@ Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICEN
 ---
 
 > Projeto desenvolvido com fins educacionais como parte de um sistema completo de e-commerce em Java com Spring Boot.
-
