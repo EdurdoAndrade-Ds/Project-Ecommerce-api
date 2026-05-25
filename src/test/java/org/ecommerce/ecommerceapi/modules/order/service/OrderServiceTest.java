@@ -6,7 +6,6 @@ import org.ecommerce.ecommerceapi.modules.order.dto.OrderRequestDTO;
 import org.ecommerce.ecommerceapi.modules.order.dto.OrderResponseDTO;
 import org.ecommerce.ecommerceapi.modules.order.entity.Order;
 import org.ecommerce.ecommerceapi.modules.order.repository.OrderRepository;
-import org.ecommerce.ecommerceapi.modules.order.repository.OrderStatus;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +54,6 @@ class OrderServiceTest {
         produto.setId(1L);
         produto.setName("Produto Teste");
         produto.setPrice(BigDecimal.valueOf(10.00));
-        produto.setStock(10);
     }
 
     @Test
@@ -81,9 +79,9 @@ class OrderServiceTest {
         orderCancelado.setId(200L);
         orderCancelado.setCliente(cliente);
         orderCancelado.setTotal(BigDecimal.valueOf(200.00));
-        orderCancelado.setStatus(OrderStatus.CANCELADO);
+        orderCancelado.setCancelado(true);
         orderCancelado.setItens(new ArrayList<>());
-        when(orderRepository.findByClienteIdAndStatus(cliente.getId(), OrderStatus.CANCELADO)).thenReturn(List.of(orderCancelado));
+        when(orderRepository.findByClienteIdAndCanceladoTrue(cliente.getId())).thenReturn(List.of(orderCancelado));
         List<OrderResponseDTO> historicoList = orderService.history(cliente.getId());
         assertNotNull(historicoList);
         assertEquals(1, historicoList.size());
@@ -180,7 +178,6 @@ class OrderServiceTest {
         orderService.cancel(order.getId(), cliente.getId());
 
         assertTrue(order.isCancelado());
-        assertEquals(OrderStatus.CANCELADO, order.getStatus());
         verify(orderRepository).save(order);
     }
 

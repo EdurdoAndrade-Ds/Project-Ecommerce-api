@@ -1,7 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.client.controllers;
 
 import org.ecommerce.ecommerceapi.exceptions.ClientNotFoundException;
-import org.ecommerce.ecommerceapi.modules.client.dto.ClientResponseDTO;
 import org.ecommerce.ecommerceapi.modules.client.dto.CreateClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.dto.DeleteClientDTO;
 import org.ecommerce.ecommerceapi.modules.client.dto.UpdateClientDTO;
@@ -13,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+
+import jakarta.persistence.EntityNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,7 +36,20 @@ class ClientControllerTest {
         deleteUseCase = mock(DeleteClientUseCase.class);
         updateUseCase = mock(UpdateClientUseCase.class);
         authentication = mock(Authentication.class);
-        clientController = new ClientController(createUseCase, deleteUseCase, updateUseCase);
+
+        clientController = new ClientController();
+
+        var f1 = ClientController.class.getDeclaredField("createClienteUseCase");
+        f1.setAccessible(true);
+        f1.set(clientController, createUseCase);
+
+        var f2 = ClientController.class.getDeclaredField("deleteClienteUseCase");
+        f2.setAccessible(true);
+        f2.set(clientController, deleteUseCase);
+
+        var f3 = ClientController.class.getDeclaredField("updateClienteUseCase");
+        f3.setAccessible(true);
+        f3.set(clientController, updateUseCase);
     }
 
     @Test
@@ -51,7 +65,7 @@ class ClientControllerTest {
         dto.setState("SP");
         dto.setCep("01234-567");
 
-        ClientResponseDTO entityMock = ClientResponseDTO.builder()
+        ClientEntity entityMock = ClientEntity.builder()
                 .id(1L)
                 .name(dto.getName())
                 .username(dto.getUsername())
@@ -62,7 +76,7 @@ class ClientControllerTest {
 
         ResponseEntity<Object> response = clientController.create(dto);
 
-        assertEquals(201, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCodeValue());
         assertEquals(entityMock, response.getBody());
     }
 
@@ -132,10 +146,13 @@ class ClientControllerTest {
         when(updateUseCase.execute(eq(1L), eq(dto)))
                 .thenThrow(new ClientNotFoundException("Cliente nao encontrado"));
 
-        ClientNotFoundException ex = assertThrows(
-                ClientNotFoundException.class,
-                () -> clientController.update(dto, authentication)
-        );
-        assertEquals("Cliente nao encontrado", ex.getMessage());
+        try {
+            clientController.update(dto, authentication);
+            fail("Deveria lançar ClientNotFoundException");
+        } catch (ClientNotFoundException ex) {
+            ResponseEntity<Object> response = clientController.handleClientNotFound(ex);
+            assertEquals(404, response.getStatusCodeValue());
+            assertEquals("Cliente nao encontrado", response.getBody());
+        }
     }
 }

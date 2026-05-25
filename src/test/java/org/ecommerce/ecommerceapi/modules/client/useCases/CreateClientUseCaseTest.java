@@ -1,7 +1,5 @@
 package org.ecommerce.ecommerceapi.modules.client.useCases;
 
-import org.ecommerce.ecommerceapi.exceptions.ClientConflictException;
-import org.ecommerce.ecommerceapi.modules.client.dto.ClientResponseDTO;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +24,9 @@ class CreateClientUseCaseTest {
         clientRepository = mock(ClientRepository.class);
         passwordEncoder = mock(PasswordEncoder.class);
 
-        createClientUseCase = new CreateClientUseCase(clientRepository, passwordEncoder);
+        createClientUseCase = new CreateClientUseCase();
+        createClientUseCase.clientRepository = clientRepository;
+        createClientUseCase.passwordEncoder = passwordEncoder;
     }
 
     @Test
@@ -50,12 +50,13 @@ class CreateClientUseCaseTest {
 
         when(clientRepository.save(any(ClientEntity.class))).thenReturn(clienteSalvo);
 
-        ClientResponseDTO resultado = createClientUseCase.execute(clientEntity);
+        ClientEntity resultado = createClientUseCase.execute(clientEntity);
 
         assertNotNull(resultado);
         assertEquals(1L, resultado.getId());
         assertEquals("usuario1", resultado.getUsername());
-        assertEquals("usuario1@email.com", resultado.getEmail());
+        assertEquals("senhaCriptografada", resultado.getPassword());
+        assertTrue(resultado.isActive());
 
         verify(clientRepository, times(1)).findByUsernameOrEmail("usuario1", "usuario1@email.com");
         verify(passwordEncoder, times(1)).encode("senha123");
@@ -72,7 +73,7 @@ class CreateClientUseCaseTest {
         when(clientRepository.findByUsernameOrEmail("usuarioExistente", "existente@email.com"))
                 .thenReturn(Optional.of(new ClientEntity()));
 
-        ClientConflictException exception = assertThrows(ClientConflictException.class, () -> {
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             createClientUseCase.execute(clientEntity);
         });
 

@@ -1,7 +1,6 @@
 package org.ecommerce.ecommerceapi.modules.order.entity;
 
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
-import org.ecommerce.ecommerceapi.modules.order.repository.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +21,7 @@ class OrderTest {
 
         order = new Order();
         order.setId(1L);
-        order.setStatus(OrderStatus.CRIADO);
+        order.setCancelado(false);
         order.setTotal(BigDecimal.valueOf(100.00));
         order.setDateCreate(LocalDateTime.now());
         order.setCliente(cliente);
@@ -41,7 +40,7 @@ class OrderTest {
     void testEqualsAndHashCode() {
         Order order2 = new Order();
         order2.setId(1L);
-        order2.setStatus(OrderStatus.CRIADO);
+        order2.setCancelado(false);
         order2.setTotal(BigDecimal.valueOf(100.00));
         order2.setDateCreate(order.getDateCreate());
         order2.setCliente(cliente);
@@ -49,7 +48,7 @@ class OrderTest {
         assertEquals(order, order2);
         assertEquals(order.hashCode(), order2.hashCode());
 
-        order2.setStatus(OrderStatus.CANCELADO); // Alterando para testar desigualdade
+        order2.setCancelado(true); // Alterando para testar desigualdade
         assertNotEquals(order, order2);
     }
 

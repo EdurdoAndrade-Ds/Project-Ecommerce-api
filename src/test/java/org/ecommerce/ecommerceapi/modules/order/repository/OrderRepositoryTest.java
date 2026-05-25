@@ -3,7 +3,6 @@ package org.ecommerce.ecommerceapi.modules.order.repository;
 import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 import org.ecommerce.ecommerceapi.modules.client.repositories.ClientRepository;
 import org.ecommerce.ecommerceapi.modules.order.entity.Order;
-import org.ecommerce.ecommerceapi.modules.order.repository.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,21 +56,21 @@ class OrderRepositoryTest {
         // Criar e salvar pedidos
         order1Cliente1 = new Order();
         order1Cliente1.setCliente(cliente1);
-        order1Cliente1.setStatus(OrderStatus.CRIADO);
+        order1Cliente1.setCancelado(false);
         order1Cliente1.setDateCreate(LocalDateTime.now().minusDays(1));
         order1Cliente1.setTotal(BigDecimal.valueOf(150.0));
         order1Cliente1 = orderRepository.save(order1Cliente1);
 
         order2Cliente1 = new Order();
         order2Cliente1.setCliente(cliente1);
-        order2Cliente1.setStatus(OrderStatus.CANCELADO);
+        order2Cliente1.setCancelado(true);
         order2Cliente1.setDateCreate(LocalDateTime.now());
         order2Cliente1.setTotal(BigDecimal.valueOf(300.0));
         order2Cliente1 = orderRepository.save(order2Cliente1);
 
         orderCliente2 = new Order();
         orderCliente2.setCliente(cliente2);
-        orderCliente2.setStatus(OrderStatus.CRIADO);
+        orderCliente2.setCancelado(false);
         orderCliente2.setDateCreate(LocalDateTime.now());
         orderCliente2.setTotal(BigDecimal.valueOf(200.0));
         orderCliente2 = orderRepository.save(orderCliente2);
@@ -96,11 +95,11 @@ class OrderRepositoryTest {
     }
 
     @Test
-    void testFindByClienteIdAndStatus() {
-        List<Order> canceladosCliente1 = orderRepository.findByClienteIdAndStatus(cliente1.getId(), OrderStatus.CANCELADO);
+    void testFindByClienteIdAndCanceladoTrue() {
+        List<Order> canceladosCliente1 = orderRepository.findByClienteIdAndCanceladoTrue(cliente1.getId());
         assertEquals(1, canceladosCliente1.size(), "Deve haver 1 pedido cancelado para o Cliente 1");
 
-        List<Order> canceladosCliente2 = orderRepository.findByClienteIdAndStatus(cliente2.getId(), OrderStatus.CANCELADO);
+        List<Order> canceladosCliente2 = orderRepository.findByClienteIdAndCanceladoTrue(cliente2.getId());
         assertTrue(canceladosCliente2.isEmpty(), "Não deve haver pedidos cancelados para o Cliente 2");
     }
 }

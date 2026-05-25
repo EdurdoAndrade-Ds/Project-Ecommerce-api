@@ -7,7 +7,6 @@ import org.ecommerce.ecommerceapi.modules.client.entities.ClientEntity;
 
 
 import org.ecommerce.ecommerceapi.modules.order.entity.Order;
-import org.ecommerce.ecommerceapi.modules.order.repository.OrderStatus;
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentRequestDTO;
 import org.ecommerce.ecommerceapi.modules.payment.dto.PaymentResponseDTO;
 import org.ecommerce.ecommerceapi.modules.payment.entity.Payment;
@@ -23,7 +22,6 @@ import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,7 +57,6 @@ class PaymentServiceTest {
         order.setId(1L);
         order.setCliente(cliente);
         order.setTotal(BigDecimal.valueOf(100));
-        order.setStatus(OrderStatus.CRIADO);
 
         requestDTO = new PaymentRequestDTO();
         requestDTO.setPedidoId(1L);
@@ -73,7 +70,6 @@ class PaymentServiceTest {
         dto.setPrice(BigDecimal.valueOf(100));
 
         when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
-        when(paymentRepository.findByOrderId(2L)).thenReturn(Collections.emptyList());
         Payment saved = new Payment();
         saved.setId(10L);
         saved.setOrder(order);
@@ -96,7 +92,6 @@ class PaymentServiceTest {
         dto.setPrice(BigDecimal.valueOf(50));
 
         when(orderRepository.findById(2L)).thenReturn(Optional.of(order));
-        when(paymentRepository.findByOrderId(2L)).thenReturn(Collections.emptyList());
 
         RuntimeException ex = assertThrows(RuntimeException.class,
                 () -> paymentService.pay(dto, 1L));
@@ -108,7 +103,7 @@ class PaymentServiceTest {
         order.setId(1L);
         order.setCliente(cliente);
         order.setTotal(BigDecimal.TEN);
-        order.setStatus(OrderStatus.CRIADO);
+        order.setCancelado(false);
 
         requestDTO = new PaymentRequestDTO();
         requestDTO.setPedidoId(1L);
@@ -124,7 +119,6 @@ class PaymentServiceTest {
         payment.setDatePayment(LocalDateTime.now());
 
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
-        when(paymentRepository.findByOrderId(1L)).thenReturn(Collections.emptyList());
         when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
 
         PaymentResponseDTO response = paymentService.pay(requestDTO, 1L);
@@ -153,7 +147,7 @@ class PaymentServiceTest {
 
     @Test
     void testPagarPedidoCancelado() {
-        order.setStatus(OrderStatus.CANCELADO);
+        order.setCancelado(true);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 
         assertThrows(RuntimeException.class, () -> paymentService.pay(requestDTO, 1L));
