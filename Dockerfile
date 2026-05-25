@@ -5,7 +5,7 @@ COPY . .
 RUN mvn clean package -DskipTests -Dmaven.test.skip=true
 
 # Etapa 2: imagem final com o JAR
-FROM eclipse-temurin:17-jdk
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080

@@ -1,28 +1,24 @@
 package org.ecommerce.ecommerceapi.modules.product.service;
 
 import jakarta.transaction.Transactional;
-import lombok.Getter;
-import lombok.Setter;
+import org.ecommerce.ecommerceapi.exceptions.ResourceNotFoundException;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductResponseDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductStockUpdateRequestDTO;
 import org.ecommerce.ecommerceapi.modules.product.dto.ProductUpdateDTO;
 import org.ecommerce.ecommerceapi.modules.product.entity.Product;
 import org.ecommerce.ecommerceapi.modules.product.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Getter
-@Setter
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    private ProductRepository repository;
+    private final ProductRepository repository;
 
     private static final String MSG_NOME_OBRIGATORIO = "Nome do produto é obrigatório";
     private static final String MSG_PRECO_INVALIDO = "Preço do produto deve ser maior que zero";
@@ -34,7 +30,7 @@ public class ProductService {
     private static final String MSG_ESTOQUE_NAO_DEFINIDO = "Estoque do produto não está definido.";
 
     public Product buscarPorId(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException(MSG_PRODUTO_NAO_ENCONTRADO));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MSG_PRODUTO_NAO_ENCONTRADO));
     }
 
     public ProductResponseDTO buscarPorIdDTO(Long id) {
@@ -151,23 +147,6 @@ public class ProductService {
 
         produto.setStock(novaQuantidade);
         repository.save(produto);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ProductService)) return false;
-        ProductService that = (ProductService) o;
-        return Objects.equals(repository, that.repository);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(repository);
-    }
-
-    protected boolean canEqual(Object other) {
-        return other instanceof ProductService;
     }
 
     @Transactional
