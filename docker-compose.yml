@@ -6,17 +6,17 @@ services:
     container_name: ecommerce-db
     restart: always
     environment:
-      POSTGRES_DB: ecommerce
-      POSTGRES_USER: ecommerce
-      POSTGRES_PASSWORD: ecommerce123
+      POSTGRES_DB: ${POSTGRES_DB:-ecommerce}
+      POSTGRES_USER: ${POSTGRES_USER:-ecommerce}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ecommerce123}
     ports:
-      - "5050:5432"  # Mantenha se quiser acessar o banco localmente
+      - "5050:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
       - ecommerce-net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ecommerce"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ecommerce}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -31,9 +31,10 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ecommerce
-      SPRING_DATASOURCE_USERNAME: ecommerce
-      SPRING_DATASOURCE_PASSWORD: ecommerce123
+      DATABASE_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-ecommerce}
+      DATABASE_USERNAME: ${POSTGRES_USER:-ecommerce}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD:-ecommerce123}
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production-min-32-chars}
       SERVER_PORT: 8080
       SERVER_ADDRESS: 0.0.0.0
     networks:
@@ -43,8 +44,8 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@admin.com}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
     ports:
       - "8081:80"
     networks:
